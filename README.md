@@ -13,27 +13,24 @@
 
 ---
 
-## 📌 Teknologi yang Digunakan
-- **Framework:** Laravel 11 dengan Nwidart Modules
-- **Database:** MySQL / PostgreSQL
-- **Frontend:** Blade / Vue.js (opsional)
-- **Autentikasi:** Laravel Sanctum / Passport
-- **File Upload:** Laravel Filesystem
-- **Docker:** Untuk lingkungan pengembangan yang terisolasi
+## 📌 Requirements
+- **PHP** >= 8.1
+- **Composer**
+- **Laravel** >= 10.x
+- **MySQL** atau database lain yang didukung
 
 ---
 
 ## 🛠 Instalasi
 ### 1️⃣ Clone Repository
 ```sh
-git clone https://github.com/username/kara.git
+git clone https://github.com/tajillahibnu/kara.git
 cd kara
 ```
 
 ### 2️⃣ Instal Dependensi
 ```sh
 composer install
-npm install
 ```
 
 ### 3️⃣ Konfigurasi Environment
@@ -53,21 +50,21 @@ DB_DATABASE=kara_db
 DB_USERNAME=root
 DB_PASSWORD=
 ```
-Lalu jalankan migrasi:
+Lalu jalankan migrasi dengan seeder:
 ```sh
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 ```
 
-### 5️⃣ Instalasi Modul Nwidart
-```sh
-php artisan module:install
-```
-Jalankan modul dengan:
-```sh
-php artisan module:enable NamaModul
+### Clear and optimize the application:
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan optimize
 ```
 
-### 6️⃣ Jalankan Aplikasi
+### 5️⃣ Jalankan Aplikasi
 ```sh
 php artisan serve
 ```
@@ -75,12 +72,56 @@ Akses aplikasi di `http://127.0.0.1:8000`
 
 ---
 
-## 📖 Dokumentasi API
-Untuk melihat dokumentasi API, jalankan perintah berikut:
+## 📖 Common Artisan Commands
+### 🔹 Buat Model dengan Migration & Seeder
 ```sh
-php artisan l5-swagger:generate
+php artisan make:model Tingkat -m -s
 ```
-Kemudian buka di browser: `http://127.0.0.1:8000/api/documentation`
+- `-m` : Membuat file migration.
+- `-s` : Membuat file seeder.
+
+### 🔹 Buat Factory
+```sh
+php artisan make:factory PostFactory
+```
+Membuat class factory untuk seeding model.
+
+### 🔹 Reset Database dengan Seeder
+```sh
+php artisan migrate:fresh --seed
+```
+Menghapus semua tabel, membuat ulang, dan menambahkan data awal.
+
+---
+
+## 📌 SOP: Standard Operating Procedures
+### 🔹 Buat Request dalam Modul
+```sh
+php artisan module:make-request Management/PegawaiRequest pkl
+```
+- `Management/PegawaiRequest` : Lokasi dan nama request class.
+- `pkl` : Nama modul.
+
+### 🔹 Buat Controller dalam Modul
+```sh
+php artisan module:make-controller Master/TahunController pkl
+```
+- `Master/TahunController` : Lokasi dan nama controller.
+- `pkl` : Nama modul.
+
+### 🔹 Buat Service dalam Modul
+```sh
+php artisan module:make-service Master/TahunService pkl
+```
+- `Master/TahunService` : Lokasi dan nama service class.
+- `pkl` : Nama modul.
+
+### 🔹 Buat Repository dalam Modul
+```sh
+php artisan module:make-repository TahunRepository pkl
+```
+- `TahunRepository` : Nama repository.
+- `pkl` : Nama modul.
 
 ---
 
@@ -117,10 +158,20 @@ kara/
 
 ---
 
-## 📢 Kontribusi
+## 📢 Kontribusi & Format Commit Git
+Gunakan format berikut untuk setiap commit:
+```
+[nama modul/menu][fitur/fungsi]: deskripsi singkat
+```
+Contoh:
+```
+[SPP][add]: Tambah fitur pembayaran SPP online
+[PKL][fix]: Perbaiki bug pada laporan PKL
+```
+### Cara Kontribusi
 1. **Fork** repositori ini.
 2. **Buat branch** dengan fitur atau perbaikan baru: `git checkout -b feature-branch`
-3. **Commit perubahan**: `git commit -m 'Menambahkan fitur X'`
+3. **Commit perubahan**: `git commit -m '[modul][fitur]: deskripsi'`
 4. **Push ke branch**: `git push origin feature-branch`
 5. **Buat Pull Request**
 
