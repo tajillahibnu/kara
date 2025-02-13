@@ -1,0 +1,1 @@
+<script src="{{asset('/')}}modules/pkl/management/pegawai.js"></script>

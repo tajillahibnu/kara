@@ -4,62 +4,36 @@ namespace Modules\Pkl\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PklController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return view('pkl::index');
+        // Cek apakah user sudah login
+        if (Auth::check()) {
+            // Jika sudah login, tampilkan halaman dashboard
+            $userId = Auth::user()->id;
+            $roleActive = session('akses_module');
+            $shortcut = [];
+            return view('pkl::index', compact('shortcut'));
+        } else {
+            // Jika belum login, tampilkan halaman login
+            $data = [];
+            return view('pkl::Auth.index', compact('data'));
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function pageLogin()
     {
-        return view('pkl::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('pkl::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('pkl::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
+        $data = [];
+        if (Auth::check()) {
+            $userId = Auth::user()->id;
+            echo $userId;
+            echo 'aaaaa';
+            // return redirect()->intended('/');
+        } else {
+            return view('pkl::Auth.index', compact('data'));
+        }
     }
 }

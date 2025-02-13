@@ -25,10 +25,12 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'username' => $this->faker->unique()->userName,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => static::$password ??= Hash::make('password@123'),
             'remember_token' => Str::random(10),
+            'primary_role_id' => '1',
         ];
     }
 
@@ -41,4 +43,27 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    public function karyawan()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'primary_role_id' => '3',
+                'is_siswa' => false,
+                'is_active' => true,
+            ];
+        });
+    }
+
+    public function siswa()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'primary_role_id' => '4',
+                'is_siswa' => true,
+                'is_active' => true,
+            ];
+        });
+    }
+
 }
