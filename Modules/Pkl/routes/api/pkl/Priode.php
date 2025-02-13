@@ -3,6 +3,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Pkl\Http\Controllers\ComboMasterController;
 use Modules\Pkl\Http\Controllers\Pkl\PriodePKLController;
 
 /*
@@ -27,4 +28,5 @@ Route::group(['prefix' => 'priode', 'middleware' => ['web', 'auth']], function (
     Route::post('update/{id}', [PriodePKLController::class, 'update'])->name('update');
     Route::post('delete', [PriodePKLController::class, 'delete'])->name('delete');
     Route::post('status', [PriodePKLController::class, 'status'])->name('status');
+    Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
 });

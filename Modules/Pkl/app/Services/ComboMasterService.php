@@ -44,7 +44,7 @@ class ComboMasterService
 
     public function tahun_pelajaran()
     {
-        $data = TahunAkademik::select('id', 'name')->get();
+        $data = TahunAkademik::select('id', 'name')->orderBy('id', 'DESC')->get();
         return $data->map(function ($item) {
             return [
                 'id' => $item->id,

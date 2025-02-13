@@ -1,5 +1,27 @@
 var targetID = '';
 $(() => {
+    APP.combov1({
+        el: ['#tahun_ajaran'],
+        url: `${BASE_API_MENU}/combo/tahun-pelajaran`,
+        fild_id: 'name',
+        fild_name: 'name',
+        select2: true,
+        dropdownParent: '#mainModal',
+    })
+
+    $('#batas_registrasi').flatpickr({
+        monthSelectorType: 'static',
+        dateFormat: 'd-m-Y'
+    });
+    $('#tanggal_mulai').flatpickr({
+        monthSelectorType: 'static',
+        dateFormat: 'd-m-Y'
+    });
+    $('#tanggal_selesai').flatpickr({
+        monthSelectorType: 'static',
+        dateFormat: 'd-m-Y'
+    });
+
     mainTable();
 })
 
@@ -27,8 +49,8 @@ mainTable = () => {
                 render: function (data, type, full, meta) {
                     return `
                     <div class="d-flex flex-column">
-                        <span>Mulai : ${full['name']}</span>
-                        <small>Registrasi : ${moment(full['batas_registrasi']).format("D-MM-Y")}</small>
+                        <span>${full['name']}</span>
+                        <small>Registrasi : ${moment(full['batas_registrasi']).format("DD-MM-Y")}</small>
                     </div>
                     `
                     return full['name'];
@@ -40,8 +62,8 @@ mainTable = () => {
                 render: function (data, type, full, meta) {
                     return `
                     <div class="d-flex flex-column">
-                        <small>Mulai : ${moment(full['tanggal_mulai']).format("D-MM-Y")}</small>
-                        <small>Selesai : ${moment(full['tanggal_selesai']).format("D-MM-Y")}</small>
+                        <small>Mulai : ${moment(full['tanggal_mulai']).format("DD-MM-Y")}</small>
+                        <small>Selesai : ${moment(full['tanggal_selesai']).format("DD-MM-Y")}</small>
                     </div>
                     `
                 },
@@ -50,7 +72,7 @@ mainTable = () => {
                 targets: 3,
                 width: "100px", // Mengatur lebar kolom nomor urut
                 render: function (data, type, full, meta) {
-                    return full['kuota_siswa']+' Siswa';
+                    return full['kuota_siswa'] + ' Siswa';
                 },
             },
             {
@@ -84,7 +106,17 @@ editData = (el) => {
     targetID = data['id'];
     console.log(data)
     $.each(data, (i, v) => {
-        $(`[name="${i}"]`).val(v);
+        let inputElement = $(`[name="${i}"]`);
+        inputElement.val(v).trigger('change');
+
+        // Jika elemen memiliki Flatpickr, atur tanggalnya dengan setDate
+        if (inputElement.hasClass('flatpickr-input')) {
+            // Konversi format YYYY-MM-DD ke DD-MM-YYYY jika perlu
+            let formattedDate = v.split('-').reverse().join('-');
+
+            console.log("Setting date:", formattedDate); // Debugging
+            inputElement[0]._flatpickr.setDate(formattedDate, true);
+        }
     })
     $('#mainModal').modal('show');
 }
