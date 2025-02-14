@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('romawi', 4)->nullable();
             $table->string('alamat')->nullable();
             $table->string('telepon', 20)->nullable();
+            $table->boolean('is_pkl')->default(false);
             $table->boolean('is_active')->default(false);
             $table->string('email', 150)->unique();
             $table->timestamps();

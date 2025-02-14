@@ -9,7 +9,14 @@ class PklApproval extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['periode_id', 'role_id', 'is_required'];
+    protected $fillable = [
+        'periode_id',
+        'role_id',
+        'is_required',
+        'can_override',
+        'approval_type',
+        'approval_order',
+    ];
 
     public function periode()
     {
@@ -20,5 +27,4 @@ class PklApproval extends Model
     {
         return $this->belongsTo(Role::class);
     }
-
 }

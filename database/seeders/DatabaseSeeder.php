@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Jurusan;
 use App\Models\PeriodePkl;
+use App\Models\PklApproval;
 use App\Models\Role;
 use App\Models\Rombel;
 use App\Models\Siswa;
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             PegawaiSeeder::class,
             StatusKelasSeeder::class,
+            PklPeriodeSeeder::class,
         ]);
         
         $this->create_user();
@@ -37,7 +39,7 @@ class DatabaseSeeder extends Seeder
             RombelSeeder::class,
             DudiSeeder::class,
             SiswaSeeder::class,
-            PklPeriodeSeeder::class,
+            PklApprovalSeeder::class,
         ]);
         // User::factory()->create([
         //     'name' => 'Test User',

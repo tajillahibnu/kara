@@ -3,6 +3,7 @@
 namespace Modules\Pkl\Services;
 
 use App\Models\Jurusan;
+use App\Models\PklPeriode;
 use App\Models\Role;
 use App\Models\TahunAkademik;
 use App\Models\Tingkat;
@@ -29,14 +30,14 @@ class ComboMasterService
     public function jurusan()
     {
         // Hanya ambil data dengan is_active = true
-        $data = Jurusan::select('id', 'name','kode')
+        $data = Jurusan::select('id', 'name', 'kode')
             ->where('is_active', true) // Filter data yang aktif
             ->get();
 
         return $data->map(function ($item) {
             return [
                 'id' => $item->id,
-                'name' => '['.ucwords($item->kode).'] '.ucwords($item->name),
+                'name' => '[' . ucwords($item->kode) . '] ' . ucwords($item->name),
                 'kode' => $item->kode,
             ];
         });
@@ -44,7 +45,9 @@ class ComboMasterService
 
     public function tahun_pelajaran()
     {
-        $data = TahunAkademik::select('id', 'name')->orderBy('id', 'DESC')->get();
+        $data = TahunAkademik::select('id', 'name')
+            ->orderBy('id', 'DESC')
+            ->get();
         return $data->map(function ($item) {
             return [
                 'id' => $item->id,
@@ -56,6 +59,20 @@ class ComboMasterService
     public function roles()
     {
         $data = Role::select('id', 'name')->get();
+        return $data->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => ucwords($item->name)
+            ];
+        });
+    }
+
+    public function priode_pkl()
+    {
+        $data = PklPeriode::select('id', 'name')
+            ->where('is_active', true) // Filter data yang aktif
+            ->orderBy('name', 'DESC')
+            ->get();
         return $data->map(function ($item) {
             return [
                 'id' => $item->id,
