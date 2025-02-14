@@ -104,7 +104,6 @@ editData = (el) => {
     var data = $(el).data('params')
     data = JSON.parse(atob(data));
     targetID = data['id'];
-    console.log(data)
     $.each(data, (i, v) => {
         let inputElement = $(`[name="${i}"]`);
         inputElement.val(v).trigger('change');

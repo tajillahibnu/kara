@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('pkl_registration_statuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('registration_id')->constrained('pkl_registrations')->onDelete('cascade'); // Pendaftaran siswa
+            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // siswa id
+            $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade'); // jurusan siswa
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Role yang menyetujui
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // User yang approve
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status approval
