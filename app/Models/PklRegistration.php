@@ -9,7 +9,7 @@ class PklRegistration extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['periode_id', 'siswa_id', 'registration_type', 'status'];
+    protected $fillable = ['periode_id', 'siswa_id', 'jurusan_id','registration_type', 'status'];
 
     public function periode()
     {

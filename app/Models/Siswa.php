@@ -25,6 +25,7 @@ class Siswa extends Model
         'rombel_name',
         'email',
         'is_active',
+        'is_pkl',
     ];
 
     protected static function booted()

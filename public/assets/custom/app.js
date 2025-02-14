@@ -64,10 +64,10 @@ var APP = ((config) => {
     );
 
     return {
-        block : () => {
+        block: () => {
             $('#block-loader').show();
         },
-        unblock : () =>{
+        unblock: () => {
             $('#block-loader').hide();
         },
         decodeEntities: (encodedString) => {
@@ -80,6 +80,7 @@ var APP = ((config) => {
             config = $.extend(true, {
                 method: 'post', // Metode default untuk penyimpanan adalah POST
                 headers: {},
+                withCredentials: true,
             }, config);
 
             if (config.data instanceof FormData) {
@@ -309,12 +310,19 @@ var APP = ((config) => {
                 custom: false,
                 autoselect: true,
                 select2: false,
+                choose: true,
                 callback: () => { }
             }, config);
 
-            config.el.forEach(selector => {
-                $(selector).empty().append('<option disabled="" value="">Choose...</option>');
-            });
+            if (config.choose) {
+                config.el.forEach(selector => {
+                    $(selector).empty().append('<option disabled="" value="">Choose...</option>');
+                });
+            }else{
+                config.el.forEach(selector => {
+                    $(selector).empty();
+                });
+            }
 
             APP.axiosRequest({
                 url: config.url,
@@ -470,16 +478,16 @@ var APP = ((config) => {
 
 getInitials = (name) => {
     // Pecah nama berdasarkan spasi
-    let words = name.trim().split(/\s+/); 
-    
+    let words = name.trim().split(/\s+/);
+
     // Jika hanya ada satu kata, gunakan huruf pertama dari kata tersebut
     if (words.length === 1) {
         return words[0].charAt(0).toUpperCase();
     }
-    
+
     // Ambil dua nama depan pertama dan buat inisialnya
     let initials = words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
-    
+
     return initials;
 }
 

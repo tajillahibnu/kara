@@ -9,7 +9,15 @@ class PklRegistrationStatuses extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['registration_id', 'role_id', 'user_id', 'status', 'notes'];
+    protected $fillable = [
+        'registration_id',
+        'siswa_id',
+        'jurusan_id',
+        'role_id',
+        'user_id',
+        'status',
+        'notes'
+    ];
 
     public function registration()
     {
@@ -25,5 +33,4 @@ class PklRegistrationStatuses extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

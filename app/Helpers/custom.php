@@ -57,3 +57,21 @@ if (!function_exists('getSiteMeta')) {
         });
     }
 }
+
+if (!function_exists('getBadgeStatus')) {
+    function getBadgeStatus($status)
+    {
+        $statusMap = [
+            'pending'   => ['class' => 'bg-label-primary', 'text' => 'Pending'],
+            'approved'  => ['class' => 'bg-label-success', 'text' => 'Approved'],
+            'rejected'  => ['class' => 'bg-label-danger', 'text' => 'Rejected'],
+            'new'       => ['class' => 'bg-label-info', 'text' => 'Information'],
+            'warning'   => ['class' => 'bg-label-warning', 'text' => 'Warning'],
+        ];
+
+        $badgeClass = $statusMap[$status]['class'] ?? 'bg-label-secondary';
+        $badgeText  = $statusMap[$status]['text'] ?? 'Unknown';
+
+        return '<span class="badge ' . $badgeClass . '">' . $badgeText . '</span>';
+    }
+}

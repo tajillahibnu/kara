@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('periode_id')->constrained('pkl_periodes')->onDelete('cascade'); // Periode PKL
             $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // Siswa yang mendaftar
+            $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade'); // jurusan siswa
             $table->enum('registration_type', ['mandiri', 'seleksi']); // Jenis pendaftaran
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status awal
             $table->timestamps();

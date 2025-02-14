@@ -19,6 +19,10 @@ class ComboMasterController extends Controller
     public function combo($tipe)
     {
         switch ($tipe) {
+            case 'priode_pkl':
+                $data = $this->mainServices->priode_pkl();
+                return $this->apiResponse($data)->send();
+                break;
             case 'tingkat':
                 $data = $this->mainServices->tingkat();
                 return $this->apiResponse($data)->send();

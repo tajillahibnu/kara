@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('periode_id')->constrained('pkl_periodes')->onDelete('cascade'); // Periode PKL
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Jabatan yang berhak approve
             $table->boolean('is_required')->default(true); // Apakah approval wajib?
-            $table->integer('approval_order'); // Urutan approval (1, 2, 3, dst.)
             $table->boolean('can_override')->default(false);
+            $table->enum('approval_type', ['mandiri', 'seleksi']); // Jenis pendaftaran
+            $table->integer('approval_order'); // Urutan approval (1, 2, 3, dst.)
             $table->timestamps();
         });
     }
