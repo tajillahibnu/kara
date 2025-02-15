@@ -119,7 +119,7 @@ class MenuSeeder extends Seeder
         $save['title']      = 'Periode';
         $save['name']       = 'Periode';
         $save['slug']       = 'pklpriode';
-        $save['url']        = 'pkl/priode';
+        $save['url']        = 'prekerin/priode';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
@@ -133,7 +133,7 @@ class MenuSeeder extends Seeder
         $save['title']      = 'Pendaftaran';
         $save['name']       = 'Pendaftaran PKL';
         $save['slug']       = 'pendaftaranpkl';
-        $save['url']        = 'pkl/pendaftaran';
+        $save['url']        = 'prekerin/pendaftaranpkl';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
@@ -147,7 +147,7 @@ class MenuSeeder extends Seeder
         $save['title']      = 'Konfirmasi';
         $save['name']       = 'Konfirmasi';
         $save['slug']       = 'konfirmasipkl';
-        $save['url']        = 'pkl/konfirmasi';
+        $save['url']        = 'prekerin/konfirmasi';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
