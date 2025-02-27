@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade'); // jurusan siswa
             $table->enum('registration_type', ['mandiri', 'seleksi']); // Jenis pendaftaran
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status awal
+            $table->timestamp('status_updated_at')->nullable();
+            $table->string('tahun_pelajaran', 9);
             $table->timestamps();
         });
     }

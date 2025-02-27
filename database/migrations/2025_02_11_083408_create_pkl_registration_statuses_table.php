@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Role yang menyetujui
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // User yang approve
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status approval
+            $table->timestamp('status_updated_at')->nullable();
             $table->text('notes')->nullable(); // Catatan jika ada alasan penolakan
             $table->timestamps();
         });

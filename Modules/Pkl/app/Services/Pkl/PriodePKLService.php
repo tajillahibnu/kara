@@ -33,25 +33,6 @@ class PriodePKLService
 
 
     /**
-     * Constructor 2: Menggunakan repository spesifik yang sudah ditargetkan untuk model tertentu.
-     *
-     * @param DefaultRepository $repository
-     */
-    // public function __construct(
-    //     DefaultRepository $repository,
-    // ) {
-    //     /**
-    //      * Constructor ini digunakan jika developer ingin memanfaatkan repository spesifik
-    //      * (dalam hal ini, `DefaultRepository`) yang sudah ditargetkan untuk model tertentu.
-    //      * Contoh: Repository ini dioptimalkan untuk entitas Dummy/Default.
-    //      * Keunggulan: Kode lebih sederhana, tidak perlu menentukan model secara manual.
-    //      * Kekurangan: Kurang fleksibel jika repository ingin digunakan untuk model lain.
-    //      */
-    //     $this->repository = $repository;
-    // }
-
-
-    /**
      * Menyiapkan data sebelum disimpan ke dalam database.
      *
      * @param array $input Data masukan dari user.
