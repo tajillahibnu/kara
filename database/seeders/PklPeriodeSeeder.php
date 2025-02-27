@@ -26,8 +26,8 @@ class PklPeriodeSeeder extends Seeder
         ]);
 
         PklPeriode::create([
-            'name'  => 'Gelombang 1 Tahun 2025',
-            'tahun_ajaran' => '2025/2026',
+            'name'  => 'Gelombang 2 Tahun 2025',
+            'tahun_ajaran' => '2024/2025',
             'kuota_siswa' => 60,
             'batas_registrasi' => Carbon::parse('2025-02-30'),
             'syarat_pendaftaran' => 'Siswa harus minimal kelas 11, memiliki izin orang tua, dan memenuhi syarat administrasi.',

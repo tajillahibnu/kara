@@ -16,7 +16,8 @@ class PklRegistrationStatuses extends Model
         'role_id',
         'user_id',
         'status',
-        'notes'
+        'notes',
+        'status_updated_at'
     ];
 
     public function registration()

@@ -18,6 +18,9 @@ class RegisterPklRepository extends BaseRepository
 
     public function register(array $save, int $id)
     {
+        $getSetting = getSiteMeta();
+        $tahunPelajaran = $getSetting['kbm']['tahun_pelajaran'];
+
         DB::beginTransaction(); // Mulai transaction
 
         try {
@@ -29,6 +32,7 @@ class RegisterPklRepository extends BaseRepository
                 $siswa->update($update);
             }
 
+            $save['tahun_pelajaran'] = $tahunPelajaran;
             // Buat data pendaftaran PKL
             $pklRegistration = PklRegistration::create($save);
 

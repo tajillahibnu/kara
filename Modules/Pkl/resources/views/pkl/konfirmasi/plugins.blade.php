@@ -1,1 +1,1 @@
-<!-- <script src="{{asset('/')}}modules/pkl/xx/xx.js"></script> -->
+<script src="{{asset('/')}}modules/pkl/pkl/konfirmasi.js"></script>

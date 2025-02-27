@@ -3,6 +3,7 @@
 namespace Modules\Pkl\Services\Pkl;
 
 use App\Models\PklPeriode;
+use App\Models\PklRegistration;
 use App\Models\Siswa;
 use App\Services\DataTableService;
 use Illuminate\Database\QueryException;
@@ -12,11 +13,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class RegisterPklService
 {
     protected $repository;
-
+    protected $tahunPelajaran;
     public function __construct(
         RegisterPklRepository $repository,
     ) {
         $this->repository = $repository;
+        $getSetting = getSiteMeta();
+        $this->tahunPelajaran = $getSetting['kbm']['tahun_pelajaran'];
     }
 
     public function register(array $input)
@@ -88,7 +91,7 @@ class RegisterPklService
         $filter['pkl_registrations.jurusan_id'] = $data['jurusan'];
         $filter['periode_id'] = $data['priode'];
 
-        if($data['tipe'] != 'all'){
+        if ($data['tipe'] != 'all') {
             $filter['registration_type'] = $data['tipe'];
         }
         $where = $filter;
@@ -123,13 +126,24 @@ class RegisterPklService
             ->where('is_active', true)
             ->where('deleted_at', null)
             ->addColumn('total', function ($detail) {
-                return '0';
+                $total = PklRegistration::where('jurusan_id', $detail->id)
+                ->where('tahun_pelajaran',$this->tahunPelajaran)
+                ->count();
+                return $total;
             })
             ->addColumn('diterima', function ($detail) {
-                return '0';
+                $total = PklRegistration::where('jurusan_id', $detail->id)
+                ->where('tahun_pelajaran',$this->tahunPelajaran)
+                ->where('status','approved')
+                ->count();
+                return $total;
             })
             ->addColumn('ditolak', function ($detail) {
-                return '0';
+                $total = PklRegistration::where('jurusan_id', $detail->id)
+                ->where('tahun_pelajaran',$this->tahunPelajaran)
+                ->where('status','rejected')
+                ->count();
+                return $total;
             })
             ->addColumn('action', function ($detail) {
                 return '
