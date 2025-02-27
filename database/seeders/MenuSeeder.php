@@ -147,7 +147,7 @@ class MenuSeeder extends Seeder
         $save['title']      = 'Konfirmasi';
         $save['name']       = 'Konfirmasi';
         $save['slug']       = 'konfirmasipkl';
-        $save['url']        = 'prekerin/konfirmasi';
+        $save['url']        = 'prekerin/konfirmasipkl';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
