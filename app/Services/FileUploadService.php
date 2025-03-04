@@ -2,40 +2,49 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
 class FileUploadService
 {
-    protected $disk;
-
-    public function __construct($disk = 'public')
-    {
-        $this->disk = $disk; // Disk default
-    }
-
     /**
-     * Upload File
-     *
+     * Upload file dengan disk yang dipilih.
+     * 
      * @param UploadedFile $file
-     * @param string $path
-     * @param string|null $fileName
-     * @return string File path yang diupload
+     * @param string $directory
+     * @param string|null $disk Pilihan disk: local atau minio
+     * @return string URL file yang di-upload
+     * @throws Exception
      */
-    public function upload(UploadedFile $file, string $path, ?string $fileName = null): string
+    public function upload($file, $path = 'pkl_files', $disk = null)
     {
-        $fileName = $fileName ?? uniqid() . '.' . $file->getClientOriginalExtension();
-        return Storage::disk($this->disk)->putFileAs($path, $file, $fileName);
-    }
+        try {
+            // Tentukan disk, default ke S3 atau dari .env
+            $disk = $disk ?? env('FILESYSTEM_DISK', 's3');
 
-    /**
-     * Hapus File
-     *
-     * @param string $filePath
-     * @return bool
-     */
-    public function delete(string $filePath): bool
-    {
-        return Storage::disk($this->disk)->delete($filePath);
+            // Bikin path unik buat file
+            $filePath = $path . '/' . uniqid() . '-' . $file->getClientOriginalName();
+
+            // Upload file ke disk yang dipilih
+            Storage::disk($disk)->put($filePath, file_get_contents($file));
+
+            // Generate URL tergantung disk
+            if ($disk === 's3') {
+                // URL buat S3 atau MinIO
+                $url = env('AWS_ENDPOINT') . '/' . env('AWS_BUCKET') . '/' . $filePath;
+                // Benerin URL kalau MinIO lokal
+                $url = str_replace('http://minio:9000', 'http://localhost:9000', $url);
+            } else {
+                // URL buat lokal
+                $url = asset('storage/' . $filePath);
+            }
+
+            return $url;
+        } catch (\Exception $e) {
+            // Log error kalau ada masalah
+            // \Log::error('Upload Error: ' . $e->getMessage());
+            return null;
+        }
     }
 }
