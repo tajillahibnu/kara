@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Pkl\Http\Controllers\MenuPageController;
 use Modules\Pkl\Http\Controllers\PklController;
+use Modules\Pkl\Http\Controllers\Profil\UserController;
 
 /*
  *--------------------------------------------------------------------------
@@ -20,7 +21,11 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth', 'PageAccess']],
     Route::post('load-page', [MenuPageController::class, 'getMenuPage'])->name('load-page');
 });
 
+
+
 Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
+    Route::post('profile/upload', [UserController::class, 'doUpload'])->name('profile.upload');
+
     Route::group(['prefix' => 'setting'], function () {
         require_once(__DIR__ . '/api/setting/app.php');
     });
