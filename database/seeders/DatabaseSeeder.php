@@ -27,13 +27,14 @@ class DatabaseSeeder extends Seeder
             ConfigAppSeeder::class,
             RoleSeeder::class,
             MenuSeeder::class,
+            RoleMenuSeeder::class,
             PegawaiSeeder::class,
             StatusKelasSeeder::class,
             PklPeriodeSeeder::class,
         ]);
-        
+
         $this->create_user();
-        
+
         $this->call([
             JurusanSeeder::class,
             RombelSeeder::class,
@@ -51,10 +52,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         $superadmin = User::factory()->create([
-            'name' => 'Test User',
+            'name' => 'Administrator',
             'email' => 'admin@demo.com',
             'username' => 'admin',
-            'primary_role_id' => 1,
+            'primary_role_id' => 3,
             'is_siswa' => false,
             'is_active' => true,
         ]);
@@ -73,6 +74,24 @@ class DatabaseSeeder extends Seeder
 
             $item->roles()->attach($rolesWithPivot);
         });
+
+        User::factory()->create([
+            'name' => 'user guru',
+            'email' => 'guru@demo.com',
+            'username' => 'guru',
+            'primary_role_id' => 3,
+            'is_siswa' => false,
+            'is_active' => true,
+        ]);
+
+        User::factory()->create([
+            'name' => 'user siswa',
+            'email' => 'siswa@demo.com',
+            'username' => 'siswa',
+            'primary_role_id' => 4,
+            'is_siswa' => true,
+            'is_active' => true,
+        ]);
 
         // Buat siswa
         // User::factory()->siswa()->count(10)->create();

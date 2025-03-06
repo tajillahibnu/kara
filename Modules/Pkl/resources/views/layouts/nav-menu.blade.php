@@ -45,9 +45,9 @@
         </li>
         <!-- Tables -->
         @foreach ($menus as $menu)
-        @empty($menu->sub_menu)
+        @if ($menu->sub_menu->isEmpty())
         <li class="menu-item">
-            <a class="menu-link main-menu_nav" href="javascript:void(0)" data-url="{{$menu->url}}" data-suburl="" data-params="{{base64_encode(json_encode($menu, JSON_PRETTY_PRINT))}}">
+            <a class="menu-link main-menu_nav" href="javascript:void(0)" data-tipe="main" data-url="{{$menu->url}}" data-suburl="" data-params="{{base64_encode(json_encode($menu, JSON_PRETTY_PRINT))}}">
                 <i class="menu-icon tf-icons ti ti-lifebuoy"></i>
                 <div data-i18n="{{$menu->name}}">{{$menu->name}}</div>
             </a>
@@ -62,14 +62,14 @@
             <ul class="menu-sub">
                 @foreach ( $menu->sub_menu as $subMenu)
                 <li class="menu-item">
-                    <a class="menu-link main-menu_nav" href="javascript:void(0)" class="main-menu_nav" data-suburl="{{$menu->url}}" data-url="{{$subMenu->url}}" data-params="{{base64_encode(json_encode($subMenu, JSON_PRETTY_PRINT))}}">
+                    <a class="menu-link main-menu_nav" href="javascript:void(0)" data-tipe="main" data-suburl="{{$menu->url}}" data-url="{{$subMenu->url}}" data-params="{{base64_encode(json_encode($subMenu, JSON_PRETTY_PRINT))}}">
                         <div data-i18n="{{$subMenu->name}}">{{$subMenu->name}}</div>
                     </a>
                 </li>
                 @endforeach
             </ul>
         </li>
-        @endempty
+        @endif
         @endforeach
         <!-- <li class="menu-item">
             <a href="tables-basic.html" class="menu-link">
