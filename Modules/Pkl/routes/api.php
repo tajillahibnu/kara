@@ -19,11 +19,13 @@ use Modules\Pkl\Http\Controllers\Profil\UserController;
 
 Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth', 'PageAccess']], function () {
     Route::post('load-page', [MenuPageController::class, 'getMenuPage'])->name('load-page');
+    Route::post('switch/module', [MenuPageController::class, 'switchModule'])->name('switch.module');
 });
 
 
 
 Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
+
     Route::post('profile/upload', [UserController::class, 'doUpload'])->name('profile.upload');
 
     Route::group(['prefix' => 'setting'], function () {

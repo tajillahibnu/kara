@@ -20,9 +20,9 @@ class MemberController extends Controller
             // $getRole = Role::where('id', $user->primary_role_id)->get()->toArray();
             $getRole = Role::where('id', $user->primary_role_id)->first();
 
-            session()->put('module_role_id', $getRole->id);
-            session()->put('akses_module', $getRole->slug);
-            session()->put('name_module', $getRole->name);
+            session()->put('active_role_id', $getRole->id);
+            session()->put('active_role_slug', $getRole->slug);
+            session()->put('active_role_name', $getRole->name);
             // session()->put('user_role', 'admin');
             return redirect()->intended('/');
         } else {

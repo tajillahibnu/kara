@@ -114,7 +114,7 @@
                                 <span class="dropdown-shortcuts-icon rounded-circle mb-3">
                                     <i class="{{ $item->icon }} ti-26px text-heading"></i>
                                 </span>
-                                <a href="javascript:switchModule('{{ $item->kode }}')" class="stretched-link">{{ $item->name }}</a>
+                                <a href="javascript:switchModule('{{ encrypt($item->slug) }}')" class="stretched-link">{{ $item->name }}</a>
                                 <small>{{ $item->description }}</small>
                             </div>
 
@@ -254,11 +254,14 @@
                     <li>
                         <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>
+                    @foreach ($nav_head as $head)
                     <li>
-                        <a class="dropdown-item" href="pages-profile-user.html">
-                            <i class="ti ti-user me-3 ti-md"></i><span class="align-middle">My Profile</span>
+                        <a class="dropdown-item main-menu_nav" href="javascript:void(0)" data-tipe="head" data-url="{{$head->url}}" data-suburl="" data-params="{{base64_encode(json_encode($head, JSON_PRETTY_PRINT))}}">
+                            <i class="ti ti-user me-3 ti-md"></i><span class="align-middle">{{$head->name}}</span>
                         </a>
                     </li>
+                    @endforeach
+
                     <li>
                         <div class="dropdown-divider my-1 mx-n2"></div>
                     </li>

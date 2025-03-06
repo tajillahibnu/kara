@@ -209,20 +209,6 @@ class MenuSeeder extends Seeder
         $save['view_path']      = 'master/rombel/';
         $save['view_file']      = 'default';
         Menu::create($save);
-
-        // $dd = $dd + 1;
-        // $save['id']         = $id.$dd;
-        // $save['parent_id']  = $id;
-        // $save['title']      = 'Tahun Akademik';
-        // $save['name']       = 'Tahun Akademik';
-        // $save['slug']       = 'masta';
-        // $save['url']        = 'master/tahun';
-        // $save['level']      = '1';
-        // $save['type']       = 'main';
-        // $save['menu_order'] = $dd;
-        // $save['view_path']      = 'master/tahun/';
-        // $save['view_file']      = 'default';
-        // Menu::create($save);
     }
     
     private function management($id,$menuNumber){
@@ -311,11 +297,11 @@ class MenuSeeder extends Seeder
     {
         $dd = $id;
         $save['id']    = $id;
-        $save['name']  = 'Profile';
+        $save['name']  = 'My Profile';
         $save['type']  = 'head';
         $save['slug']   = 'profile_~|role|~';
         $save['url']   = 'profile';
-        $save['view_path']  = 'biodata/~|role|~';
+        $save['view_path']  = 'profile/~|role|~';
         $save['view_file']  = 'default';
         $save['level'] = '0';
         $save['menu_order'] = $menuNumber;
