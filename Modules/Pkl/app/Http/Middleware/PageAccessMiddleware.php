@@ -39,16 +39,18 @@ class PageAccessMiddleware
                     return $next($request);
                 }
             } else {
-                $menu = $this->verificationMenu($request);
-                $request->merge($menu);
+                $getMenu = $this->verificationMenu($request);
+                $request->merge($getMenu ? $getMenu->toArray() : []);
                 $input = $request->input();
                 unset($input['params']);
                 $request->replace($input);
-                return $next($request);
+                if (!empty($getMenu)) {
+                    return $next($request);
+                }
             }
         }
 
-        return $this->apiResponse(['message' => ''])
+        return $this->apiResponse(['message' => $msgError])
             ->statusCode($kode)
             ->send();
     }
@@ -57,6 +59,7 @@ class PageAccessMiddleware
     {
         // $user = Auth::user();
         $roleName = session('active_role_slug');
+        $roleId = session('active_role_id');
 
         $page = $request->input('params');
 
@@ -65,10 +68,16 @@ class PageAccessMiddleware
          */
 
         $menu = json_decode(decryptData($page), true);
-        $menu = Menu::find($menu['id'])->toArray();
-        $menu['title'] = str_replace('~|role|~', $roleName, $menu['title']);
-        $menu['slug'] = str_replace('~|role|~', $roleName, $menu['slug']);
-        $menu['view_path'] = str_replace('~|role|~', $roleName, $menu['view_path']);
+        $menu = Menu::leftJoin('role_menus', 'menus.id', '=', 'role_menus.menu_id')
+            ->select('menus.*')
+            ->where('role_menus.menu_id', $menu['id'])
+            ->where('role_menus.role_id', $roleId)
+            ->first();
+        if (!empty($menu)) {
+            $menu['title'] = str_replace('~|role|~', $roleName, $menu['title']);
+            $menu['slug'] = str_replace('~|role|~', $roleName, $menu['slug']);
+            $menu['view_path'] = str_replace('~|role|~', $roleName, $menu['view_path']);
+        }
         return $menu;
     }
 
