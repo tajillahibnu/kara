@@ -22,15 +22,20 @@ class SiswaSeeder extends Seeder
         $jurusanList = Jurusan::pluck('id', 'kode');
 
         foreach ($jurusanList as $namaJurusan => $jurusanId) {
+            $tahun1 = 2022;
+            $tahun2 = 2023;
             $this->command->info("Menambahkan siswa untuk jurusan: $namaJurusan");
-
-            $this->seedSiswa(20, '10', $jurusanId);
-            $this->seedSiswa(20, '11', $jurusanId);
-            $this->seedSiswa(20, '12', $jurusanId);
+            $this->seedSiswa(20, '10', $jurusanId,$tahun1.'/'.$tahun2);
+            $tahun1++;
+            $tahun2++;
+            $this->seedSiswa(20, '11', $jurusanId,$tahun1.'/'.$tahun2);
+            $tahun1++;
+            $tahun2++;
+            $this->seedSiswa(20, '12', $jurusanId,$tahun1.'/'.$tahun2);
         }
     }
 
-    private function seedSiswa($jumlah, $tingkat,$jurusanId)
+    private function seedSiswa($jumlah, $tingkat,$jurusanId,$tahunMasuk)
     {
         $faker = Faker::create('id_ID');
 
@@ -75,6 +80,7 @@ class SiswaSeeder extends Seeder
                 'email'         => $faker->unique()->safeEmail,
                 'is_active'     => true,
                 'rombel_id'     => $rombelId, // Masukkan ke rombel yang sesuai
+                'tahun_masuk'   => $tahunMasuk, // Masukkan ke rombel yang sesuai
             ]);
 
             // // Buat User dengan biodata_id merujuk ke Siswa

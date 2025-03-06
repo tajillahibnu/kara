@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('telepon', 20)->nullable();
             $table->boolean('is_pkl')->default(false);
             $table->boolean('is_active')->default(false);
+            $table->boolean('is_lulus')->default(false);
+            $table->string('tahun_masuk', 9)->nullable();
+            $table->string('tahun_lulus', 9)->nullable();
             $table->string('email', 150)->unique();
             $table->timestamps();
             $table->softDeletes();
