@@ -26,6 +26,9 @@ class Siswa extends Model
         'email',
         'is_active',
         'is_pkl',
+        'tahun_masuk',
+        'is_lulus',
+        'tahun_lulus',
     ];
 
     protected static function booted()

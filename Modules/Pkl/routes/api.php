@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Pkl\Http\Controllers\DashboardController;
 use Modules\Pkl\Http\Controllers\MenuPageController;
 use Modules\Pkl\Http\Controllers\PklController;
 use Modules\Pkl\Http\Controllers\Profil\UserController;
@@ -26,6 +27,7 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth', 'PageAccess']],
 
 Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
 
+    Route::post('dashboard/info', [DashboardController::class, 'show'])->name('dashboard.info');
     Route::post('profile/upload', [UserController::class, 'doUpload'])->name('profile.upload');
 
     Route::group(['prefix' => 'setting'], function () {
@@ -48,7 +50,7 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
         require_once(__DIR__ . '/api/master/Jurusan.php');
         require_once(__DIR__ . '/api/master/Rombel.php');
     });
-    
+
     Route::group(['prefix' => 'prekerin'], function () {
         require_once(__DIR__ . '/api/pkl.php');
     });
