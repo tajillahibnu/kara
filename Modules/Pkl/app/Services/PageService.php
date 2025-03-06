@@ -73,4 +73,13 @@ class PageService
             throw new \Exception("Default view file does not exist.");
         }
     }
+
+    public function changeModule($data)
+    {
+        session()->put('active_role_id', $data['id']);
+        session()->put('active_role_slug', $data['slug']);
+        session()->put('active_role_name', $data['name']);
+        unset($data['id']);
+        return $data;
+    }
 }

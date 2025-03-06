@@ -17,53 +17,86 @@ class MenuRoleMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            $roleActive = session('akses_module');
-            
+            $slugRole = session('active_role_slug');
+            $roleId = session('active_role_id');
+
             $user = Auth::user();
-            $user->name_module = session('name_module');
-            // dd($user);
+            $user->name_module = session('active_role_name');
+
             View::share('biodata', $user);
 
-            $menus = $this->menuNav($roleActive);
+            $menus = $this->menuNav($slugRole, $roleId);
             View::share('menus', $menus);
 
-            $userRoles = $this->shorcutRole();
+            $getRole = Role::where('id', $user->primary_role_id)->first();
+            $mainRole = !empty($getRole) ? strtolower(trim($getRole->slug)) : 'unknown';
+            $navHead = $this->headNav($mainRole);
+            View::share('nav_head', $navHead);
+
+            $userRoles = $this->shorcutRole($user->id);
             View::share('userRoles', $userRoles);
         }
         return $next($request);
     }
 
-    private function shorcutRole()
+    private function shorcutRole($userId)
     {
-        $aArrRoles = Role::all();
+        $aArrRoles = Role::leftJoin('role_users', 'roles.id', '=', 'role_users.role_id')
+            ->where('role_users.user_id', $userId)
+            ->select('roles.slug', 'roles.name', 'roles.description') // Memilih semua kolom dari roles
+            ->get();
+
         return $aArrRoles;
     }
 
-    private function menuNav($roleActive,$type = 'main')
+    private function menuNav($roleActive, $roleId, $type = 'main')
     {
-        $menus = Menu::where('parent_id', null)
+        return Menu::leftJoin('role_menus', 'menus.id', '=', 'role_menus.menu_id')
+            ->select('menus.*')
+            ->whereNull('parent_id')
             ->where('type', $type)
-            ->get();
-        foreach ($menus as $value) {
-            $value->name = ucwords($value->name);
-            $value->sub_menu = $this->subMenuNav($value->id, $roleActive);;
-        }
-        return $menus;
+            ->where('role_menus.role_id', $roleId)
+            ->get()
+            ->map(function ($menu) use ($roleActive, $roleId) {
+                $menu->name = ucwords($menu->name);
+                $menu->sub_menu = $this->subMenuNav($menu->id, $roleActive, $roleId);
+                return $menu;
+            });
     }
 
-    private function subMenuNav($id, $roleActive)
+    private function subMenuNav($id, $roleActive, $roleId)
     {
-        $aArrSubMenu = Menu::select("*")
+        $subMenus = Menu::leftJoin('role_menus', 'menus.id', '=', 'role_menus.menu_id')
+            ->select('menus.*')
             ->where('parent_id', $id)
+            ->where('role_menus.role_id', $roleId)
             ->orderBy('menu_order', 'ASC')
             ->get();
-        if (!$aArrSubMenu->isEmpty()) {
-            foreach ($aArrSubMenu as $key => $value) {
-                $value->name = ucwords($value->name);
-                $value->sub_menu = $this->subMenuNav($value->id, $roleActive);
-            }
+
+        return $subMenus->isNotEmpty()
+            ? $subMenus->map(function ($menu) use ($roleActive, $roleId) {
+                $menu->name = ucwords($menu->name);
+                $menu->sub_menu = $this->subMenuNav($menu->id, $roleActive, $roleId);
+                return $menu;
+            })
+            : collect([]); // Tetap return Collection kosong agar konsisten
+
+    }
+
+    private function headNav($mainRole, $type = 'head')
+    {
+        if (empty($mainRole) || empty($type)) {
+            return collect(); // Return collection kosong jika parameter tidak valid
         }
-        // return $aArrSubMenu->isEmpty() ? (object)[] : $aArrSubMenu;
-        return $aArrSubMenu->isEmpty() ? [] : $aArrSubMenu;
+
+        return Menu::whereNull('parent_id')
+            ->where('type', $type)
+            ->get()
+            ->map(function ($menu) use ($mainRole) {
+                $menu->name = ucwords($menu->name);
+                $menu->slug = str_replace('~|role|~', $mainRole, $menu->slug);
+                $menu->view_path = str_replace('~|role|~', $mainRole, $menu->view_path);
+                return $menu;
+            });
     }
 }

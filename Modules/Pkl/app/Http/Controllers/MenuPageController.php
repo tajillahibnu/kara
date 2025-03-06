@@ -22,4 +22,11 @@ class MenuPageController extends Controller
         return $this->apiResponse($dataService)
             ->send();
     }
+
+    public function switchModule(Request $request)
+    {
+        $dataService = $this->mainService->changeModule($request->input());
+        return $this->apiResponse($dataService)
+            ->send();
+    }
 }

@@ -14,7 +14,6 @@ class PklController extends Controller
         if (Auth::check()) {
             // Jika sudah login, tampilkan halaman dashboard
             $userId = Auth::user()->id;
-            $roleActive = session('akses_module');
             $shortcut = [];
             return view('pkl::index', compact('shortcut'));
         } else {
