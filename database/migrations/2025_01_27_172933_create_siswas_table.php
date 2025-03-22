@@ -16,6 +16,7 @@ return new class extends Migration
             // $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('nis', 20)->unique()->nullable(); // Nomor Induk Siswa
             $table->string('name', 100);
+            $table->string('tempat_lahir', 150)->nullable();
             $table->date('tanggal_lahir')->nullable();
             $table->enum('jk', ['P', 'L']);
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade');
@@ -31,6 +32,10 @@ return new class extends Migration
             $table->string('tahun_masuk', 9)->nullable();
             $table->string('tahun_lulus', 9)->nullable();
             $table->string('email', 150)->unique();
+            $table->string('no_wa', 16)->unique()->nullable();
+            $table->string('nisn', 20)->nullable();
+            $table->string('kode_kk', 16)->nullable(); // Nomor Induk Siswa
+            $table->string('kode_nik', 16)->unique()->nullable(); // Nomor Induk Siswa
             $table->timestamps();
             $table->softDeletes();
         });

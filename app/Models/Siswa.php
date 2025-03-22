@@ -11,6 +11,7 @@ class Siswa extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'nisn',
         'nis',
         'name',
         'tanggal_lahir',
@@ -29,7 +30,13 @@ class Siswa extends Model
         'tahun_masuk',
         'is_lulus',
         'tahun_lulus',
+        'no_wa',
+        'kode_kk',
+        'kode_nik',
     ];
+
+    protected $hidden = ['created_at', 'updated_at','deleted_at'];
+
 
     protected static function booted()
     {

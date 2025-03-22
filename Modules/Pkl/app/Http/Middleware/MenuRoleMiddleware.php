@@ -4,6 +4,7 @@ namespace Modules\Pkl\Http\Middleware;
 
 use App\Models\Menu;
 use App\Models\Role;
+use App\Models\Siswa;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,14 @@ class MenuRoleMiddleware
             View::share('biodata', $user);
 
             $menus = $this->menuNav($slugRole, $roleId);
+            if($user->is_siswa){
+                $getSiswa = Siswa::find($user->biodata_id)->toArray();
+                if($getSiswa['is_pkl']){
+                    $pklMenus = $this->menuNav($slugRole, $roleId,'menu_pkl_siswa');
+                    $menus = $menus->merge($pklMenus);
+                }
+            }
+
             View::share('menus', $menus);
 
             $getRole = Role::where('id', $user->primary_role_id)->first();
@@ -37,16 +46,6 @@ class MenuRoleMiddleware
             View::share('userRoles', $userRoles);
         }
         return $next($request);
-    }
-
-    private function shorcutRole($userId)
-    {
-        $aArrRoles = Role::leftJoin('role_users', 'roles.id', '=', 'role_users.role_id')
-            ->where('role_users.user_id', $userId)
-            ->select('roles.slug', 'roles.name', 'roles.description') // Memilih semua kolom dari roles
-            ->get();
-
-        return $aArrRoles;
     }
 
     private function menuNav($roleActive, $roleId, $type = 'main')
@@ -81,6 +80,16 @@ class MenuRoleMiddleware
             })
             : collect([]); // Tetap return Collection kosong agar konsisten
 
+    }
+
+    private function shorcutRole($userId)
+    {
+        $aArrRoles = Role::leftJoin('role_users', 'roles.id', '=', 'role_users.role_id')
+            ->where('role_users.user_id', $userId)
+            ->select('roles.slug', 'roles.name', 'roles.description') // Memilih semua kolom dari roles
+            ->get();
+
+        return $aArrRoles;
     }
 
     private function headNav($mainRole, $type = 'head')

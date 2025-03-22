@@ -17,6 +17,7 @@ class MenuSeeder extends Seeder
             'dashboard',
             'data',
             'pkl',
+            'pkl_siswa',
             'master',
             'management',
             'setting',
@@ -155,6 +156,36 @@ class MenuSeeder extends Seeder
         $save['view_file']      = 'default';
         Menu::create($save);
     }
+
+    
+    private function pkl_siswa($id,$menuNumber){
+        $dd = $id;
+        $save['id']    = $id;
+        $save['name']  = 'PKL';
+        $save['title']  = 'PKL';
+        $save['slug']   = 'pkl_siswa';
+        $save['url']   = 'pkl';
+        $save['level'] = '0';
+        $save['type']  = 'menu_pkl_siswa';
+        $save['menu_order'] = $menuNumber;
+        Menu::create($save);
+
+        $dd = $dd + 1;
+        $save['id']         = $id.$dd;
+        $save['parent_id']  = $id;
+        $save['title']      = 'Absensi';
+        $save['name']       = 'Absensi';
+        $save['slug']       = 'absensi_pkl_siswa';
+        $save['url']        = 'absensi/pkl';
+        $save['level']      = '1';
+        $save['type']       = 'menu_pkl_siswa';
+        $save['menu_order'] = $dd;
+        $save['view_path']      = 'pkl/absensi/siswa/';
+        $save['view_file']      = 'default';
+        Menu::create($save);
+    }
+
+
 
     private function master($id,$menuNumber){
         $dd = $id;

@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             // $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('nip', 18)->unique()->nullable(); // Nomor Induk Pegawai (opsional untuk karyawan non-guru)
-            $table->string('nik', 16)->unique()->nullable(); // Nomor Induk Kependudukan
+            $table->string('nik', 18)->unique()->nullable(); // Nomor Induk Kependudukan
             $table->string('name', 150);
             $table->enum('jk', ['P', 'L']);
             $table->string('telepon', 15)->nullable();
             $table->text('alamat')->nullable();
+            $table->string('tempat_lahir', 120)->nullable(); // Nomor Induk Kependudukan
             $table->date('tanggal_lahir');
             $table->string('email', 150)->unique();
             $table->enum('status_kepegawaian', ['PNS', 'Honorer'])->default('PNS');
