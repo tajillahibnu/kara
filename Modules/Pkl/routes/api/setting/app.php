@@ -36,7 +36,9 @@ Route::group(['prefix' => 'sekolah'], function () {
 Route::group(['prefix' => 'upload'], function () {
     Route::post('main-table', [UploadSiswaController::class, 'mainTable'])->name('main-table');
     Route::post('table-siswa', [UploadSiswaController::class, 'tableSiswa'])->name('table-siswa');
-    Route::post('read', [UploadSiswaController::class, 'read'])->name('read');
     Route::post('siswa', [UploadSiswaController::class, 'uploadSiswaJurusan'])->name('siswa');
+    Route::post('read', [UploadSiswaController::class, 'read'])->name('read');
+    Route::post('update', [UploadSiswaController::class, 'update'])->name('update');
+    Route::post('delete', [UploadSiswaController::class, 'delete'])->name('delete');
     Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
 });

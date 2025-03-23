@@ -76,7 +76,8 @@ class ProcessSiswaUploade implements ShouldQueue
                         'nama' => $row[2] ?? null,
                         'tingkat_id' => $tingkat_id,
                         'romawi' => $getTingkat->romawi,
-                        'jurusan_id' => $this->upload->jurusan_id
+                        'jurusan_id' => $this->upload->jurusan_id,
+                        'tahun_akademik' => $this->upload->tahun_akademik,
                     ]);
 
                     $rowCount++;

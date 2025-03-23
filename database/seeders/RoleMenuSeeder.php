@@ -98,6 +98,13 @@ class RoleMenuSeeder extends Seeder
         return $inMenu;
     }
 
+    private function menu_pkl_siswa()
+    {
+        $inMenu[] = 'pkl_siswa';
+        $inMenu[] = 'absensi_pkl_siswa';
+        return $inMenu;
+    }
+
     private function master()
     {
         $inMenu[] = 'master';

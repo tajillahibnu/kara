@@ -23,6 +23,10 @@ class ComboMasterController extends Controller
                 $data = $this->mainServices->priode_pkl();
                 return $this->apiResponse($data)->send();
                 break;
+            case 'kelas':
+                $data = $this->mainServices->kelas();
+                return $this->apiResponse($data)->send();
+                break;
             case 'tingkat':
                 $data = $this->mainServices->tingkat();
                 return $this->apiResponse($data)->send();

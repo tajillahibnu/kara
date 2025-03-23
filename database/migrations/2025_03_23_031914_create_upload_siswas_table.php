@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade')->nullable();
             $table->timestamp('processing_started_at')->nullable();
             $table->timestamp('processing_completed_at')->nullable();
+            $table->string('tahun_akademik', 9)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

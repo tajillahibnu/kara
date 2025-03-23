@@ -29,6 +29,30 @@ class UploadSiswaController extends Controller
         }
     }
 
+    public function update(Request $request)
+    {
+        try {
+            $id = $request->input('taskSiswaID');
+            $aArrUpdate = $this->mainServices->update($request->input(),$id);
+            return $this->apiResponse($aArrUpdate)
+                ->send();
+        } catch (\Throwable $th) {
+            throw new Exception('Internal server malfunction.'.$th->getMessage());
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $aArrDelete = $this->mainServices->delete($id);
+            return $this->apiResponse($aArrDelete)
+                ->send();
+        } catch (\Throwable $th) {
+            throw new Exception('Internal server malfunction.');
+        }
+    }
+
     public function mainTable()
     {
         return $this->mainServices->table();

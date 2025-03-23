@@ -11,8 +11,19 @@ class Upload_siswa extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'filename', 'original_name', 'file_type', 'file_size', 'row_count',
-        'url', 'status', 'errors', 'processing_started_at', 'processing_completed_at','path','jurusan_id'
+        'filename', 
+        'original_name', 
+        'file_type', 
+        'file_size', 
+        'row_count',
+        'url', 
+        'status', 
+        'errors', 
+        'processing_started_at', 
+        'processing_completed_at',
+        'path',
+        'jurusan_id',
+        'tahun_akademik',
     ];
 
     protected $dates = ['processing_started_at', 'processing_completed_at'];

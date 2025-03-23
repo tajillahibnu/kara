@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('romawi', 4)->nullable();
             $table->string('status', 25)->default('pending'); // pending, processing, completed, failed
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade')->nullable();
+            $table->string('tahun_akademik', 9)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

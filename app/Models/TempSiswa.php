@@ -20,6 +20,7 @@ class TempSiswa extends Model
         'rombel_name',
         'romawi',
         'status',
+        'tahun_akademik',
     ];
 
     public function rombel()
