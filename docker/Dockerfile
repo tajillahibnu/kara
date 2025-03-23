@@ -17,6 +17,8 @@ RUN apk add --no-cache \
     npm \
     nginx \
     supervisor \
+    nodejs \
+    npm \
     && docker-php-ext-configure zip \
     && docker-php-ext-install pcntl \
     && docker-php-ext-install zip pdo pdo_mysql \
@@ -34,8 +36,8 @@ RUN command -v composer
 
 WORKDIR /var/www/html
 
-COPY ../nginx/nginx.conf /etc/nginx/http.d/default.conf
-COPY ./deploy_php8/php.ini "$PHP_INI_DIR/conf.d/app.ini"
+COPY ./nginx/nginx.conf /etc/nginx/http.d/default.conf
+COPY ./php.ini "$PHP_INI_DIR/conf.d/app.ini"
 
 # CMD ["sh", "-c","supervisord", "/etc/supervisord.conf","nginx && php-fpm"]
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]

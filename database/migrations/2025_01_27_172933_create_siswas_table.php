@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade');
             $table->foreignId('rombel_id')->nullable()->constrained('rombels')->onDelete('cascade'); // Relasi ke tabel Rombel
             $table->foreignId('tingkat_id')->constrained('tingkats')->onDelete('cascade'); // Relasi ke tabel Rombel
-            $table->string('rombel_name', 15)->nullable();
+            $table->string('rombel_name', 20)->nullable();
             $table->string('romawi', 4)->nullable();
             $table->string('alamat')->nullable();
             $table->string('telepon', 20)->nullable();

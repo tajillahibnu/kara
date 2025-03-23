@@ -119,6 +119,7 @@ class RoleMenuSeeder extends Seeder
     {
         $inMenu[] = 'setting';
         $inMenu[] = 'config_app';
+        $inMenu[] = 'upload_siswa';
         $inMenu[] = 'config_kurikulum';
         return $inMenu;
     }

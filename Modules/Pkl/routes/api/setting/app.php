@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Pkl\Http\Controllers\ComboMasterController;
 use Modules\Pkl\Http\Controllers\Setting\SekolahController;
+use Modules\Pkl\Http\Controllers\Setting\UploadSiswaController;
 
 /*
     |--------------------------------------------------------------------------
@@ -21,13 +22,21 @@ use Modules\Pkl\Http\Controllers\Setting\SekolahController;
 // });
 
 
-Route::group(['prefix' => 'app', 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => 'app'], function () {
     Route::post('read', [SekolahController::class, 'read'])->name('read');
     Route::post('update', [SekolahController::class, 'update'])->name('update');
 });
 
-Route::group(['prefix' => 'sekolah', 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => 'sekolah'], function () {
     Route::post('read', [SekolahController::class, 'read'])->name('read');
     Route::post('update', [SekolahController::class, 'update'])->name('update');
+    Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
+});
+
+Route::group(['prefix' => 'upload'], function () {
+    Route::post('main-table', [UploadSiswaController::class, 'mainTable'])->name('main-table');
+    Route::post('table-siswa', [UploadSiswaController::class, 'tableSiswa'])->name('table-siswa');
+    Route::post('read', [UploadSiswaController::class, 'read'])->name('read');
+    Route::post('siswa', [UploadSiswaController::class, 'uploadSiswaJurusan'])->name('siswa');
     Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
 });

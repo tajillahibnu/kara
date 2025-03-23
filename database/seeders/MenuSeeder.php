@@ -312,6 +312,20 @@ class MenuSeeder extends Seeder
         $dd = $dd + 1;
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
+        $save['title']      = 'Upload';
+        $save['name']       = 'Upload Siswa';
+        $save['slug']       = 'upload_siswa';
+        $save['url']        = 'setting/upload';
+        $save['level']      = '1';
+        $save['type']       = 'main';
+        $save['menu_order'] = $dd;
+        $save['view_path']      = 'setting/upload_siswa/';
+        $save['view_file']      = 'default';
+        Menu::create($save);
+
+        $dd = $dd + 1;
+        $save['id']         = $id.$dd;
+        $save['parent_id']  = $id;
         $save['title']      = 'Setting Sekolah';
         $save['name']       = 'Sekolah';
         $save['slug']       = 'config_kurikulum';
