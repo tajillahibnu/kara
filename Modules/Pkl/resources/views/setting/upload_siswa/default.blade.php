@@ -83,6 +83,7 @@
                         <th></th>
                         <th>Nama</th>
                         <th>Tingkat</th>
+                        <th>Rombel</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>

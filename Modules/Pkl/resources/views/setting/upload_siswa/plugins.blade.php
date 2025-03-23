@@ -10,6 +10,22 @@
             select2: true,
             dropdownParent: '#mainModal',
         })
+        APP.combov1({
+            el: ['#tahun_pelajaran'],
+            url: `${BASE_API_MENU}/combo/tahun-pelajaran`,
+            fild_id: 'name',
+            fild_name: 'name',
+            select2: true,
+            dropdownParent: '#mainModal',
+            callback: (response) => {
+                if (response.error) {
+                    console.error("Error:", response.error);
+                } else {
+                    // console.log("Data berhasil dimuat:", response.data);
+                    onLoadFirst()
+                }
+            }
+        })
         mainTable();
     })
 
@@ -49,13 +65,19 @@
                 },
                 {
                     targets: 3,
+                    render: function(data, type, full, meta) {
+                        return full['rombel_name'];
+                    },
+                },
+                {
+                    targets: 4,
                     width: "50px",
                     render: function(data, type, full, meta) {
                         return full['status'];
                     },
                 },
                 {
-                    targets: 4,
+                    targets: -1,
                     width: "50px",
                     // data: 'name',
                     render: function(data, type, full, meta) {
@@ -197,6 +219,86 @@
         }).catch(error => {
             console.error("Fetch error:", error);
             APP.unblock();
+        });
+    }
+
+    onEditSiswa = (el) => {
+        var data = $(el).data('params')
+        data = JSON.parse(atob(data));
+        APP.combov1({
+            el: ['#kelas_siswa'],
+            url: `${BASE_API_MENU}/combo/kelas`,
+            fild_id: 'id',
+            fild_name: 'name',
+            select2: true,
+            data: {
+                jurusan_id: data['jurusan_id'],
+                tingkat_id :data['tingkat_id'],
+            },
+            dropdownParent: '#modalKelasSiswa',
+        })
+        $(`[name="taskSiswaID"]`).val(data['id']);
+        $.each(data, (i, v) => {
+            $(`[name="${i}"]`).val(v);
+        })
+        $('#modalKelasSiswa').modal('show');
+
+    }
+
+    saveIt = (name) => {
+        APP.block();
+        var form = $(`#${name}`)[0];
+        var formData = new FormData(form);
+        var action = 'update';
+
+        APP.axiosRequest({
+            url: `${BASE_API_MENU}/${action}`,
+            data: formData,
+        }).then(data => {
+            APP.reloadTable({
+                el: '#table-siswa'
+            });
+            $('#modalKelasSiswa').modal('hide');
+            APP.showToast({
+                type: data.status,
+                message: data.message,
+            });
+            APP.unblock();
+        }).catch(error => {
+            console.error("Fetch error:", error);
+            APP.unblock();
+        });
+    }
+
+    onDeleteSiswa = (el) => {
+        var data = $(el).data('params')
+        data = JSON.parse(atob(data));
+        APP.confirm({
+            title: 'Are you sure?',
+            text: 'Do you want to delete this item?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                APP.axiosRequest({
+                    url: `${BASE_API_MENU}/delete`,
+                    data: {
+                        id: data['id']
+                    },
+                }).then(data => {
+                    APP.reloadTable({
+                        el: '#table-siswa'
+                    });
+                    APP.showToast({
+                        type: data.status,
+                        message: data.message,
+                    });
+                }).catch(error => {
+                    console.error("Fetch error:", error);
+                });
+            }
         });
     }
 </script>
