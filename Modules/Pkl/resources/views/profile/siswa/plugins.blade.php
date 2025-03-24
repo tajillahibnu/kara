@@ -91,7 +91,7 @@
                 if (i == 'jk') {
                     var v = v == 'L' ? 'LAKI - LAKI' : 'PEREMPUAN';
                     $(`.detail-${i}`).html(v);
-                } else if (i == 'is_active') {
+                } else if (i == 'is_default') {
                     var v = v ? `<span class="badge bg-success">Aktif</span>` : `<span class="badge bg-danger">Tidak Aktif</span>`
                     $(`.detail-${i}`).html(v);
                 } else if (i == 'tanggal_lahir') {
@@ -123,7 +123,7 @@
             $.each(data, (i, v) => {
                 // param = JSON.parse(atob(data));
                 params = btoa(JSON.stringify(v));
-                var badge = `<span class="badge bg-label-success">Default Address</span>`;
+                var badge = v.is_default ? `<span class="badge bg-label-success">Default Address</span>` : '';
                 html = `
                 <div class="accordion-item border-bottom">
                     <div class="accordion-header d-flex justify-content-between align-items-center flex-wrap flex-sm-nowrap" id="headingHome">
@@ -136,8 +136,7 @@
                             role="button">
                             <span>
                                 <span class="d-flex gap-2 align-items-baseline">
-                                    <span class="h6 mb-1">${v.label}</span>
-                                    <span class="badge bg-label-success d-none">Default Address</span>
+                                    <span class="h6 mb-1">${v.label}</span>${badge}
                                 </span>
                                 <span class="mb-0">${v.kota},${v.provinsi}</span>
                             </span>
@@ -228,7 +227,14 @@
         console.log(data)
         $('#taskIdAlamat').val(data.id);
         $.each(data, (i, v) => {
-            $(`[name="${i}"]`).val(v);
+            if (i === 'is_default') {
+                var booleanValue = v === 1 ? true : false;
+                console.log(booleanValue)
+                console.log(v)
+                $('#alamat_utama').prop('checked', booleanValue);
+            } else {
+                $(`[name="${i}"]`).val(v);
+            }
         })
         $('#addNewAddress').modal('show');
     }

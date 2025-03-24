@@ -62,8 +62,8 @@
                     <p class="address-subtitle">Silakan tambahkan alamat baru Anda</p>
                 </div>
                 <form id="addNewAddressForm" class="mt-6" action="javascript:onSaveItAlamat('addNewAddressForm')">
-                    <input type="text" name="task" value="alamat">
-                    <input type="text" id="taskIdAlamat" name="taskID" value="">
+                    <input type="hidden" name="task" value="alamat">
+                    <input type="hidden" id="taskIdAlamat" name="taskID" value="">
                     <div class="row mb-4">
                         <label for="lbl-label_alamat" class="col-form-label col-3">Label Alamat</label>
                         <div class="col-9">
@@ -98,6 +98,12 @@
                         <label for="lbl-label_alamat" class="col-form-label col-3">Desa</label>
                         <div class="col-9">
                             <input class="form-control" type="text" id="desa" name="desa" />
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <label for="lbl-label_alamat" class="col-form-label col-3">Kode Pos</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" id="kode_pos" name="kode_pos" />
                         </div>
                     </div>
                     <div class="row g-6">
