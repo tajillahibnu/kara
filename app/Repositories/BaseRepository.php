@@ -95,8 +95,13 @@ abstract class BaseRepository
                 return $query->update($data);
             }
 
+            // $instance = $this->find($identifier);
+            // return $instance->update($data);
             $instance = $this->find($identifier);
-            return $instance->update($data);
+            if ($instance) {
+                $instance->update($data);
+                return $instance; // Mengembalikan instance yang telah diperbarui
+            }
         }
 
         return false;

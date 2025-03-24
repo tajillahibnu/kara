@@ -20,6 +20,7 @@ class PegawaiSeeder extends Seeder
 
         // List jabatan dengan jumlah pegawai yang diinginkan
         $jabatanList = [
+            'Guru' => ['PNS' => 1, 'Honorer' => 1],
             'Kepala Sekolah' => ['PNS' => 1, 'Honorer' => 0],
             'Wakil Kepala' => ['PNS' => 1, 'Honorer' => 0],
             'Guru' => ['PNS' => 10, 'Honorer' => 5],
@@ -35,6 +36,7 @@ class PegawaiSeeder extends Seeder
                     $dataPegawai[] = [
                         // 'nip' => ($jabatan !== 'Staff' && $status === 'PNS') ? $faker->numerify('1980##########') : null, // NIP hanya untuk PNS selain Staff
                         'nip' => ($status === 'PNS') ? $faker->numerify('1980##########') : null, // NIP hanya untuk PNS selain Staff
+                        'nik' => $faker->numerify('350##############'),
                         'name' => $faker->name,
                         'jk' => $faker->randomElement(['P', 'L']),
                         // 'telepon' => $faker->phoneNumber,

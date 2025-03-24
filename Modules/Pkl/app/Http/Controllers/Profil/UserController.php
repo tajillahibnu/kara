@@ -4,18 +4,86 @@ namespace Modules\Pkl\Http\Controllers\Profil;
 
 use App\Http\Controllers\Controller;
 use App\Services\FileUploadService;
+use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Pkl\Services\Alamat\AlamatSiswaService;
+use Modules\Pkl\Services\Profile\GuruService;
+use Modules\Pkl\Services\Profile\SiswaService;
 
 class UserController extends Controller
 {
-    protected FileUploadService $fileUploadService;
+    use ApiResponseTrait;
 
-    public function __construct(FileUploadService $fileUploadService)
-    {
+    protected FileUploadService $fileUploadService;
+    protected $guruService;
+    protected $siswaService;
+    protected $alamatSiswaService;
+
+    public function __construct(
+        FileUploadService $fileUploadService,
+        GuruService $guruService,
+        SiswaService $siswaService,
+        AlamatSiswaService $alamatSiswaService
+    ) {
         $this->fileUploadService = $fileUploadService;
+        $this->guruService = $guruService;
+        $this->siswaService = $siswaService;
+        $this->alamatSiswaService = $alamatSiswaService;
     }
 
-    
+    public function info(Request $request)
+    {
+        $bIsSiswa = Auth::user()->is_siswa;
+        $aArrData = [];
+        if ($bIsSiswa) {
+            $task = $request->input('task');
+            switch ($task) {
+                case 'alamat':
+                    $aArrData = $this->alamatSiswaService->fetchAlamat(Auth::user()->biodata_id);
+                    break;
+                default:
+                    $aArrData = $this->siswaService->getBiodata();
+                    break;
+            }
+        } else {
+            $aArrData = $this->guruService->getBiodata();
+        }
+        return $this->apiResponse($aArrData)
+            ->send();
+    }
+
+    public function update(Request $request)
+    {
+        $aArrData = [];
+        try {
+            $bIsSiswa = Auth::user()->is_siswa;
+            $task = $request->input('task');
+            if ($bIsSiswa) {
+                if ($task == 'alamat') {
+                    $taskId = !empty($request->input('taskID')) ? $request->input('taskID') : null;
+                    $aArrData = $this->alamatSiswaService->save($request->input(), Auth::user()->biodata_id,$taskId);
+                } else if ($task == 'delete') {
+                    $aArrData = $this->alamatSiswaService->delete($request->input('id'),Auth::user()->biodata_id);
+                } else if ($task == 'password') {
+                    $aArrData = $this->siswaService->changePassword($request->input(),Auth::user()->id);
+                } else {
+                    $aArrData = $this->siswaService->updateProfile($task, $request->input());
+                }
+            } else {
+                $aArrData = $this->guruService->save($task, $request->input());
+            }
+
+            return $this->apiResponse($aArrData)
+                ->send();
+        } catch (\Exception $e) {
+            return $this->apiResponse([])
+                ->statusCode(500)
+                ->message($e->getMessage())
+                ->send();
+        }
+    }
+
     public function doUpload(Request $request)
     {
         $request->validate([

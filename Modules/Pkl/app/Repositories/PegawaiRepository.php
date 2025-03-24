@@ -26,7 +26,7 @@ class PegawaiRepository extends BaseRepository
             // Generate username unik
             $username = $this->generateUniqueUsername($pegawai->nama);
 
-            $pass = $pegawai->nip??'password123';
+            $pass = $pegawai->nip ?? 'password123';
             // Buat user secara otomatis
             $user = User::create([
                 'name'       => $pegawai->name,
@@ -55,4 +55,64 @@ class PegawaiRepository extends BaseRepository
 
         return $username;
     }
+
+    public function pegawaiToUpdate(array $dataToUpdate, $identifier = null, callable $userCallback = null)
+    {
+        DB::beginTransaction();
+        try {
+            if (isset($dataToUpdate['email'])) {
+                $exists = User::where('email', $dataToUpdate['email'])
+                    ->where('id', '!=', $identifier) // Pastikan bukan dirinya sendiri
+                    ->exists();
+    
+                if ($exists) {
+                    throw new \Exception("Email sudah digunakan oleh pengguna lain.");
+                }
+            }
+    
+            // Update pegawai terlebih dahulu
+            $updated = false;
+            if ($identifier && !empty($dataToUpdate)) {
+                $updated = Pegawai::where('id', $identifier)->update($dataToUpdate);
+                // Ambil data terbaru setelah update
+            }
+            $pegawai = Pegawai::find($identifier);
+
+            // Jika update pegawai berhasil dan ada callback, jalankan callback
+            if ($updated && $userCallback !== null) {
+                $userCallback($pegawai->toArray()); // Callback dipanggil tanpa parameter
+            }
+
+            DB::commit();
+            return $updated;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+
+
+    // public function pegawaiToUpdate(array $dataToUpdate, $identifier = null, $userId = null, array $userToUpdate = [])
+    // {
+    //     DB::beginTransaction(); // Mulai transaction
+    //     try {
+    //         // Update user jika userId dan userToUpdate tidak kosong
+    //         if ($userId && !empty($userToUpdate)) {
+    //             User::where('id', $userId)->update($userToUpdate);
+    //         }
+
+    //         // Update pegawai jika identifier dan dataToUpdate tidak kosong
+    //         $updated = false;
+    //         if ($identifier && !empty($dataToUpdate)) {
+    //             $updated = Pegawai::where('id', $identifier)->update($dataToUpdate);
+    //         }
+
+    //         DB::commit(); // Simpan perubahan ke database
+    //         return $updated; // Kembalikan status update (true jika berhasil, false jika tidak)
+    //     } catch (\Exception $e) {
+    //         DB::rollBack(); // Batalkan semua perubahan jika ada error
+    //         throw $e;
+    //     }
+    // }
 }

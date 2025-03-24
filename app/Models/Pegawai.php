@@ -23,4 +23,6 @@ class Pegawai extends Model
         'user_id',
         'is_active',
     ];
+
+    // protected $hidden = ['created_at', 'updated_at'];
 }
