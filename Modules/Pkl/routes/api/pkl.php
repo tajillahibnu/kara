@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Pkl\Http\Controllers\ComboMasterController;
+use Modules\Pkl\Http\Controllers\Pkl\PesertaPklController;
 use Modules\Pkl\Http\Controllers\Pkl\PriodePKLController;
 use Modules\Pkl\Http\Controllers\Pkl\ProsesRegisterController;
 use Modules\Pkl\Http\Controllers\Pkl\RegisterPklController;
@@ -59,6 +60,10 @@ Route::group(['prefix' => 'pendaftaranpkl', 'middleware' => []], function () {
     // Route::post('delete', [RegisterPklController::class, 'delete'])->name('delete');
     // Route::post('status', [RegisterPklController::class, 'status'])->name('status');
     Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
+});
+
+Route::group(['prefix' => 'peserta', 'middleware' => []], function () {
+    Route::post('main-table', [PesertaPklController::class, 'mainTable'])->name('main-table');
 });
 
 Route::group(['prefix' => 'konfirmasipkl', 'middleware' => []], function () {

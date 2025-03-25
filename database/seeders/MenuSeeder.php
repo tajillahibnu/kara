@@ -117,10 +117,24 @@ class MenuSeeder extends Seeder
         $dd = $dd + 1;
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
+        $save['title']      = 'Peserta';
+        $save['name']       = 'Peserta';
+        $save['slug']       = 'peserta_pkl';
+        $save['url']        = 'prakerin/peserta';
+        $save['level']      = '1';
+        $save['type']       = 'main';
+        $save['menu_order'] = $dd;
+        $save['view_path']      = 'pkl/peserta/~|role|~';
+        $save['view_file']      = 'default';
+        Menu::create($save);
+        
+        $dd = $dd + 1;
+        $save['id']         = $id.$dd;
+        $save['parent_id']  = $id;
         $save['title']      = 'Periode';
         $save['name']       = 'Periode';
         $save['slug']       = 'pklpriode';
-        $save['url']        = 'prekerin/priode';
+        $save['url']        = 'prakerin/priode';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
@@ -134,7 +148,7 @@ class MenuSeeder extends Seeder
         $save['title']      = 'Pendaftaran';
         $save['name']       = 'Pendaftaran PKL';
         $save['slug']       = 'pendaftaranpkl';
-        $save['url']        = 'prekerin/pendaftaranpkl';
+        $save['url']        = 'prakerin/pendaftaranpkl';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
@@ -148,7 +162,7 @@ class MenuSeeder extends Seeder
         $save['title']      = 'Konfirmasi';
         $save['name']       = 'Konfirmasi';
         $save['slug']       = 'konfirmasipkl';
-        $save['url']        = 'prekerin/konfirmasipkl';
+        $save['url']        = 'prakerin/konfirmasipkl';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
@@ -184,8 +198,6 @@ class MenuSeeder extends Seeder
         $save['view_file']      = 'default';
         Menu::create($save);
     }
-
-
 
     private function master($id,$menuNumber){
         $dd = $id;

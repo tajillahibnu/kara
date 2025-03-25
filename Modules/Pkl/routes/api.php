@@ -54,7 +54,7 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
         require_once(__DIR__ . '/api/master/Rombel.php');
     });
 
-    Route::group(['prefix' => 'prekerin'], function () {
+    Route::group(['prefix' => 'prakerin'], function () {
         require_once(__DIR__ . '/api/pkl.php');
     });
 });

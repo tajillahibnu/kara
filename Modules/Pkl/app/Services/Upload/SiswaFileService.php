@@ -4,13 +4,16 @@ namespace Modules\Pkl\Services\Upload;
 
 use App\Models\Jurusan;
 use App\Models\Rombel;
+use App\Models\Siswa;
 use App\Models\TempSiswa;
 use App\Models\Upload_siswa;
 use App\Services\DataTableService;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Modules\Pkl\Jobs\ProcessSiswaUploade;
+use Modules\Pkl\Repositories\SiswaRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SiswaFileService
@@ -46,15 +49,26 @@ class SiswaFileService
     public function update($request, $id)
     {
         $response['statusCode'] = 200;
+        DB::beginTransaction(); // Mulai transaction
         try {
-            $post = TempSiswa::find($id);
+            $tempSiswa = TempSiswa::find($id);
             $dataToUpdate['rombel_id'] = $request['kelas_siswa'];
-            return $post->update($dataToUpdate);
+
+            $save['nis']        = $tempSiswa['nis'];
+            $save['name']       = $tempSiswa['nama'];
+            $save['jurusan_id'] = $tempSiswa['jurusan_id'];
+            $save['tingkat_id'] = $tempSiswa['tingkat_id'];
+            $save['tahun_masuk'] = $tempSiswa['tahun_akademik'];
+            
+            $siswa = Siswa::create($save);
+
+            DB::commit(); // Simpan perubahan ke database
+            return $tempSiswa->update($dataToUpdate);
         } catch (NotFoundHttpException $e) {
-            throw new NotFoundHttpException("Item with ID $id not found for deletion");
+            throw new NotFoundHttpException("Item with ID $id not found for update");
         } catch (Exception $e) {
             $response['message'] = $e->getMessage();
-            throw new Exception("Failed to delete item", 500);
+            throw new Exception($e->getMessage(), 500);
         }
     }
 
