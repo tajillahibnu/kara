@@ -57,7 +57,43 @@ class DudiSeeder extends Seeder
             'partnership_status' => 'Belum Ada MoU',
             'description' => 'Bengkel yang melayani perawatan dan perbaikan motor.',
             'requirements' => 'Siswa diutamakan yang memiliki dasar mekanik otomotif.',
-            'is_active' => false
+            'is_active' => true
+        ]);
+
+        Dudi::create([
+            'name' => 'PT.Dirgantara',
+            'address' => 'Jl. Otomotif No. 45, Bandung',
+            'phone' => '022-7654321',
+            'email' => 'bengkel1@motorshop.com',
+            'website' => null,
+            'latitude' => -6.914744,
+            'longitude' => 107.609810,
+            'pic_name' => 'Dedi Supriatna',
+            'pic_phone' => '08129876543',
+            'quota' => 5,
+            'sector' => 'Otomotif',
+            'partnership_status' => 'Belum Ada MoU',
+            'description' => 'Bengkel yang melayani perawatan dan perbaikan motor.',
+            'requirements' => 'Siswa diutamakan yang memiliki dasar mekanik otomotif.',
+            'is_active' => true
+        ]);
+
+        Dudi::create([
+            'name' => 'PT.Indo Jaya',
+            'address' => 'Jl. Otomotif No. 45, Bandung',
+            'phone' => '022-7654321',
+            'email' => 'bengkel2@motorshop.com',
+            'website' => null,
+            'latitude' => -6.914744,
+            'longitude' => 107.609810,
+            'pic_name' => 'Dedi Supriatna',
+            'pic_phone' => '08129876543',
+            'quota' => 5,
+            'sector' => 'Otomotif',
+            'partnership_status' => 'Belum Ada MoU',
+            'description' => 'Bengkel yang melayani perawatan dan perbaikan motor.',
+            'requirements' => 'Siswa diutamakan yang memiliki dasar mekanik otomotif.',
+            'is_active' => true
         ]);
     }
 }

@@ -35,7 +35,7 @@ class Siswa extends Model
         'kode_nik',
     ];
 
-    protected $hidden = ['created_at', 'updated_at','deleted_at'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
 
     protected static function booted()
@@ -66,8 +66,8 @@ class Siswa extends Model
         return $this->belongsTo(Rombel::class);
     }
 
-    public function jurusan()
+    public function jurusans()
     {
-        return $this->belongsTo(Jurusan::class);
+        return $this->belongsTo(Jurusan::class, 'jurusan_id'); // 'jurusan_id' adalah nama kolom di tabel siswa
     }
 }

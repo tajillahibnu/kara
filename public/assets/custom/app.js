@@ -311,12 +311,14 @@ var APP = ((config) => {
                 autoselect: true,
                 select2: false,
                 choose: true,
+                allowClear: true,
                 callback: () => { }
             }, config);
 
             if (config.choose) {
                 config.el.forEach(selector => {
-                    $(selector).empty().append('<option disabled="" value="">Choose...</option>');
+                    // $(selector).empty().append('<option disabled="" value="">Choose...</option>');
+                    $(selector).empty().append('<option value="">Choose...</option>');
                 });
             }else{
                 config.el.forEach(selector => {
@@ -346,6 +348,7 @@ var APP = ((config) => {
                     // Jika custom select2 diaktifkan, lakukan inisialisasi select2
                     if (config.select2) {
                         $(selector).select2({
+                            allowClear: config.allowClear,
                             placeholder: config.placeholder,
                             dropdownParent: config.dropdownParent ? $(config.dropdownParent) : undefined
                         });

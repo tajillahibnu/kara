@@ -14,7 +14,7 @@ mainTable = () => {
             <"dt-action-buttons d-flex justify-content-center flex-md-row align-items-baseline"B>>>t
         <"row mx-1"<"col-sm-12 col-md-6 d-flex align-items-center length-menu-no-margin"li><"col-sm-12 col-md-6"p>>`,
         buttons: [{
-            text: '<i class="ti ti-plus ti-xs me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Tambah Dudi</span>',
+            text: '<i class="ti ti-plus ti-xs me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Tambah Data</span>',
             className: "add-new btn btn-primary ms-2 waves-effect waves-light",
             action: function (e, dt, node, config) {
                 newData()

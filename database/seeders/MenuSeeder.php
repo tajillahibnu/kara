@@ -117,14 +117,28 @@ class MenuSeeder extends Seeder
         $dd = $dd + 1;
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
-        $save['title']      = 'Peserta';
-        $save['name']       = 'Peserta';
+        $save['title']      = 'Daftar Siswa';
+        $save['name']       = 'Daftar Siswa';
         $save['slug']       = 'peserta_pkl';
         $save['url']        = 'prakerin/peserta';
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
         $save['view_path']      = 'pkl/peserta/~|role|~';
+        $save['view_file']      = 'default';
+        Menu::create($save);
+
+        $dd = $dd + 1;
+        $save['id']         = $id.$dd;
+        $save['parent_id']  = $id;
+        $save['title']      = 'Penempatan Siswa';
+        $save['name']       = 'Penempatan Siswa';
+        $save['slug']       = 'penempatanpkl';
+        $save['url']        = 'prakerin/penempatan';
+        $save['level']      = '1';
+        $save['type']       = 'main';
+        $save['menu_order'] = $dd;
+        $save['view_path']      = 'pkl/penempatan/';
         $save['view_file']      = 'default';
         Menu::create($save);
         
@@ -145,8 +159,8 @@ class MenuSeeder extends Seeder
         $dd = $dd + 1;
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
-        $save['title']      = 'Pendaftaran';
-        $save['name']       = 'Pendaftaran PKL';
+        $save['title']      = 'Registrasi';
+        $save['name']       = 'Registrasi';
         $save['slug']       = 'pendaftaranpkl';
         $save['url']        = 'prakerin/pendaftaranpkl';
         $save['level']      = '1';
@@ -159,8 +173,8 @@ class MenuSeeder extends Seeder
         $dd = $dd + 1;
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
-        $save['title']      = 'Konfirmasi';
-        $save['name']       = 'Konfirmasi';
+        $save['title']      = 'Data Pengajuan';
+        $save['name']       = 'Data Pengajuan';
         $save['slug']       = 'konfirmasipkl';
         $save['url']        = 'prakerin/konfirmasipkl';
         $save['level']      = '1';
@@ -215,7 +229,7 @@ class MenuSeeder extends Seeder
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Dunia Usaha dan Dunia Industri';
-        $save['name']       = 'DU & DI';
+        $save['name']       = 'Data Perusahaan';
         $save['slug']       = 'masdudi';
         $save['url']        = 'master/dudi';
         $save['level']      = '1';
@@ -229,7 +243,7 @@ class MenuSeeder extends Seeder
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Jurusan';
-        $save['name']       = 'Jurusan';
+        $save['name']       = 'Data Jurusan';
         $save['slug']       = 'masju';
         $save['url']        = 'master/jurusan';
         $save['level']      = '1';
@@ -243,7 +257,7 @@ class MenuSeeder extends Seeder
         $save['id']         = $id.$dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Kelas';
-        $save['name']       = 'Kelas';
+        $save['name']       = 'Data Kelas';
         $save['slug']       = 'masrombel';
         $save['url']        = 'master/rombel';
         $save['level']      = '1';

@@ -20,6 +20,13 @@ class Jurusan extends Model
         'is_active',
     ];
 
+    // Definisikan relasi ke model Siswa
+    public function siswas()
+    {
+        return $this->hasMany(Siswa::class, 'jurusan_id'); // 'jurusan_id' adalah nama kolom di tabel siswa
+    }
+
+
     protected static function boot()
     {
         parent::boot();

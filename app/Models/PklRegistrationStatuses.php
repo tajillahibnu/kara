@@ -17,7 +17,9 @@ class PklRegistrationStatuses extends Model
         'user_id',
         'status',
         'notes',
-        'status_updated_at'
+        'status_updated_at',
+        'is_view',
+        'is_revisi',
     ];
 
     public function registration()

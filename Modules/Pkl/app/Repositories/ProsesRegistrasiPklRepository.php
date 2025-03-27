@@ -22,9 +22,9 @@ class ProsesRegistrasiPklRepository extends BaseRepository
     private function updateRegistrationStatus($registerId, $status, $roleFilter = true)
     {
         return DB::transaction(function () use ($registerId, $status, $roleFilter) {
-            // **Pastikan action hanya 'approved' atau 'rejected'**
-            if (!in_array($status, ['approved', 'rejected'])) {
-                throw new \InvalidArgumentException("Action must be 'approved' or 'rejected'");
+            // **Pastikan action hanya 'completed' atau 'rejected'**
+            if (!in_array($status, ['completed', 'rejected'])) {
+                throw new \InvalidArgumentException("Action must be 'completed' or 'rejected'");
             }
 
             // Ambil query untuk update status berdasarkan role pengguna jika diperlukan
@@ -36,7 +36,7 @@ class ProsesRegistrasiPklRepository extends BaseRepository
                 $query->where('role_id', $role_id);
             }
 
-            // Update status menjadi 'approved' atau 'rejected'
+            // Update status menjadi 'completed' atau 'rejected'
             $update['user_id']  = Auth::user()->id;
             $update['status']   = $status;
             $update['status_updated_at'] = now();
@@ -50,16 +50,16 @@ class ProsesRegistrasiPklRepository extends BaseRepository
                 throw new \Exception("PklRegistration dengan ID $registerId tidak ditemukan.");
             }
 
-            if ($status === 'approved') {
+            if ($status === 'completed') {
                 // Cek apakah semua approval sudah diberikan
                 $countPending = PklRegistrationStatuses::where('registration_id', $registerId)
-                    ->where('status', '!=', 'approved')
+                    ->where('status', '!=', 'completed')
                     ->count();
 
                 // Jika semua sudah disetujui, update status utama di `PklRegistration`
                 if ($countPending == 0) {
                     $updatedRegister->update([
-                        'status' => 'approved',
+                        'status_register' => 'completed',
                         'status_updated_at' => now(),
                     ]);
                 }
@@ -70,7 +70,7 @@ class ProsesRegistrasiPklRepository extends BaseRepository
 
                 // Update status di tabel `PklRegistration`
                 $updatedRegister->update([
-                    'status' => 'rejected',
+                    'status_register' => 'rejected',
                     'status_updated_at' => now(),
                 ]);
             }
@@ -89,7 +89,7 @@ class ProsesRegistrasiPklRepository extends BaseRepository
      */
     public function saveAcc($registerId)
     {
-        return $this->updateRegistrationStatus($registerId, 'approved', true);
+        return $this->updateRegistrationStatus($registerId, 'completed', true);
     }
 
     /**
@@ -97,16 +97,16 @@ class ProsesRegistrasiPklRepository extends BaseRepository
      */
     public function saveAccAll($registerId)
     {
-        return $this->updateRegistrationStatus($registerId, 'approved', false);
+        return $this->updateRegistrationStatus($registerId, 'completed', false);
     }
 
 
     public function saveReject($registerId)
     {
-        return $this->updateRegistrationStatus($registerId, 'rejected', true);
+        return $this->updateRegistrationStatus($registerId, 'completed', true);
     }
     public function saveRejectAll($registerId)
     {
-        return $this->updateRegistrationStatus($registerId, 'rejected', false);
+        return $this->updateRegistrationStatus($registerId, 'completed', false);
     }
 }

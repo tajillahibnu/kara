@@ -2,7 +2,9 @@
 
 namespace Modules\Pkl\Services;
 
+use App\Models\Dudi;
 use App\Models\Jurusan;
+use App\Models\Pegawai;
 use App\Models\PklPeriode;
 use App\Models\Role;
 use App\Models\Rombel;
@@ -100,12 +102,60 @@ class ComboMasterService
         });
     }
 
-    public function priode_pkl()
+    public function pegawai()
     {
-        $data = PklPeriode::select('id', 'name')
-            ->where('is_active', true) // Filter data yang aktif
+        $input = Request::all(); // Mengambil semua input dari request
+        $query = Pegawai::select('id', 'name')
+            ->orderBy('name', 'ASC')
+            ->whereNull('deleted_at');
+
+        if (!empty($input)) {
+            foreach ($input as $fild => $value) {
+                $query->where($fild, $value);
+            }
+        }
+
+        $query->where('is_active', true);
+        $data = $query->get();
+        return $data->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => ucwords($item->name)
+            ];
+        });
+    }
+
+    public function industri()
+    {
+        $query = Dudi::select('id', 'name')
             ->orderBy('name', 'DESC')
-            ->get();
+            ->whereNull('deleted_at');
+
+        $query->where('is_active', true);
+
+        $data = $query->get();
+        return $data->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => ucwords($item->name)
+            ];
+        });
+    }
+
+    public function priode_pkl($isAll = true)
+    {
+        // Ambil data dengan is_active = true
+        $query = PklPeriode::select('id', 'name')
+            ->orderBy('name', 'DESC')
+            ->whereNull('deleted_at'); // Pastikan data tidak dihapus (soft delete)
+
+        // Tambahkan kondisi where untuk jurusan_id jika ada dalam request
+        if (($isAll)) {
+            $query->where('is_active', true);
+        }
+
+        // Ambil data
+        $data = $query->get();
         return $data->map(function ($item) {
             return [
                 'id' => $item->id,

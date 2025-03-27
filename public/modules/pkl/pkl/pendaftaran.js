@@ -6,6 +6,8 @@ $(() => {
         fild_id: 'id',
         fild_name: 'name',
         select2: true,
+        allowClear: false,
+        choose:false,
         dropdownParent: '#mainModal',
     })
     APP.combov1({
@@ -14,6 +16,8 @@ $(() => {
         fild_id: 'id',
         fild_name: 'name',
         select2: true,
+        allowClear: false,
+        choose:false,
         dropdownParent: '#mainModal',
     })
 

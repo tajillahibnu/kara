@@ -94,6 +94,7 @@ class RoleMenuSeeder extends Seeder
     {
         $inMenu[] = 'pkl';
         $inMenu[] = 'peserta_pkl';
+        $inMenu[] = 'penempatanpkl';
         $inMenu[] = 'pklpriode';
         $inMenu[] = 'pendaftaranpkl';
         $inMenu[] = 'konfirmasipkl';

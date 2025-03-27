@@ -2,7 +2,9 @@
 
 namespace Modules\Pkl\Repositories;
 
+use App\Models\Jurusan;
 use App\Models\PklApproval;
+use App\Models\PklPeriode;
 use App\Models\PklRegistration;
 use App\Models\PklRegistrationStatuses;
 use App\Models\Siswa;
@@ -20,9 +22,10 @@ class RegisterPklRepository extends BaseRepository
     {
         $getSetting = getSiteMeta();
         $tahunPelajaran = $getSetting['kbm']['tahun_pelajaran'];
-
+        $getSiswa = Siswa::with('jurusans')->find($id);
+        // dd($getPriode);
+        
         DB::beginTransaction(); // Mulai transaction
-
         try {
 
             // Simpan data siswa yang mendaftar PKL
@@ -31,8 +34,14 @@ class RegisterPklRepository extends BaseRepository
                 $update['is_pkl'] = true;
                 $siswa->update($update);
             }
-
+            $save['jurusan_name'] = $getSiswa->jurusans->name;
+            $save['tingkat_id'] = $siswa->tingkat_id;
+            $save['kelas']      = $siswa->rombel_name;
             $save['tahun_pelajaran'] = $tahunPelajaran;
+
+            $getPriode = PklPeriode::find($save['periode_id']);
+            $save['tanggal_mulai']    = $getPriode->tanggal_mulai;
+            $save['tanggal_berakhir'] = $getPriode->tanggal_selesai;
             // Buat data pendaftaran PKL
             $pklRegistration = PklRegistration::create($save);
 
@@ -51,6 +60,7 @@ class RegisterPklRepository extends BaseRepository
                     'role_id'   => $approval->role_id,
                     'status'    => 'pending', // Status awal menunggu konfirmasi
                     'approval_order' => $approval->approval_order,
+                    'is_view' => $approval->approval_order == 1 ? true : false,
                 ]);
             }
             DB::commit(); // Simpan perubahan ke database
