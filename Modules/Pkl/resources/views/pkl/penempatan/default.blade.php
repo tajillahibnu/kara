@@ -5,7 +5,7 @@
                 <h5 class="card-tile mb-0">Daftar Siswa</h5>
             </div>
             <div class="card-body pb-0 mb-0">
-                <div class="border border-light-primary rounded-2 border-2 p-4 mt-2" id="div_filter_tamu" style="">
+                <div class="border border-light-primary rounded-2 border-2 p-4 mt-2">
                     <form action="javascript:javascript:onFilter()" method="post">
                         <div class="row">
                             <div class="col-12 col-md">

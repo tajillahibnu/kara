@@ -82,7 +82,7 @@ class PenempatanPKLService
         if (!empty($request['dudi'])) {
             $query->where('dudi_id', $request['dudi']);
         }
-        
+
         $query->where('pkl_registrations.jurusan_id', $request['jurusan']);
 
         return $query
@@ -145,5 +145,25 @@ class PenempatanPKLService
             })
             ->rawColumns(['status', 'action'])
             ->toJson();
+    }
+
+    public function industri()
+    {
+        $query = Dudi::select('id', 'name', 'pic_name', 'pic_phone', 'pic_jabatan')
+            ->orderBy('name', 'DESC')
+            ->whereNull('deleted_at');
+
+        $query->where('is_active', true);
+
+        $data = $query->get();
+        return $data->map(function ($item) {
+            return [
+                'id'            => $item->id,
+                'name'          => ucwords($item->name),
+                'pic_name'      => ucwords($item->pic_name),
+                'pic_phone'     => ($item->pic_phone),
+                'pic_jabatan'   => ucwords($item->pic_jabatan),
+            ];
+        });
     }
 }

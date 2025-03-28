@@ -39,7 +39,7 @@
         })
         APP.combov1({
             el: ['#filter_industri'],
-            url: `${BASE_API_MENU}/combo/dudi`,
+            url: `${BASE_API_MENU}/combobox/dudi`,
             fild_id: 'id',
             fild_name: 'name',
             select2: true,
@@ -48,13 +48,26 @@
                 $('#filter_industri').val(null).trigger('change');
                 $('#dudi_id').empty().append('<option value="">Choose...</option>');
                 item['data'].forEach(element => {
-                    $('#dudi_id').append(`<option value="${element['id']}">${element['name']}</option>`);
+                    $('#dudi_id').append(`<option value="${element['id']}" data-name="${element['pic_name']}" data-phone="${element['pic_phone']}" data-jabatan="${element['pic_jabatan']}">${element['name']}</option>`);
                 });
                 $("#dudi_id").select2({
                     allowClear: true,
                     placeholder: "Pilih Industri",
                     dropdownParent: '#mainModal'
                 });
+                $('#dudi_id').on('change', function() {
+                    var selectedOption = $(this).find('option:selected');
+
+                    var picName = selectedOption.data('name');
+                    var picPhone = selectedOption.data('phone');
+                    var picJabatan = selectedOption.data('jabatan');
+
+                    // Update the input fields with the selected option's data
+                    $('#pembina_name').val(picName);
+                    $('#pembina_hp').val(picPhone);
+                    $('#pembina_jabatan').val(picJabatan);
+                });
+
             }
         })
         APP.combov1({
@@ -170,7 +183,6 @@
         var data = $(el).data('params')
         data = JSON.parse(atob(data));
         targetID = data['id'];
-        console.log(data)
         $('#dudi_id').val(null).trigger('change'); // Menghapus pilihan
         $.each(data, (i, v) => {
             let inputElement = $(`[name="${i}"]`);
@@ -183,7 +195,6 @@
                     // Konversi format YYYY-MM-DD ke DD-MM-YYYY jika perlu
                     let formattedDate = v.split('-').reverse().join('-');
 
-                    console.log("Setting date:", formattedDate); // Debugging
                     inputElement[0]._flatpickr.setDate(formattedDate, true);
                 }
             }
@@ -204,7 +215,7 @@
         }).then(data => {
             APP.reloadTable();
             $('#mainModal').modal('hide');
-            APP.notif({
+            APP.showToast({
                 type: data.status,
                 message: data.message,
             });

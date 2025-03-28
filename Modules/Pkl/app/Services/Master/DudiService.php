@@ -3,9 +3,15 @@
 namespace Modules\Pkl\Services\Master;
 
 use App\Models\Dudi;
+use App\Models\DudiChekInOut;
+use App\Models\Role;
+use App\Models\User;
 use App\Services\DataTableService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Modules\Pkl\Repositories\BasePklRepository;
 use Modules\Pkl\Repositories\DudiRepository;
@@ -15,34 +21,74 @@ class DudiService
 {
     protected $repository;
 
-    public function __construct(BasePklRepository $repository)
-    {
-        /**
-         * Memangil Model yang digunakan di repository
-         */
-        $this->repository = $repository->setModel(new Dudi());
-    }
+    // public function __construct(BasePklRepository $repository)
+    // {
+    //     /**
+    //      * Memangil Model yang digunakan di repository
+    //      */
+    //     $this->repository = $repository->setModel(new Dudi());
+    // }
 
+    public function __construct(
+        DudiRepository $repository,
+    ) {
+        $this->repository = $repository;
+    }
 
     protected function prepareData(array $input)
     {
         return [
-            'name' => $input['name'] ?? null,
-            'email' => $input['email'] ?? null,
-            'phone' => $input['phone'] ?? null,
-            'address' => $input['address'] ?? null,
+            'name'          => $input['name'] ?? null,
+            'email'         => $input['email'] ?? null,
+            'phone'         => $input['phone'] ?? null,
+            'address'       => $input['address'] ?? null,
+            'pic_name'      => $input['pic_name'] ?? null,
+            'pic_phone'     => $input['pic_phone'] ?? null,
+            'pic_jabatan'   => $input['pic_jabatan'] ?? null,
+            'latitude'      => $input['latitude'] ?? null,
+            'longitude'     => $input['longitude'] ?? null,
+            'username'     => $input['username'] ?? null,
+            'password'     => $input['password'] ?? null,
         ];
     }
 
     public function store(array $input)
     {
+        DB::beginTransaction(); // Mulai transaction
         $response['success'] = false;
         $response['statusCode'] = 200;
         try {
+            $getRole = Role::where('slug', 'iduka')->first();
+
             $dataToSave = $this->prepareData($input);
             $response = $this->repository->create($dataToSave);
-            $response['data'] = $input;
+
+            $save['dudi_id'] = $response['id'];
+            for ($i = 1; $i <= 7; $i++) {
+                $daySlug = strtolower(Carbon::create(2024, 1, $i)->format('l')); // "Monday", "Tuesday", etc.
+
+                $save['shift'] = 'umum';
+                $save['day_number'] = $i;
+                $save['day_slug'] = $daySlug;
+                $save['clock_in'] = '08:00:00';
+                $save['clock_out'] = '17:00:00';
+                $save['ramadhan_clock_in'] = '08:00:00';
+                $save['ramadhan_clock_out'] = '16:00:00';
+                DudiChekInOut::create($save);
+            }
+
+            User::create([
+                'name'       => $response['name'],
+                'username'   => $response['username'], // Gunakan username yang sudah dibuat
+                'email'      => $response['email'],
+                'password'   => Hash::make($response->password), // Bisa pakai default password atau dari request
+                'biodata_id' => $response['id'],
+                'is_siswa'          => false,
+                'primary_role_id'   => $getRole->id,
+            ]);
+            DB::commit(); // Simpan perubahan ke database
         } catch (QueryException $e) {
+            DB::rollBack();
             $response['statusCode'] = 400;
             $response['message'] = $e->getMessage();
         }
@@ -51,15 +97,44 @@ class DudiService
 
     public function update($id, array $input)
     {
+        DB::beginTransaction(); // Mulai transaction
         $response['success'] = false;
         $response['statusCode'] = 200;
         try {
+
             $dataToUpdate = $this->prepareData($input);
-            $response['data'] = $this->repository->update($dataToUpdate, $id);
+            $response = $this->repository->update($dataToUpdate, $id);
+
+            $getRole = Role::where('slug', 'iduka')->first();
+            $query = User::where('biodata_id', $response['id'])
+                ->where('primary_role_id', $getRole->id);
+            if (!$query->exists()) {
+                User::create([
+                    'name'       => $response['name'],
+                    'username'   => $response['username'], // Gunakan username yang sudah dibuat
+                    'email'      => $response['email'],
+                    'password'   => Hash::make($response['password']), // Bisa pakai default password atau dari request
+                    'biodata_id' => $response['id'],
+                    'is_siswa'          => false,
+                    'primary_role_id'   => $getRole->id,
+                ]);
+            } else {
+                $updateUser = [
+                    'username' => $dataToUpdate['username'],
+                ];
+                // Update password hanya jika ada perubahan
+                if (!empty($dataToUpdate['password'])) {
+                    $updateUser['password'] = Hash::make($dataToUpdate['password']);
+                }
+                $query->update($updateUser);
+            }
+            DB::commit(); // Simpan perubahan ke database
         } catch (NotFoundHttpException $e) {
+            DB::rollBack();
             $response['message'] = "Item with ID $id not found for update";
             throw new NotFoundHttpException($response['message']);
         } catch (Exception $e) {
+            DB::rollBack();
             $response['message'] = $e->getMessage();
             Log::error("Error updating : " . $response['message']);
             throw new Exception("Failed to update item", 500);
@@ -96,7 +171,7 @@ class DudiService
         $response['success'] = false;
         $response['statusCode'] = 200;
         try {
-            $dataToUpdate['is_active'] = !$input['is_active']?? true;
+            $dataToUpdate['is_active'] = !$input['is_active'] ?? true;
             // print_r($dataToUpdate);
             // exit;
             $response['data'] = $this->repository->update($dataToUpdate, $id);
@@ -118,14 +193,14 @@ class DudiService
             ->addColumn('status', function ($detail) {
                 // $badgeClass = $detail->is_active ? 'bg-label-success' : 'bg-label-danger';
                 // $badgeText = $detail->is_active ? 'Active' : 'Inactive';
-                
+
                 // return '<span class="badge  ' . $badgeClass . '">' . $badgeText . '</span>';
-                
+
                 $badgeText = $detail->is_active ? 'checked' : '';
                 return '
                         <div class="w-75 d-flex justify-content-end">
                             <div class="form-check form-switch me-n3">
-                            <input type="checkbox" class="form-check-input" name="'.$detail->id.'" data-params="' . base64_encode(json_encode($detail)) . '" onchange="setActive(this)" '.$badgeText.'>
+                            <input type="checkbox" class="form-check-input" name="' . $detail->id . '" data-params="' . base64_encode(json_encode($detail)) . '" onchange="setActive(this)" ' . $badgeText . '>
                             </div>
                         </div>
                 ';

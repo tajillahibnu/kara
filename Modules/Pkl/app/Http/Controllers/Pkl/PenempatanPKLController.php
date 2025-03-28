@@ -27,6 +27,12 @@ class PenempatanPKLController extends Controller
         $this->mainServices = $mainServices;
     }
 
+    public function combobox_dudi()
+    {
+        $data = $this->mainServices->industri(false);
+        return $this->apiResponse($data)->send();
+    }
+
     public function store(Request $request)
     {
         try {

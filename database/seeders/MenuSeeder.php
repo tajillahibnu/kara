@@ -204,7 +204,7 @@ class MenuSeeder extends Seeder
         $save['title']      = 'Absensi';
         $save['name']       = 'Absensi';
         $save['slug']       = 'absensi_pkl_siswa';
-        $save['url']        = 'absensi/pkl';
+        $save['url']        = 'prakerin/absensi';
         $save['level']      = '1';
         $save['type']       = 'menu_pkl_siswa';
         $save['menu_order'] = $dd;
