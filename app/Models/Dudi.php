@@ -33,6 +33,8 @@ class Dudi extends Model
         'password',
     ];
 
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at','password'];
+
     protected $casts = [
         'is_active' => 'boolean',
     ];

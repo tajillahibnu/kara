@@ -37,7 +37,7 @@ return new class extends Migration
             
             $table->boolean('is_active')->default(false); // Status aktif/tidak
 
-            $table->string('username',15)->nullable(); // Nama DUDI
+            $table->string('username')->nullable(); // Nama DUDI
             $table->string('password')->nullable(); // Nama DUDI
             
             $table->timestamps();

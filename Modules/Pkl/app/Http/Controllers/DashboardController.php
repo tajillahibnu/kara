@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Modules\Pkl\Services\Dashboard\DashboardSiswaService;
+use Modules\Pkl\Services\Dashboard\IdukaService;
 use Modules\Pkl\Services\Dashboard\SuperadminService;
 
 class DashboardController extends Controller
@@ -13,14 +14,16 @@ class DashboardController extends Controller
     use ApiResponseTrait;
     protected $superadminServices;
     protected $dashboardSiswaService;
+    protected $idukaDashboardService;
     public function __construct(
         SuperadminService $superadminServices,
         DashboardSiswaService $dashboardSiswaService,
+        IdukaService $idukaDashboardService,
 
-        )
-    {
+    ) {
         $this->superadminServices = $superadminServices;
         $this->dashboardSiswaService = $dashboardSiswaService;
+        $this->idukaDashboardService = $idukaDashboardService;
     }
 
     public function show()
@@ -34,9 +37,12 @@ class DashboardController extends Controller
             case 'siswa':
                 $dataService = $this->dashboardSiswaService->getBiodata();
                 break;
+            case 'iduka':
+                $dataService = $this->idukaDashboardService->readDashboard();
+                break;
             default:
                 # code...
-                // echo $slugRole;
+                $dataService[] = $slugRole;
                 // exit;
                 break;
         }

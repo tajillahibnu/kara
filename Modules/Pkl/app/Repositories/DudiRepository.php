@@ -18,7 +18,6 @@ class DudiRepository extends BaseRepository
         parent::__construct($model);
     }
 
-
     public function updateData(array $dataToUpdate, $dudiId = null)
     {
 
@@ -64,5 +63,30 @@ class DudiRepository extends BaseRepository
             throw new Exception("Failed to update item" . $e->getMessage(), 500);
         }
         return $response;
+    }
+
+    public function infoDashboard($dudiId)
+    {
+        try {
+            $result = DB::select("SELECT 
+                COUNT(*) AS siswa,
+                SUM(CASE WHEN jk = 'L' THEN 1 ELSE 0 END) AS pria,
+                SUM(CASE WHEN jk = 'P' THEN 1 ELSE 0 END) AS wanita
+            FROM view_pkl_siswa WHERE dudi_id = ? AND status_register = 'completed'", [$dudiId]);
+
+            // Memeriksa apakah ada hasil
+            if (!empty($result)) {
+                foreach ($result as $value) {
+                    foreach ($value as $key => $item) {
+                        $aArrData['total'][$key] = $item;
+                    }
+                }
+            } else {
+                $aArrData['total'] = []; // Atau bisa diisi dengan nilai default
+            }
+        } catch (Exception $e) {
+            throw new Exception("Failed to update item" . $e->getMessage(), 500);
+        }
+        return $aArrData;
     }
 }
