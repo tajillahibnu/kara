@@ -37,19 +37,10 @@ class DudiService
 
     protected function prepareData(array $input)
     {
-        return [
-            'name'          => $input['name'] ?? null,
-            'email'         => $input['email'] ?? null,
-            'phone'         => $input['phone'] ?? null,
-            'address'       => $input['address'] ?? null,
-            'pic_name'      => $input['pic_name'] ?? null,
-            'pic_phone'     => $input['pic_phone'] ?? null,
-            'pic_jabatan'   => $input['pic_jabatan'] ?? null,
-            'latitude'      => $input['latitude'] ?? null,
-            'longitude'     => $input['longitude'] ?? null,
-            'username'     => $input['username'] ?? null,
-            'password'     => $input['password'] ?? null,
-        ];
+        foreach ($input as $fild => $value) {
+            $save[$fild] = $value;
+        }
+        return $save;
     }
 
     public function store(array $input)
@@ -97,47 +88,14 @@ class DudiService
 
     public function update($id, array $input)
     {
-        DB::beginTransaction(); // Mulai transaction
         $response['success'] = false;
         $response['statusCode'] = 200;
         try {
-
             $dataToUpdate = $this->prepareData($input);
-            $response = $this->repository->update($dataToUpdate, $id);
-
-            $getRole = Role::where('slug', 'iduka')->first();
-            $query = User::where('biodata_id', $response['id'])
-                ->where('primary_role_id', $getRole->id);
-            if (!$query->exists()) {
-                User::create([
-                    'name'       => $response['name'],
-                    'username'   => $response['username'], // Gunakan username yang sudah dibuat
-                    'email'      => $response['email'],
-                    'password'   => Hash::make($response['password']), // Bisa pakai default password atau dari request
-                    'biodata_id' => $response['id'],
-                    'is_siswa'          => false,
-                    'primary_role_id'   => $getRole->id,
-                ]);
-            } else {
-                $updateUser = [
-                    'username' => $dataToUpdate['username'],
-                ];
-                // Update password hanya jika ada perubahan
-                if (!empty($dataToUpdate['password'])) {
-                    $updateUser['password'] = Hash::make($dataToUpdate['password']);
-                }
-                $query->update($updateUser);
-            }
-            DB::commit(); // Simpan perubahan ke database
-        } catch (NotFoundHttpException $e) {
-            DB::rollBack();
-            $response['message'] = "Item with ID $id not found for update";
-            throw new NotFoundHttpException($response['message']);
+            $response = $this->repository->updateData($dataToUpdate, $id);
         } catch (Exception $e) {
-            DB::rollBack();
             $response['message'] = $e->getMessage();
-            Log::error("Error updating : " . $response['message']);
-            throw new Exception("Failed to update item", 500);
+            throw new Exception($e->getMessage(), 500);
         }
         return $response;
     }
@@ -206,6 +164,7 @@ class DudiService
                 ';
             })
             ->addColumn('action', function ($detail) {
+                unset($detail->password);
                 return '
                 <div class="d-inline-block">
                     <a href="javascript:void(0);" class="btn btn-sm rounded-pill btn-icon dropdown-toggle hide-arrow show" data-bs-toggle="dropdown" aria-expanded="true"><i class="ti ti-dots-vertical ti-md"></i></a>

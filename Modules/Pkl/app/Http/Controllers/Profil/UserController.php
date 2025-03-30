@@ -3,12 +3,14 @@
 namespace Modules\Pkl\Http\Controllers\Profil;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\FileUploadService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Pkl\Services\Alamat\AlamatSiswaService;
 use Modules\Pkl\Services\Profile\GuruService;
+use Modules\Pkl\Services\Profile\IdukaService;
 use Modules\Pkl\Services\Profile\SiswaService;
 
 class UserController extends Controller
@@ -18,18 +20,21 @@ class UserController extends Controller
     protected FileUploadService $fileUploadService;
     protected $guruService;
     protected $siswaService;
+    protected $idukaService;
     protected $alamatSiswaService;
 
     public function __construct(
         FileUploadService $fileUploadService,
         GuruService $guruService,
         SiswaService $siswaService,
-        AlamatSiswaService $alamatSiswaService
+        IdukaService $idukaService,
+        AlamatSiswaService $alamatSiswaService,
     ) {
         $this->fileUploadService = $fileUploadService;
         $this->guruService = $guruService;
         $this->siswaService = $siswaService;
         $this->alamatSiswaService = $alamatSiswaService;
+        $this->idukaService = $idukaService;
     }
 
     public function info(Request $request)
@@ -47,7 +52,12 @@ class UserController extends Controller
                     break;
             }
         } else {
-            $aArrData = $this->guruService->getBiodata();
+            $getUser = User::with('role')->where('id', Auth::id())->first();
+            if ($getUser->role->slug == 'iduka') {
+                $aArrData = $this->idukaService->getBiodata();
+            } else {
+                $aArrData = $this->guruService->getBiodata();
+            }
         }
         return $this->apiResponse($aArrData)
             ->send();
@@ -62,16 +72,21 @@ class UserController extends Controller
             if ($bIsSiswa) {
                 if ($task == 'alamat') {
                     $taskId = !empty($request->input('taskID')) ? $request->input('taskID') : null;
-                    $aArrData = $this->alamatSiswaService->save($request->input(), Auth::user()->biodata_id,$taskId);
+                    $aArrData = $this->alamatSiswaService->save($request->input(), Auth::user()->biodata_id, $taskId);
                 } else if ($task == 'delete') {
-                    $aArrData = $this->alamatSiswaService->delete($request->input('id'),Auth::user()->biodata_id);
+                    $aArrData = $this->alamatSiswaService->delete($request->input('id'), Auth::user()->biodata_id);
                 } else if ($task == 'password') {
-                    $aArrData = $this->siswaService->changePassword($request->input(),Auth::user()->id);
+                    $aArrData = $this->siswaService->changePassword($request->input(), Auth::user()->id);
                 } else {
                     $aArrData = $this->siswaService->updateProfile($task, $request->input());
                 }
             } else {
-                $aArrData = $this->guruService->save($task, $request->input());
+                $getUser = User::with('role')->where('id', Auth::id())->first();
+                if ($getUser->role->slug == 'iduka') {
+                    $aArrData = $this->idukaService->save($task, $request->input());
+                } else {
+                    $aArrData = $this->guruService->save($task, $request->input());
+                }
             }
 
             return $this->apiResponse($aArrData)

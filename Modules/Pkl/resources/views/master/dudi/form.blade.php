@@ -23,11 +23,11 @@
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="pic_jabatan">Username</label>
-                                <input class="form-control" id="username" name="username" type="text" placeholder="Jabatan Pembimbing" required="">
+                                <input class="form-control" id="username" name="username" type="text" placeholder="Username" required="">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="password">Password</label>
-                                <input class="form-control" id="password" name="password" type="text" placeholder="Jabatan Pembimbing" required="">
+                                <input class="form-control" id="password" name="password" type="text" placeholder="Password" required="">
                             </div>
 
                         </div>
