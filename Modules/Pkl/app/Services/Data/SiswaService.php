@@ -2,7 +2,9 @@
 
 namespace Modules\Pkl\Services\Data;
 
+use App\Models\Dudi;
 use App\Models\Jurusan;
+use App\Models\PklRegistration;
 use App\Models\Rombel;
 use App\Services\DataTableService;
 use Exception;
@@ -147,10 +149,18 @@ class SiswaService
     {
         $query = DataTableService::draw('siswas');
 
-        if ($role == 'wali_kelas') {
+        if ($role === 'wali_kelas') {
             $user = Auth::user();
-            $getRombel = Rombel::where('walikelas_id', $user->id)->first();
+            $getRombel = Rombel::where('walikelas_id', $user->biodata_id)->first();
             $query->where('rombel_id', $getRombel->id);
+        }
+
+        if ($role === 'iduka') {
+            $siswaIds = PklRegistration::where('dudi_id', Auth::user()->biodata_id)
+                ->pluck('siswa_id')
+                ->map(fn($id) => (string)$id)
+                ->toArray();;
+            $query->where('id', 'IN', $siswaIds);
         }
 
         return $query->where('deleted_at', null)
@@ -174,37 +184,42 @@ class SiswaService
                 ';
             })
             ->addColumn('action', function ($detail) use ($role) {
-                if($role == 'wali_kelas'){
-                    return '
-                    <div class="d-flex align-items-center">
-                        <a class="btn btn-icon" href="javascript:void(0);" data-permision="user-update" onclick="onEdit(this)" data-params="' . base64_encode(json_encode($detail)) . '">
-                            <i class="ti ti-eye ti-md"></i>
-                        </a>
+                $btnMore = '';
+                $btnview = '';
+                $btnview .= '<a class="btn btn-icon" href="javascript:void(0);" data-permision="user-update" onclick="onEdit(this)" data-params="' . base64_encode(json_encode($detail)) . '">
+                                <i class="ti ti-eye ti-md"></i>
+                            </a>';
+                switch ($role) {
+                    case 'wali_kelas':
+                        $btnMore .= '<a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="onDetails(this)" data-params="' . base64_encode(json_encode($detail)) . '">Reset Password</a>';
+                        break;
+                    case 'super_admin':
+                    case 'admin_sekolah':
+                        $btnMore .= '<a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="editData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Edit</a>';
+                        $btnMore .= '<div class="dropdown-divider"></div>';
+                        $btnMore .= '<a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="onDetails(this)" data-params="' . base64_encode(json_encode($detail)) . '">Reset Password</a>';
+                        $btnMore .= '<a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="deleteData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Delete</a>';
+                        break;
+                    default:
+
+                        break;
+                }
+
+                $btnDropdown = $btnMore === '' ? '' : '
                         <div class="dropdown">
                             <a href="javascript:;" class="btn dropdown-toggle hide-arrow btn-icon p-0" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical ti-md"></i></a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="onDetails(this)" data-params="' . base64_encode(json_encode($detail)) . '">Reset Password</a>
+                                ' . $btnMore . '
                             </div>
                         </div>
-                    </div>
-                    ';
-                }else{
-                    return '
-                    <div class="d-inline-block">
-                        <a href="javascript:void(0);" class="btn btn-sm rounded-pill btn-icon dropdown-toggle hide-arrow show" data-bs-toggle="dropdown" aria-expanded="true"><i class="ti ti-dots-vertical ti-md"></i></a>
-                        <ul class="dropdown-menu dropdown-menu-end m-0" data-popper-placement="bottom-end">
-                            <li>
-                                <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="editData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Edit</a>
-                            </li>
-                            <div class="dropdown-divider"></div>
-                            <li>
-                                <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="deleteData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Delete</a>
-                            </li>
-                        </ul>
-                    </div>
-                    ';
-                }
+                ';
 
+                return '
+                    <div class="d-flex align-items-center">
+                        ' . $btnview . '
+                        ' . $btnDropdown . '
+                    </div>
+                    ';
             })
             ->rawColumns(['status', 'action'])
             ->toJson();

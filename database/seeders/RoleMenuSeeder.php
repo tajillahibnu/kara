@@ -88,7 +88,7 @@ class RoleMenuSeeder extends Seeder
     private function iduka($role)
     {
         $inMenu = $this->global();
-        $inMenu = array_merge($inMenu,$this->menu_pkl_siswa());
+        $inMenu = array_merge($inMenu,['dasirole']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
