@@ -85,6 +85,7 @@ class PageAccessMiddleware
                     $menu['title'] = str_replace('~|role|~', $roleName, $menu['title']);
                     $menu['slug'] = str_replace('~|role|~', $roleName, $menu['slug']);
                     $menu['view_path'] = str_replace('~|role|~', $roleName, $menu['view_path']);
+                    $menu['url'] = str_replace('~|role|~', $roleName, $menu['url']);
                     break;
             }
         }

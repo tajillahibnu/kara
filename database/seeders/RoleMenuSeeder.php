@@ -50,6 +50,18 @@ class RoleMenuSeeder extends Seeder
         }
     }
 
+    private function wali_kelas($role)
+    {
+        $inMenu = $this->global();
+        $inMenu = array_merge($inMenu,['dasirole']);
+        $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
+
+        if (!empty($menuIds)) {
+            $this->command->info($role->name);
+            $role->menus()->syncWithoutDetaching($menuIds);
+        }
+    }
+
     private function guru($role)
     {
         $inMenu = $this->global();

@@ -50,7 +50,6 @@ class ProsesPklService
             } else {
                 $response['data'] = $this->repository->saveReject($id);
             }
-            exit;
         } catch (NotFoundHttpException $e) {
             $response['message'] = "Item with ID $id not found for update";
             throw new NotFoundHttpException($response['message']);

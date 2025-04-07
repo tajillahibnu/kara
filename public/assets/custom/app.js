@@ -320,7 +320,7 @@ var APP = ((config) => {
                     // $(selector).empty().append('<option disabled="" value="">Choose...</option>');
                     $(selector).empty().append('<option value="">Choose...</option>');
                 });
-            }else{
+            } else {
                 config.el.forEach(selector => {
                     $(selector).empty();
                 });
@@ -352,6 +352,9 @@ var APP = ((config) => {
                             placeholder: config.placeholder,
                             dropdownParent: config.dropdownParent ? $(config.dropdownParent) : undefined
                         });
+                        if (config.allowClear) {
+                            $(selector).val(null).trigger('change');
+                        }
                     }
                 });
                 if (typeof config.callback === "function") {

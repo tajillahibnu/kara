@@ -103,10 +103,10 @@ class ProsesRegistrasiPklRepository extends BaseRepository
 
     public function saveReject($registerId)
     {
-        return $this->updateRegistrationStatus($registerId, 'completed', true);
+        return $this->updateRegistrationStatus($registerId, 'rejected', true);
     }
     public function saveRejectAll($registerId)
     {
-        return $this->updateRegistrationStatus($registerId, 'completed', false);
+        return $this->updateRegistrationStatus($registerId, 'rejected', false);
     }
 }

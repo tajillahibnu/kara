@@ -48,6 +48,18 @@ class MenuSeeder extends Seeder
     }
 
     private function data($id,$menuNumber){
+        $save['id']    = $id.'0';
+        $save['title']      = 'Siswa';
+        $save['name']       = 'Siswa';
+        $save['slug']       = 'dasirole';
+        $save['url']        = 'data/dasirole';
+        $save['level']      = '1';
+        $save['type']       = 'main';
+        $save['view_path']      = 'data/siswa/~|role|~';
+        $save['view_file']      = 'default';
+        $save['menu_order'] = $menuNumber;
+        Menu::create($save);
+        
         $dd = $id;
         $save['id']    = $id;
         $save['name']  = 'Data';
@@ -83,7 +95,7 @@ class MenuSeeder extends Seeder
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
-        $save['view_path']      = 'data/siswa/';
+        $save['view_path']      = 'data/siswa';
         $save['view_file']      = 'default';
         Menu::create($save);
 
