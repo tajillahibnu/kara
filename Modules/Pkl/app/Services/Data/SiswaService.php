@@ -153,6 +153,15 @@ class SiswaService
             $user = Auth::user();
             $getRombel = Rombel::where('walikelas_id', $user->biodata_id)->first();
             $query->where('rombel_id', $getRombel->id);
+            $query->where('is_active', true);
+            $query->whereNotNull('nis');
+        }
+
+        if ($role === 'kepala_jurusan') {
+            $user = Auth::user();
+            $getJurusan = Jurusan::where('kakomli_id', $user->biodata_id)->first();
+            $query->where('jurusan_id', $getJurusan->id);
+            $query->whereNotNull('nis');
         }
 
         if ($role === 'iduka') {
@@ -162,7 +171,6 @@ class SiswaService
                 ->toArray();;
             $query->where('id', 'IN', $siswaIds);
         }
-
         return $query->where('deleted_at', null)
             ->addColumn('jurusan', function ($detail) {
                 return Cache::remember("jurusan_{$detail->jurusan_id}", now()->addMinutes(5), function () use ($detail) {
@@ -191,6 +199,7 @@ class SiswaService
                             </a>';
                 switch ($role) {
                     case 'wali_kelas':
+                    case 'kepala_jurusan':
                         $btnMore .= '<a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="onDetails(this)" data-params="' . base64_encode(json_encode($detail)) . '">Reset Password</a>';
                         break;
                     case 'super_admin':

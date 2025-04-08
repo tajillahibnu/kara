@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Traits\Macroable;
 
 /**
  * @package    KodeKopi
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\DB;
  */
 class DataTableService
 {
+    use Macroable;
+
     protected $query;
     protected $dataTable;
     protected $showQueries = false; // Flag to control whether to include query logs in the response.
@@ -28,6 +31,16 @@ class DataTableService
      *
      * @param string $table - The database table to query.
      */
+    public function __call($method, $parameters)
+    {
+        if (method_exists($this->query, $method)) {
+            call_user_func_array([$this->query, $method], $parameters);
+            return $this;
+        }
+
+        throw new \BadMethodCallException("Method {$method} does not exist.");
+    }
+
     public function __construct($table)
     {
         $this->query = DB::table($table);
