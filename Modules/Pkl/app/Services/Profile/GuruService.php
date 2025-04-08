@@ -94,4 +94,13 @@ class GuruService
         ];
         return $data;
     }
+
+    public function changePassword(array $input, $userId)
+    {
+        // Update password
+        $user = User::findOrFail($userId);
+        $user->password = Hash::make($input['newPassword']);
+        $user->save();
+        return $user;
+    }
 }

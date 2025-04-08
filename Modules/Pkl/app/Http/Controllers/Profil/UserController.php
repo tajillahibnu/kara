@@ -8,6 +8,7 @@ use App\Services\FileUploadService;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Modules\Pkl\Services\Alamat\AlamatPegawaiService;
 use Modules\Pkl\Services\Alamat\AlamatSiswaService;
 use Modules\Pkl\Services\Profile\GuruService;
 use Modules\Pkl\Services\Profile\IdukaService;
@@ -22,6 +23,7 @@ class UserController extends Controller
     protected $siswaService;
     protected $idukaService;
     protected $alamatSiswaService;
+    protected $alamatPegawaiService;
 
     public function __construct(
         FileUploadService $fileUploadService,
@@ -29,11 +31,13 @@ class UserController extends Controller
         SiswaService $siswaService,
         IdukaService $idukaService,
         AlamatSiswaService $alamatSiswaService,
+        AlamatPegawaiService $alamatPegawaiService,
     ) {
         $this->fileUploadService = $fileUploadService;
         $this->guruService = $guruService;
         $this->siswaService = $siswaService;
-        $this->alamatSiswaService = $alamatSiswaService;
+        $this->alamatSiswaService   = $alamatSiswaService;
+        $this->alamatPegawaiService = $alamatPegawaiService;
         $this->idukaService = $idukaService;
     }
 
@@ -41,8 +45,8 @@ class UserController extends Controller
     {
         $bIsSiswa = Auth::user()->is_siswa;
         $aArrData = [];
+        $task = $request->input('task');
         if ($bIsSiswa) {
-            $task = $request->input('task');
             switch ($task) {
                 case 'alamat':
                     $aArrData = $this->alamatSiswaService->fetchAlamat(Auth::user()->biodata_id);
@@ -56,7 +60,14 @@ class UserController extends Controller
             if ($getUser->role->slug == 'iduka') {
                 $aArrData = $this->idukaService->getBiodata();
             } else {
-                $aArrData = $this->guruService->getBiodata();
+                switch ($task) {
+                    case 'alamat':
+                        $aArrData = $this->alamatPegawaiService->fetchAlamat(Auth::user()->biodata_id);
+                        break;
+                    default:
+                        $aArrData = $this->guruService->getBiodata();
+                        break;
+                }
             }
         }
         return $this->apiResponse($aArrData)
@@ -85,7 +96,16 @@ class UserController extends Controller
                 if ($getUser->role->slug == 'iduka') {
                     $aArrData = $this->idukaService->save($task, $request->input());
                 } else {
-                    $aArrData = $this->guruService->save($task, $request->input());
+                    if ($task == 'alamat') {
+                        $taskId = !empty($request->input('taskID')) ? $request->input('taskID') : null;
+                        $aArrData = $this->alamatPegawaiService->storeUpdate($request->input(), Auth::user()->biodata_id, $taskId);
+                    } else if ($task == 'delete') {
+                        $aArrData = $this->alamatPegawaiService->delete($request->input('id'), Auth::user()->biodata_id);
+                    } else if ($task == 'password') {
+                        $aArrData = $this->guruService->changePassword($request->input(), Auth::user()->id);
+                    } else {
+                        $aArrData = $this->guruService->save($task, $request->input());
+                    }
                 }
             }
 
