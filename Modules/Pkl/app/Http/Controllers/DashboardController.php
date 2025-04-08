@@ -7,6 +7,7 @@ use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Modules\Pkl\Services\Dashboard\DashboardSiswaService;
 use Modules\Pkl\Services\Dashboard\IdukaService;
+use Modules\Pkl\Services\Dashboard\KakomliService;
 use Modules\Pkl\Services\Dashboard\SuperadminService;
 use Modules\Pkl\Services\Dashboard\WaliKelasService;
 
@@ -17,17 +18,20 @@ class DashboardController extends Controller
     protected $dashboardSiswaService;
     protected $idukaDashboardService;
     protected $walikelasDashboardService;
+    protected $kakomliServices;
     public function __construct(
         SuperadminService $superadminServices,
         DashboardSiswaService $dashboardSiswaService,
         IdukaService $idukaDashboardService,
         WaliKelasService $walikelasDashboardService,
+        KakomliService $kakomliServices,
 
     ) {
         $this->superadminServices = $superadminServices;
         $this->dashboardSiswaService = $dashboardSiswaService;
         $this->idukaDashboardService = $idukaDashboardService;
         $this->walikelasDashboardService = $walikelasDashboardService;
+        $this->kakomliServices = $kakomliServices;
     }
 
     public function show()
@@ -49,6 +53,9 @@ class DashboardController extends Controller
                 break;
             case 'wali_kelas':
                 $dataService = $this->walikelasDashboardService->readDashboard();
+                break;
+            case 'kepala_jurusan':
+                $dataService = $this->kakomliServices->readDashboard();
                 break;
             default:
                 # code...
