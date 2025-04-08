@@ -16,6 +16,10 @@
                             <label class="form-label" for="name">Nama Jurusan</label>
                             <input class="form-control" id="name" name="name" type="text" placeholder="Nama Jurusan" required="">
                         </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="kakomli_id">Kepala Kompetensi</label>
+                            <select id="kakomli_id" name="kakomli_id" class="select2 form-select" data-placeholder="Select Kakomli"></select>
+                        </div>
                         <div class="col-12 mb-4">
                             <label class="form-label" for="bidang_keahlian">Bidang Keahlian</label>
                             <input class="form-control" id="bidang_keahlian" name="bidang_keahlian" type="text" placeholder="Nama Jurusan" required="">

@@ -1,5 +1,20 @@
 var targetID = '';
 $(() => {
+    APP.combov1({
+        el: ['#kakomli_id'],
+        url: `${BASE_API_MENU}/combo/pegawai`,
+        fild_id: 'id',
+        fild_name: 'name',
+        select2: true,
+        dropdownParent: '#mainModal',
+        data: {
+            status_kepegawaian: 'PNS',
+            jabatan: 'guru',
+        },
+        callback: (item) => {
+            $('#kakomli_id').val(null).trigger('change');
+        }
+    })
     mainTable();
 })
 
@@ -37,6 +52,19 @@ mainTable = () => {
             },
             {
                 targets: 2,
+                render: function (data, type, full, meta) {
+                    return `
+                    <div class="d-flex justify-content-left align-items-center">
+                        <div class="d-flex flex-column">
+                            <h6 class="text-truncate mb-0">${full['kakomli_name']}</h6>
+                            <small class="text-truncate">NIP.${full['kakomli_nip']}</small>
+                        </div>
+                    </div>
+                    `
+                },
+            },
+            {
+                targets: 3,
                 width: "40px", // Mengatur lebar kolom nomor urut
                 render: function (data, type, full, meta) {
                     return full['status'];
@@ -66,7 +94,8 @@ editData = (el) => {
     targetID = data['id'];
     console.log(data)
     $.each(data, (i, v) => {
-        $(`[name="${i}"]`).val(v);
+        let inputElement = $(`[name="${i}"]`);
+        inputElement.val(v).trigger('change'); // Set nilai yang dipilih
     })
     $('#mainModal').modal('show');
 }
@@ -142,7 +171,7 @@ setActive = (el) => {
                 url: `${BASE_API_MENU}/status`,
                 data: {
                     id: targetID,
-                    data : data
+                    data: data
                 },
             }).then(data => {
                 APP.reloadTable();

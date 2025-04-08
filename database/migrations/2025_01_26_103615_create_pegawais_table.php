@@ -29,6 +29,10 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::table('jurusans', function (Blueprint $table) {
+            $table->foreignId('kakomli_id')->nullable()->after('id')->constrained('pegawais')->onDelete('cascade');
+        });
     }
 
     /**

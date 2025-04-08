@@ -8,6 +8,7 @@
                 <tr>
                     <th></th>
                     <th>Name</th>
+                    <th>Kakomli</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
