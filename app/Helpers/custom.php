@@ -64,6 +64,7 @@ if (!function_exists('getBadgeStatus')) {
         $statusMap = [
             'pending'   => ['class' => 'bg-label-primary', 'text' => 'Pending'],
             'approved'  => ['class' => 'bg-label-success', 'text' => 'Approved'],
+            'completed'  => ['class' => 'bg-label-success', 'text' => 'Completed'],
             'rejected'  => ['class' => 'bg-label-danger', 'text' => 'Rejected'],
             'new'       => ['class' => 'bg-label-info', 'text' => 'Information'],
             'warning'   => ['class' => 'bg-label-warning', 'text' => 'Warning'],

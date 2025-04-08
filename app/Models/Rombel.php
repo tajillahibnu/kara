@@ -26,6 +26,8 @@ class Rombel extends Model
         'is_active',      // Status aktif/nonaktif rombel
     ];
 
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+
     /**
      * Relasi: Rombel memiliki wali kelas.
      * Relasi ini menghubungkan ke model Pegawai berdasarkan kolom walikelas_id.

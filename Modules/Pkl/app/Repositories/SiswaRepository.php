@@ -15,6 +15,41 @@ class SiswaRepository extends BaseRepository
         parent::__construct($model);
     }
 
+    public function siswaToUpdate(array $dataToUpdate, $identifier = null, ?callable $userCallback = null)
+    {
+        DB::beginTransaction();
+        try {
+            // if (isset($dataToUpdate['email'])) {
+            //     $exists = User::where('email', $dataToUpdate['email'])
+            //         ->where('id', '!=', $identifier) // Pastikan bukan dirinya sendiri
+            //         ->exists();
+
+            //     if ($exists) {
+            //         throw new \Exception("Email sudah digunakan oleh pengguna lain.");
+            //     }
+            // }
+
+            // Update pegawai terlebih dahulu
+            $updated = false;
+            if ($identifier && !empty($dataToUpdate)) {
+                $updated = Siswa::where('id', $identifier)->update($dataToUpdate);
+                // Ambil data terbaru setelah update
+            }
+            $pegawai = Siswa::find($identifier);
+
+            // Jika update pegawai berhasil dan ada callback, jalankan callback
+            if ($updated && $userCallback !== null) {
+                $userCallback($pegawai->toArray()); // Callback dipanggil tanpa parameter
+            }
+
+            DB::commit();
+            return $updated;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
     public function createSiswa(array $data)
     {
         DB::beginTransaction(); // Mulai transaction

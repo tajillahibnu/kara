@@ -58,6 +58,7 @@ class DatabaseSeeder extends Seeder
             'primary_role_id' => 3,
             'is_siswa' => false,
             'is_active' => true,
+            'biodata_id' => 1
         ]);
 
         // Buat atau ambil role, lalu attach ke setiap user
@@ -82,6 +83,7 @@ class DatabaseSeeder extends Seeder
             'primary_role_id' => 3,
             'is_siswa' => false,
             'is_active' => true,
+            'biodata_id' => 1
         ]);
 
         User::factory()->create([
@@ -91,6 +93,7 @@ class DatabaseSeeder extends Seeder
             'primary_role_id' => 4,
             'is_siswa' => true,
             'is_active' => true,
+            'biodata_id' => 1
         ]);
 
         // Buat siswa

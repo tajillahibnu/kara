@@ -50,6 +50,18 @@ class RoleMenuSeeder extends Seeder
         }
     }
 
+    private function wali_kelas($role)
+    {
+        $inMenu = $this->global();
+        $inMenu = array_merge($inMenu,['dasirole']);
+        $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
+
+        if (!empty($menuIds)) {
+            $this->command->info($role->name);
+            $role->menus()->syncWithoutDetaching($menuIds);
+        }
+    }
+
     private function guru($role)
     {
         $inMenu = $this->global();
@@ -64,6 +76,19 @@ class RoleMenuSeeder extends Seeder
     private function siswa($role)
     {
         $inMenu = $this->global();
+        $inMenu = array_merge($inMenu,$this->menu_pkl_siswa());
+        $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
+
+        if (!empty($menuIds)) {
+            $this->command->info($role->name);
+            $role->menus()->syncWithoutDetaching($menuIds);
+        }
+    }
+
+    private function iduka($role)
+    {
+        $inMenu = $this->global();
+        $inMenu = array_merge($inMenu,['dasirole']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -92,9 +117,18 @@ class RoleMenuSeeder extends Seeder
     private function menu_pkl()
     {
         $inMenu[] = 'pkl';
+        $inMenu[] = 'peserta_pkl';
+        $inMenu[] = 'penempatanpkl';
         $inMenu[] = 'pklpriode';
         $inMenu[] = 'pendaftaranpkl';
         $inMenu[] = 'konfirmasipkl';
+        return $inMenu;
+    }
+
+    private function menu_pkl_siswa()
+    {
+        $inMenu[] = 'pkl_siswa';
+        $inMenu[] = 'absensi_pkl_siswa';
         return $inMenu;
     }
 
@@ -119,6 +153,7 @@ class RoleMenuSeeder extends Seeder
     {
         $inMenu[] = 'setting';
         $inMenu[] = 'config_app';
+        $inMenu[] = 'upload_siswa';
         $inMenu[] = 'config_kurikulum';
         return $inMenu;
     }

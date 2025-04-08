@@ -1,14 +1,35 @@
 var targetID = '';
 $(() => {
-    mainTable();
+    $('.select2').select2({
+        placeholder: 'Select status',
+        allowClear: true,
+        minimumResultsForSearch: -1,
+    });
     combo()
+    setTimeout(() => {
+        onFilter()
+    }, 500);
 })
+
+onFilter = (isReset = false) => {
+    if (isReset) {
+        $('#filter_jurusan').val(null).trigger('change');
+        $('#filter_tingkat').val(null).trigger('change');
+        $('#filter_status').val(null).trigger('change');
+    }
+    mainTable()
+}
 
 mainTable = () => {
     APP.initTable({
         el: '#maintable', // ID atau kelas elemen tabel HTML
         url: BASE_API_MENU + '/main-table', // URL endpoint API untuk mengambil data
         index: 1, // Kolom yang diurutkan
+        data: {
+            jurusan: $('#filter_jurusan').val(),
+            tingkat: $('#filter_tingkat').val(),
+            status: $('#filter_status').val(),
+        },
         dom: `
         <"card-header d-flex flex-wrap py-0 flex-column flex-sm-row"<f>
             <"d-flex justify-content-center justify-content-md-end align-items-baseline"
@@ -26,18 +47,43 @@ mainTable = () => {
                 targets: 1,
                 data: 'name',
                 render: function (data, type, full, meta) {
-                    return `${full['name']}`;
+                    return `
+                        <div class="d-flex justify-content-left align-items-center">
+                            <div class="d-flex flex-column">
+                                <h6 class="text-truncate mb-0">${full['name']}</h6>
+                                <small class="text-truncate">${full['jurusan_name']}</small>
+                            </div>
+                        </div>
+                        `
                 },
             },
             {
                 targets: 2,
+                render: function (data, type, full, meta) {
+                    return `
+                        <div class="d-flex justify-content-left align-items-center">
+                            <div class="avatar-wrapper">
+                                <div class="avatar avatar-sm me-3">
+                                    <span class="avatar-initial rounded-circle bg-label-info">${getInitials(full['walikelas_name'] == null ? 'N A' : full['walikelas_name'])}</span>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <h6 class="text-truncate mb-0">${full['walikelas_name'] == null ? '-' : full['walikelas_name']}</h6>
+                                <small class="text-truncate">${full['email'] == null ? '-' : full['email']}</small>
+                            </div>
+                        </div>
+                        `
+                },
+            },
+            {
+                targets: 3,
                 width: "50px", // Mengatur lebar kolom nomor urut
                 render: function (data, type, full, meta) {
                     return full['kapasitas'] + ' Siswa';
                 },
             },
             {
-                targets: 3,
+                targets: 4,
                 width: "50px", // Mengatur lebar kolom nomor urut
                 render: function (data, type, full, meta) {
                     return full['status'];
@@ -65,9 +111,9 @@ editData = (el) => {
     var data = $(el).data('params')
     data = JSON.parse(atob(data));
     targetID = data['id'];
-    console.log(data)
     $.each(data, (i, v) => {
-        $(`[name="${i}"]`).val(v);
+        let inputElement = $(`[name="${i}"]`);
+        inputElement.val(v).trigger('change');
     })
     $('#mainModal').modal('show');
 }
@@ -144,7 +190,7 @@ setActive = (el) => {
                 url: `${BASE_API_MENU}/status`,
                 data: {
                     id: targetID,
-                    data : data
+                    data: data
                 },
             }).then(data => {
                 APP.reloadTable();
@@ -159,21 +205,52 @@ setActive = (el) => {
     });
 }
 
-combo = () =>{
+combo = () => {
     APP.combov1({
         el: ['#tingkat_id'],
         url: `${BASE_API_MENU}/combo/tingkat`,
         fild_id: 'id',
         fild_name: 'name',
-        select2:true,
+        select2: true,
+        allowClear: false,
         dropdownParent: '#mainModal',
+        callback: (item) => {
+            console.log(item)
+            $('#filter_tingkat').val(null).trigger('change');
+            $('#filter_tingkat').empty().append('<option value="">Choose...</option>');
+            item['data'].forEach(element => {
+                $('#filter_tingkat').append(`<option value="${element['id']}">[${element['romawi']}] ${element['name']}</option>`);
+            });
+            $("#filter_tingkat").select2({
+                allowClear: true,
+            });
+        }
     })
     APP.combov1({
         el: ['#jurusan_id'],
         url: `${BASE_API_MENU}/combo/jurusan`,
         fild_id: 'id',
         fild_name: 'name',
-        select2:true,
+        select2: true,
+        allowClear: false,
+        dropdownParent: '#mainModal',
+        callback: (item) => {
+            $('#filter_jurusan').val(null).trigger('change');
+            $('#filter_jurusan').empty().append('<option value="">Choose...</option>');
+            item['data'].forEach(element => {
+                $('#filter_jurusan').append(`<option value="${element['id']}">${element['name']}</option>`);
+            });
+            $("#filter_jurusan").select2({
+                allowClear: true,
+            });
+        }
+    })
+    APP.combov1({
+        el: ['#walikelas_id'],
+        url: `${BASE_API_MENU}/combo/pegawai`,
+        fild_id: 'id',
+        fild_name: 'name',
+        select2: true,
         dropdownParent: '#mainModal',
     })
 }

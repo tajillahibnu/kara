@@ -103,6 +103,7 @@ class SiswaController extends Controller
      */
     public function mainTable()
     {
-        return $this->mainServices->table();
+        $slugRole = session('active_role_slug');
+        return $this->mainServices->table($slugRole);
     }
 }

@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Cache;
 
 class Jurusan extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'kakomli_id',
         'kode',
         'name',
         'deskripsi',
@@ -19,6 +20,20 @@ class Jurusan extends Model
         'program_keahlian',
         'is_active',
     ];
+
+    // Definisikan relasi ke model Siswa
+    public function siswas()
+    {
+        return $this->hasMany(Siswa::class, 'jurusan_id'); // 'jurusan_id' adalah nama kolom di tabel siswa
+    }
+
+    // Definisikan relasi satu ke satu dengan Pegawai
+    public function kakomli()
+    {
+        return $this->belongsTo(Pegawai::class, 'kakomli_id');
+    }
+
+
 
     protected static function boot()
     {
@@ -32,5 +47,4 @@ class Jurusan extends Model
             Cache::forget("jurusan_{$jurusan->id}");
         });
     }
-
 }

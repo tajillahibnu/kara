@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Pkl\Http\Controllers\ComboMasterController;
 use Modules\Pkl\Http\Controllers\Master\DudiController;
 
 /*
@@ -26,4 +27,5 @@ Route::group(['prefix' => 'dudi', 'middleware' => ['web', 'auth']], function () 
     Route::post('update/{id}', [DudiController::class, 'update'])->name('update');
     Route::post('delete', [DudiController::class, 'delete'])->name('delete');
     Route::post('status', [DudiController::class, 'status'])->name('status');
+    Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
 });

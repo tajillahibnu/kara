@@ -50,7 +50,6 @@ class ProsesPklService
             } else {
                 $response['data'] = $this->repository->saveReject($id);
             }
-            exit;
         } catch (NotFoundHttpException $e) {
             $response['message'] = "Item with ID $id not found for update";
             throw new NotFoundHttpException($response['message']);
@@ -84,7 +83,7 @@ class ProsesPklService
                 });
             })
             ->addColumn('status_badge', function ($detail) {
-                return getBadgeStatus($detail->status);
+                return getBadgeStatus($detail->status_register);
             })
             ->addColumn('action', function ($detail) {
                 return '
@@ -96,7 +95,7 @@ class ProsesPklService
                         </li>
                         <div class="dropdown-divider"></div>
                         <li>
-                            <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="confirmAll(this)" data-task="bypass" data-tipe="approved" data-params="' . base64_encode(json_encode($detail)) . '">Approve All</a>
+                            <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="confirmAll(this)" data-task="bypass" data-tipe="completed" data-params="' . base64_encode(json_encode($detail)) . '">Approve All</a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="confirmAll(this)" data-task="bypass" data-tipe="rejected" data-params="' . base64_encode(json_encode($detail)) . '">Rejected All</a>

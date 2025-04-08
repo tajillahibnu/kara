@@ -39,7 +39,7 @@ class PageAccessMiddleware
                     return $next($request);
                 }
             } else {
-                $getMenu = $this->verificationMenu($request);
+                $getMenu = $this->verificationMenu($user, $request);
                 $request->merge($getMenu ? $getMenu->toArray() : []);
                 $input = $request->input();
                 unset($input['params']);
@@ -55,9 +55,9 @@ class PageAccessMiddleware
             ->send();
     }
 
-    private function verificationMenu($request)
+    private function verificationMenu($user, $request)
     {
-        // $user = Auth::user();
+        // $user = Auth::user()
         $roleName = session('active_role_slug');
         $roleId = session('active_role_id');
 
@@ -74,10 +74,22 @@ class PageAccessMiddleware
             ->where('role_menus.role_id', $roleId)
             ->first();
         if (!empty($menu)) {
-            $menu['title'] = str_replace('~|role|~', $roleName, $menu['title']);
-            $menu['slug'] = str_replace('~|role|~', $roleName, $menu['slug']);
-            $menu['view_path'] = str_replace('~|role|~', $roleName, $menu['view_path']);
+            switch ($menu['slug']) {
+                case 'profile_~|role|~':
+                    $getRole = Role::where('id', $user->primary_role_id)->first();
+                    $menu['title'] = str_replace('~|role|~', $getRole->slug, $menu['title']);
+                    $menu['slug'] = str_replace('~|role|~', $getRole->slug, $menu['slug']);
+                    $menu['view_path'] = str_replace('~|role|~', $getRole->slug, $menu['view_path']);
+                    break;
+                default:
+                    $menu['title'] = str_replace('~|role|~', $roleName, $menu['title']);
+                    $menu['slug'] = str_replace('~|role|~', $roleName, $menu['slug']);
+                    $menu['view_path'] = str_replace('~|role|~', $roleName, $menu['view_path']);
+                    $menu['url'] = str_replace('~|role|~', $roleName, $menu['url']);
+                    break;
+            }
         }
+
         return $menu;
     }
 

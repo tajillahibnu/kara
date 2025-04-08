@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Pkl\Http\Controllers\ComboMasterController;
 use Modules\Pkl\Http\Controllers\Master\JurusanController;
 
 /*
@@ -21,4 +22,5 @@ Route::group(['prefix' => 'jurusan', 'middleware' => ['web', 'auth']], function 
     Route::post('update/{id}', [JurusanController::class, 'update'])->name('update');
     Route::post('delete', [JurusanController::class, 'delete'])->name('delete');
     Route::post('status', [JurusanController::class, 'status'])->name('status');
+    Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
 });

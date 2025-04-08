@@ -31,7 +31,7 @@ class ProsesRegisterController extends Controller
     {
         try {
             switch ($request->input('tipe')) {
-                case 'approved':
+                case 'completed':
                     $aArrProses = $this->mainServices->acc_pkl($request->input('id'), $request->input());
                     break;
                 case 'rejected':
