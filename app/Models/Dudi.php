@@ -31,6 +31,8 @@ class Dudi extends Model
         'is_active',
         'username',
         'password',
+        'jurusan_id',
+        'kota',
     ];
 
     protected $hidden = ['created_at', 'updated_at', 'deleted_at','password'];

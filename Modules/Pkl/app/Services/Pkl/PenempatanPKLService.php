@@ -147,14 +147,17 @@ class PenempatanPKLService
             ->toJson();
     }
 
-    public function industri()
+    public function industri($request)
     {
         $query = Dudi::select('id', 'name', 'pic_name', 'pic_phone', 'pic_jabatan')
             ->orderBy('name', 'DESC')
             ->whereNull('deleted_at');
 
         $query->where('is_active', true);
-
+        
+        if(!empty($request->input('jurusan'))){
+            $query->where('jurusan_id', $request->input('jurusan'));
+        }
         $data = $query->get();
         return $data->map(function ($item) {
             return [

@@ -9,29 +9,14 @@
                 <form id="formMain" action="javascript:onSaveIt('formMain')" method="post">
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="col-12 mb-4">
+                                <label class="form-label" for="jurusan_id">Jurusan</label>
+                                <select id="jurusan_id" name="jurusan_id" class="select2 form-select" data-placeholder="Select Jurusan"></select>
+                            </div>
                             <div class="mb-4">
                                 <label class="form-label" for="name">Nama Perusahaan</label>
                                 <input class="form-control" id="name" name="name" type="text" placeholder="Nama Perusahaan" required="">
                             </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="pic_name">Nama Pembimbing</label>
-                                <input class="form-control" id="pic_name" name="pic_name" type="text" placeholder="Nama Pembimbing" required="">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="pic_jabatan">Jabatan Pembimbing</label>
-                                <input class="form-control" id="pic_jabatan" name="pic_jabatan" type="text" placeholder="Jabatan Pembimbing" required="">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="pic_jabatan">Username</label>
-                                <input class="form-control" id="username" name="username" type="text" placeholder="Username" required="">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label" for="password">Password</label>
-                                <input class="form-control" id="password" name="password" type="text" placeholder="Password" required="">
-                            </div>
-
-                        </div>
-                        <div class="col-md-6">
                             <div class="mb-4">
                                 <label class="form-label" for="name">Email</label>
                                 <input class="form-control" id="email" name="email" type="email" required="">
@@ -41,10 +26,39 @@
                                 <input class="form-control" id="phone" name="phone" type="text" required="">
                             </div>
                             <div class="mb-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="pic_jabatan">Username</label>
+                                        <input class="form-control" id="username" name="username" type="text" placeholder="Username" required="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="password">Password</label>
+                                        <input class="form-control" id="password" name="password" type="text" placeholder="Password" required="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-4">
+                                <label class="form-label" for="pic_name">Nama Pembimbing</label>
+                                <input class="form-control" id="pic_name" name="pic_name" type="text" placeholder="Nama Pembimbing" required="">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="pic_jabatan">Jabatan Pembimbing</label>
+                                <input class="form-control" id="pic_jabatan" name="pic_jabatan" type="text" placeholder="Jabatan Pembimbing" required="">
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label" for="kota">Kota</label>
+                                <input class="form-control" id="kota" name="kota" type="text" placeholder="Kota Lokasi Industri" required="">
+                            </div>
+                            <div class="mb-4">
                                 <label class="form-label" for="address">Alamat</label>
                                 <textarea class="form-control" name="address" id="address" cols="30" rows="4"></textarea>
                             </div>
-                            <div class="row">
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div id="map" style="height: 400px;"></div>
+                            <div class="row mt-4">
                                 <div class="col-6">
                                     <label class="form-label" for="latitude">Latitude</label>
                                     <input type="text" class="form-control" id="latitude" name="latitude" required="">
@@ -55,24 +69,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- 
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="name">Nama Perusahaan</label>
-                            <input class="form-control" id="name" name="name" type="text" placeholder="Nama Perusahaan" required="">
-                        </div>
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="name">Email</label>
-                            <input class="form-control" id="email" name="email" type="email" required="">
-                        </div>
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="name">Phone</label>
-                            <input class="form-control" id="phone" name="phone" type="text" required="">
-                        </div>
-                        <div class="col-12 mb-4">
-                            <label class="form-label" for="name">Alamat</label>
-                            <textarea class="form-control" name="address" id="address" cols="30" rows="4"></textarea>
-                        </div> 
-                        -->
                     </div>
                 </form>
             </div>

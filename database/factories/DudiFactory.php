@@ -17,6 +17,7 @@ class DudiFactory extends Factory
     public function definition()
     {
         return [
+            'jurusan_id' => $this->faker->numberBetween(1, 3),
             'name' => $this->faker->company,
             'username' => $this->faker->unique()->userName,
             'password' => static::$password ??= Hash::make('password@123'),

@@ -1,5 +1,10 @@
 <!-- <script src="{{asset('/')}}modules/pkl/xx/xx.js"></script> -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 <script>
+    var nama_industri = '';
+    var latitude = '';
+    var longitude = '';
+    var lokasiData = [];
     $(() => {
         initSetting();
     })
@@ -29,6 +34,40 @@
             $.each(res.data, (i, v) => {
                 $(`.detail-${i}`).html(v);
             })
+
+            lokasiData.push({
+                id: res.data.id, // Ganti dengan id yang sesuai
+                nama: res.data.name,
+                latitude: res.data.latitude, // Ganti dengan latitude yang sesuai
+                longitude: res.data.longitude, // Ganti dengan longitude yang sesuai
+                // latitude: -7.9797, // Ganti dengan latitude yang sesuai
+                // longitude: 112.6304 // Ganti dengan longitude yang sesuai
+            });
+
+            // Inisialisasi peta, fokus ke Malang
+            // var map = L.map('map').setView([-7.9797, 112.6304], 13);
+            var map = L.map('map').setView([res.data.latitude, res.data.longitude], 13);
+
+            // Tile layer OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            // Data lokasi dari Laravel sebagai array JS manual
+            // var lokasiData = [{
+            //     id: 'cccv',
+            //     nama: nama_industri,
+            //     latitude: '-7.9797',
+            //     longitude: '112.6304',
+            // }];
+
+            // Tambahkan marker ke map
+            lokasiData.forEach(function(lokasi) {
+                L.marker([lokasi.latitude, lokasi.longitude])
+                    .addTo(map)
+                    .bindPopup("<strong>" + lokasi.nama + "</strong>");
+            });
+
             APP.unblock();
         }).catch(error => {
             console.error("Fetch error:", error);

@@ -182,6 +182,7 @@
     onEdit = (el) => {
         var data = $(el).data('params')
         data = JSON.parse(atob(data));
+        console.log()
         targetID = data['id'];
         $('#dudi_id').val(null).trigger('change'); // Menghapus pilihan
         $.each(data, (i, v) => {
@@ -198,6 +199,18 @@
                     inputElement[0]._flatpickr.setDate(formattedDate, true);
                 }
             }
+        })
+        APP.combov1({
+            el: ['#dudi_id'],
+            url: `${BASE_API_MENU}/combobox/dudi`,
+            fild_id: 'id',
+            fild_name: 'name',
+            select2: true,
+            allowClear: true,
+            dropdownParent: '#mainModal',
+            data:{
+                jurusan: data['jurusan_id']
+            },
         })
         $('#mainModal').modal('show');
     }

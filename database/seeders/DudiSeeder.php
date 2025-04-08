@@ -30,6 +30,7 @@ class DudiSeeder extends Seeder
             });
 
         Dudi::create([
+            'jurusan_id' => 1,
             'name' => 'PT. Software Indonesia',
             'address' => 'Jl. Teknologi No. 12, Jakarta',
             'phone' => '021-123456',
@@ -51,6 +52,7 @@ class DudiSeeder extends Seeder
         ]);
 
         Dudi::create([
+            'jurusan_id' => 1,
             'name' => 'Bengkel Motor Jaya',
             'address' => 'Jl. Otomotif No. 45, Bandung',
             'phone' => '022-7654321',
@@ -72,6 +74,7 @@ class DudiSeeder extends Seeder
         ]);
 
         Dudi::create([
+            'jurusan_id' => 2,
             'name' => 'PT.Dirgantara',
             'address' => 'Jl. Otomotif No. 45, Bandung',
             'phone' => '022-7654321',
@@ -93,6 +96,7 @@ class DudiSeeder extends Seeder
         ]);
 
         Dudi::create([
+            'jurusan_id' => 3,
             'name' => 'PT.Indo Jaya',
             'address' => 'Jl. Otomotif No. 45, Bandung',
             'phone' => '022-7654321',

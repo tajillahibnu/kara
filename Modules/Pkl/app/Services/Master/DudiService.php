@@ -147,7 +147,11 @@ class DudiService
     public function table()
     {
         return DataTableService::draw('dudis')
-            ->where('deleted_at', null)
+            ->select(['dudis.*','jurusans.name as jurusan_name'])
+            ->join('jurusans', [
+                ['jurusans.id', '=', 'dudis.jurusan_id'],
+            ])
+            ->where('dudis.deleted_at', null)
             ->addColumn('status', function ($detail) {
                 // $badgeClass = $detail->is_active ? 'bg-label-success' : 'bg-label-danger';
                 // $badgeText = $detail->is_active ? 'Active' : 'Inactive';

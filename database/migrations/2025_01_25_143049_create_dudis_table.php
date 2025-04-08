@@ -13,33 +13,35 @@ return new class extends Migration
     {
         Schema::create('dudis', function (Blueprint $table) {
             $table->id();
-            $table->string('name',150); // Nama DUDI
-            $table->string('address',200); // Alamat
+            $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade');
+            $table->string('name', 150); // Nama DUDI
+            $table->string('address', 200); // Alamat
+            $table->string('kota', 75)->nullable(); // Nomor Telepon Kantor
             $table->string('phone')->nullable(); // Nomor Telepon Kantor
             $table->string('email')->unique()->nullable(); // Email DUDI
             $table->string('website')->nullable(); // Situs web DUDI
-            
+
             // Koordinat Lokasi
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
-            
+
             // PIC (Penanggung Jawab di DUDI)
             $table->string('pic_name')->nullable(); // Nama PIC
             $table->string('pic_phone')->nullable(); // Kontak PIC
             $table->string('pic_jabatan')->nullable(); // Kontak PIC
-            
+
             // Informasi Tambahan
             $table->integer('quota')->default(0); // Kuota siswa PKL
             $table->string('sector')->nullable(); // Sektor industri
             $table->string('partnership_status')->default('Belum Ada MoU'); // Status kerja sama
             $table->text('description')->nullable(); // Deskripsi DUDI
             $table->text('requirements')->nullable(); // Persyaratan siswa PKL
-            
+
             $table->boolean('is_active')->default(false); // Status aktif/tidak
 
             $table->string('username')->nullable(); // Nama DUDI
             $table->string('password')->nullable(); // Nama DUDI
-            
+
             $table->timestamps();
             $table->softDeletes();
         });

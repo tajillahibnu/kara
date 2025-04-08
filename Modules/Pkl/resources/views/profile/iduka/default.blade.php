@@ -1,3 +1,9 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<style>
+    #map {
+        height: 500px;
+    }
+</style>
 <div class="row">
     <div class="col-6">
         <div class="card">
@@ -80,6 +86,18 @@
                         <button type="submit" class="btn btn-primary waves-effect waves-light">Update</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header py-4 border-bottom">
+                <h5 class="card-tile mb-0">Lokasi</h5>
+            </div>
+            <div class="card-body p-0">
+                <div id="map"></div>
             </div>
         </div>
     </div>
