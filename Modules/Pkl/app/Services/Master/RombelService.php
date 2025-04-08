@@ -43,10 +43,10 @@ class RombelService
     {
         return [
             // 'kode'  => $this->generateUniqueKode(),
-            'label' => $input['label'] ?? null,
-            'tingkat_id' => $input['tingkat_id'] ?? null,
-            'jurusan_id' => $input['jurusan_id'] ?? null,
-            'tahun_ajaran' => '2021/2022',
+            'label'         => $input['label'] ?? null,
+            'tingkat_id'    => $input['tingkat_id'] ?? null,
+            'jurusan_id'    => $input['jurusan_id'] ?? null,
+            'walikelas_id'  => $input['walikelas_id'] ?? null,
         ];
     }
 
@@ -73,10 +73,15 @@ class RombelService
      */
     public function store(array $input)
     {
+        $getSetting = getSiteMeta();
+        $tahunPelajaran = $getSetting['kbm']['tahun_pelajaran'];
+
         $response['success'] = false;
         $response['statusCode'] = 200;
         try {
             $dataToSave = $this->prepareData($input);
+            $dataToSave['tahun_ajaran']  = $tahunPelajaran;
+
             $response = $this->repository->create($dataToSave);
             $response['data'] = $input;
         } catch (QueryException $e) {
@@ -108,7 +113,7 @@ class RombelService
         } catch (Exception $e) {
             $response['message'] = $e->getMessage();
             Log::error("Error updating : " . $response['message']);
-            throw new Exception("Failed to update item".$e->getMessage(), 500);
+            throw new Exception("Failed to update item" . $e->getMessage(), 500);
         }
         return $response;
     }
@@ -167,20 +172,32 @@ class RombelService
      *
      * @return mixed Data dalam format JSON untuk DataTable.
      */
-    public function table()
+    public function table($request)
     {
-        return DataTableService::draw('rombels')
-            ->where('deleted_at', null)
-            ->addColumn('status', function ($detail) {
-                $badgeText = $detail->is_active ? 'checked' : '';
-                return '
+        $query = DataTableService::draw('view_rombels');
+
+        if (!empty($request['jurusan'])) {
+            $query->where('jurusan_id', $request['jurusan']);
+        }
+
+        if (!empty($request['tingkat'])) {
+            $query->where('tingkat_id', $request['tingkat']);
+        }
+
+        if (!empty($request['status'])) {
+            $query->where('is_active', ($request['status']) == 'enable' ? true : false);
+        }
+
+        return $query->addColumn('status', function ($detail) {
+            $badgeText = $detail->is_active ? 'checked' : '';
+            return '
                         <div class="w-75 d-flex justify-content-end">
                             <div class="form-check form-switch me-n3">
                             <input type="checkbox" class="form-check-input" name="' . $detail->id . '" data-params="' . base64_encode(json_encode($detail)) . '" onchange="setActive(this)" ' . $badgeText . '>
                             </div>
                         </div>
                 ';
-            })
+        })
             ->addColumn('action', function ($detail) {
                 return '
                 <div class="d-inline-block">

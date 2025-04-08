@@ -25,9 +25,12 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth', 'PageAccess']],
 
 
 
+// Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth','AccessLog']], function () {
 Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
 
     Route::post('dashboard/info', [DashboardController::class, 'show'])->name('dashboard.info');
+    Route::post('profile/info', [UserController::class, 'info'])->name('profile.info');
+    Route::post('profile/save', [UserController::class, 'update'])->name('profile.save');
     Route::post('profile/upload', [UserController::class, 'doUpload'])->name('profile.upload');
 
     Route::group(['prefix' => 'setting'], function () {
@@ -51,7 +54,7 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
         require_once(__DIR__ . '/api/master/Rombel.php');
     });
 
-    Route::group(['prefix' => 'prekerin'], function () {
+    Route::group(['prefix' => 'prakerin'], function () {
         require_once(__DIR__ . '/api/pkl.php');
     });
 });

@@ -41,7 +41,7 @@ class RombelController extends Controller
             return $this->apiResponse($aArrStore)
                 ->send();
         } catch (\Throwable $th) {
-            throw new Exception('Internal server malfunction.'.$th->getMessage());
+            throw new Exception('Internal server malfunction.' . $th->getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ class RombelController extends Controller
             return $this->apiResponse($aArrUpdate)
                 ->send();
         } catch (\Throwable $th) {
-            throw new Exception('Internal server malfunction.'.$th->getMessage());
+            throw new Exception('Internal server malfunction.' . $th->getMessage());
         }
     }
 
@@ -109,8 +109,8 @@ class RombelController extends Controller
      *
      * @return mixed Data tabel utama yang diproses oleh service.
      */
-    public function mainTable()
+    public function mainTable(Request $request)
     {
-        return $this->mainServices->table();
+        return $this->mainServices->table($request->input());
     }
 }

@@ -1,0 +1,72 @@
+services:
+  laravel:
+    restart: unless-stopped
+    container_name: laravelapp
+    build:
+      context: ./docker/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/var/www/html/
+      - ./docker/nginx/nginx.conf:/etc/nginx/http.d/default.conf
+      - ./docker/supervisord/supervisord.conf:/etc/supervisord.conf
+      - ./storage:/var/www/html/storage  # FIX: Storage tetap di luar folder docker
+      # - v-laravel-storage:/var/www/html/storage
+
+    ports:
+      - "8080:80"
+    networks:
+      - n-laravel
+    depends_on:
+      - database
+      - minio
+      
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - n-laravel
+    ports:
+      - "6379:6379"
+
+  database:
+    restart: unless-stopped
+    container_name: laraveldb
+    image: mariadb:latest
+    volumes:
+      - v-database:/var/lib/mysql
+    environment:
+      MARIADB_DATABASE: sekolah-pkl
+      MARIADB_USER: root
+      MARIADB_PASSWORD: m@l4ng
+      MARIADB_ROOT_PASSWORD: m@l4ng
+    ports:
+      - "3306:3306"
+    networks:
+      - n-laravel
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password123
+    volumes:
+      - v-minio-data:/data
+      - v-minio-config:/root/.minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    networks:
+      - n-laravel
+
+volumes:
+  v-database:
+  v-minio-data:
+  v-minio-config:
+  v-laravel-storage:
+
+networks:
+  n-laravel:
+    driver: bridge

@@ -25,7 +25,7 @@ class DudiController extends Controller
             return $this->apiResponse($aArrStore)
                 ->send();
         } catch (\Throwable $th) {
-            throw new Exception('Internal server malfunction.');
+            throw new Exception('Internal server malfunction.'.$th->getMessage());
         }
     }
 

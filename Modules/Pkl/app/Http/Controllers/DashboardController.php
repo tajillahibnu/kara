@@ -5,15 +5,29 @@ namespace Modules\Pkl\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
+use Modules\Pkl\Services\Dashboard\DashboardSiswaService;
+use Modules\Pkl\Services\Dashboard\IdukaService;
 use Modules\Pkl\Services\Dashboard\SuperadminService;
+use Modules\Pkl\Services\Dashboard\WaliKelasService;
 
 class DashboardController extends Controller
 {
     use ApiResponseTrait;
     protected $superadminServices;
-    public function __construct(SuperadminService $superadminServices)
-    {
+    protected $dashboardSiswaService;
+    protected $idukaDashboardService;
+    protected $walikelasDashboardService;
+    public function __construct(
+        SuperadminService $superadminServices,
+        DashboardSiswaService $dashboardSiswaService,
+        IdukaService $idukaDashboardService,
+        WaliKelasService $walikelasDashboardService,
+
+    ) {
         $this->superadminServices = $superadminServices;
+        $this->dashboardSiswaService = $dashboardSiswaService;
+        $this->idukaDashboardService = $idukaDashboardService;
+        $this->walikelasDashboardService = $walikelasDashboardService;
     }
 
     public function show()
@@ -24,9 +38,21 @@ class DashboardController extends Controller
             case 'admin_sekolah':
                 $dataService = $this->superadminServices->info();
                 break;
+            case 'siswa':
+                $dataService = $this->dashboardSiswaService->getBiodata();
+                break;
+            case 'iduka':
+                $dataService = $this->idukaDashboardService->readDashboard();
+                break;
+            case 'iduka':
+                $dataService = $this->idukaDashboardService->readDashboard();
+                break;
+            case 'wali_kelas':
+                $dataService = $this->walikelasDashboardService->readDashboard();
+                break;
             default:
                 # code...
-                // echo $slugRole;
+                $dataService[] = $slugRole;
                 // exit;
                 break;
         }

@@ -14,7 +14,13 @@
                         </div>
                         <div class="col-12 mb-4">
                             <label class="form-label" for="jurusan_id">Jurusan</label>
-                            <select id="jurusan_id" name="jurusan_id" class="select2 form-select" data-placeholder="Select Tingkat"></select>
+                            <select id="jurusan_id" name="jurusan_id" class="select2 form-select" data-placeholder="Select Jurusan"></select>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <label class="form-label" for="walikelas_id">Walikelas</label>
+                            <select id="walikelas_id" name="walikelas_id" class="select2 form-select" data-placeholder="Select Walikelas">
+                                <option value=""></option>
+                            </select>
                         </div>
                         <div class="col-12 mb-4">
                             <label for="label" class="form-label">Label</label>

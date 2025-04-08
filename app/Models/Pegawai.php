@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pegawai extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'nip',
@@ -23,4 +23,12 @@ class Pegawai extends Model
         'user_id',
         'is_active',
     ];
+
+    // protected $hidden = ['created_at', 'updated_at'];
+
+    // Definisikan relasi satu ke satu dengan Jurusan
+    public function jurusan()
+    {
+        return $this->hasOne(Jurusan::class, 'kakomli_id');
+    }
 }

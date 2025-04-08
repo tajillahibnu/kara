@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Pkl\Http\Controllers\ComboMasterController;
+use Modules\Pkl\Http\Controllers\Pkl\AttendanceSiswaPKLController;
+use Modules\Pkl\Http\Controllers\Pkl\PenempatanPKLController;
+use Modules\Pkl\Http\Controllers\Pkl\PesertaPklController;
 use Modules\Pkl\Http\Controllers\Pkl\PriodePKLController;
 use Modules\Pkl\Http\Controllers\Pkl\ProsesRegisterController;
 use Modules\Pkl\Http\Controllers\Pkl\RegisterPklController;
@@ -61,6 +64,17 @@ Route::group(['prefix' => 'pendaftaranpkl', 'middleware' => []], function () {
     Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
 });
 
+Route::group(['prefix' => 'peserta', 'middleware' => []], function () {
+    Route::post('main-table', [PesertaPklController::class, 'mainTable'])->name('main-table');
+});
+
+Route::group(['prefix' => 'penempatan', 'middleware' => []], function () {
+    Route::post('main-table', [PenempatanPKLController::class, 'mainTable'])->name('main-table');
+    Route::post('store', [PenempatanPKLController::class, 'store'])->name('store');
+    Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
+    Route::post('combobox/dudi', [PenempatanPKLController::class, 'combobox_dudi'])->name('combobox.dudi');
+});
+
 Route::group(['prefix' => 'konfirmasipkl', 'middleware' => []], function () {
     Route::post('main-table', [ProsesRegisterController::class, 'mainTable'])->name('main-table');
     Route::post('confirmall', [ProsesRegisterController::class, 'proses'])->name('confirmall');
@@ -71,4 +85,10 @@ Route::group(['prefix' => 'konfirmasipkl', 'middleware' => []], function () {
     // // Route::post('update/{id}', [RegisterPklController::class, 'update'])->name('update');
     // // Route::post('status', [RegisterPklController::class, 'status'])->name('status');
     // Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
+});
+// Siswa Absensi
+Route::group(['prefix' => 'absensi', 'middleware' => []], function () {
+    Route::post('main-table', [AttendanceSiswaPKLController::class, 'mainTable'])->name('main-table');
+    Route::post('read', [AttendanceSiswaPKLController::class, 'read'])->name('read');
+    Route::post('chekinout', [AttendanceSiswaPKLController::class, 'ChekInOut'])->name('chekinout');
 });

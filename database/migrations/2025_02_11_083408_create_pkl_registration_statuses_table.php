@@ -18,9 +18,11 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade'); // jurusan siswa
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Role yang menyetujui
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // User yang approve
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status approval
+            $table->enum('status', ['pending', 'completed', 'rejected', 'resubmission', 'revisi'])->default('pending'); // Status approval
             $table->timestamp('status_updated_at')->nullable();
             $table->text('notes')->nullable(); // Catatan jika ada alasan penolakan
+            $table->boolean('is_view')->default(false);
+            $table->boolean('is_revisi')->default(false);
             $table->timestamps();
         });
     }

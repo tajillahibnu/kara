@@ -36,7 +36,8 @@ class RegisterPklService
                     $save['periode_id'] = $input['periode_id'];
                     $save['jurusan_id'] = $input['jurusan_id'];
                     $save['registration_type'] = 'seleksi';
-                    $save['status']     = 'pending';
+                    $save['status_register']     = 'pending';
+                    $save['status_pelaksana']    = 'pending';
 
                     $save['siswa_id']   = $siswaId;
                     $response = $this->repository->register($save, $siswaId);
@@ -102,7 +103,7 @@ class RegisterPklService
                 ['siswas.id', '=', 'pkl_registrations.siswa_id'],
             ])
             ->addColumn('status_badge', function ($detail) {
-                return getBadgeStatus($detail->status);
+                return getBadgeStatus($detail->status_register);
             })
             ->addColumn('action', function ($detail) {
                 return '
@@ -134,14 +135,14 @@ class RegisterPklService
             ->addColumn('diterima', function ($detail) {
                 $total = PklRegistration::where('jurusan_id', $detail->id)
                 ->where('tahun_pelajaran',$this->tahunPelajaran)
-                ->where('status','approved')
+                ->where('status_register','completed')
                 ->count();
                 return $total;
             })
             ->addColumn('ditolak', function ($detail) {
                 $total = PklRegistration::where('jurusan_id', $detail->id)
                 ->where('tahun_pelajaran',$this->tahunPelajaran)
-                ->where('status','rejected')
+                ->where('status_register','rejected')
                 ->count();
                 return $total;
             })

@@ -21,11 +21,15 @@ use Modules\Pkl\Http\Controllers\Data\SiswaController;
 // });
 
 
-Route::group(['prefix' => 'dasi', 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => 'dasi'], function () {
     Route::post('main-table', [SiswaController::class, 'mainTable'])->name('main-table');
     Route::post('store', [SiswaController::class, 'store'])->name('store');
     Route::post('update/{id}', [SiswaController::class, 'update'])->name('update');
     Route::post('delete', [SiswaController::class, 'delete'])->name('delete');
     Route::post('status', [SiswaController::class, 'status'])->name('status');
     Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
+});
+
+Route::group(['prefix' => 'dasirole'], function () {
+    Route::post('main-table', [SiswaController::class, 'mainTable'])->name('main-table');
 });

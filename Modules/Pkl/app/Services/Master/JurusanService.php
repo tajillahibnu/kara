@@ -61,6 +61,7 @@ class JurusanService
     protected function prepareData(array $input)
     {
         return [
+            'kakomli_id' => $input['kakomli_id'] ?? null,
             'kode' => $input['kode'] ?? null,
             'name' => $input['name'] ?? null,
             'bidang_keahlian' => $input['bidang_keahlian'] ?? null,
@@ -131,7 +132,7 @@ class JurusanService
         $response['success'] = false;
         $response['statusCode'] = 200;
         try {
-            $dataToUpdate['is_active'] = !$input['is_active']?? true;
+            $dataToUpdate['is_active'] = !$input['is_active'] ?? true;
             // print_r($dataToUpdate);
             // exit;
             $response['data'] = $this->repository->update($dataToUpdate, $id);
@@ -176,36 +177,50 @@ class JurusanService
     public function table()
     {
         return DataTableService::draw('jurusans')
-            ->where('deleted_at', null)
+            ->select(['jurusans.*', 'pegawais.name AS kakomli_name', 'pegawais.nip AS kakomli_nip'])
+            ->join('pegawais', [
+                ['pegawais.id', '=', 'jurusans.kakomli_id'],
+            ], 'LEFT')
+            ->where('jurusans.deleted_at', null)
             ->addColumn('status', function ($detail) {
                 // $badgeClass = $detail->is_active ? 'bg-label-success' : 'bg-label-danger';
                 // $badgeText = $detail->is_active ? 'Active' : 'Inactive';
-                
+
                 // return '<span class="badge  ' . $badgeClass . '">' . $badgeText . '</span>';
                 $badgeText = $detail->is_active ? 'checked' : '';
                 return '
                         <div class="w-75 d-flex justify-content-end">
                             <div class="form-check form-switch me-n3">
-                            <input type="checkbox" class="form-check-input" name="'.$detail->id.'" data-params="' . base64_encode(json_encode($detail)) . '" onchange="setActive(this)" '.$badgeText.'>
+                            <input type="checkbox" class="form-check-input" name="' . $detail->id . '" data-params="' . base64_encode(json_encode($detail)) . '" onchange="setActive(this)" ' . $badgeText . '>
                             </div>
                         </div>
                 ';
             })
             ->addColumn('action', function ($detail) {
-                return '
-                <div class="d-inline-block">
-                    <a href="javascript:void(0);" class="btn btn-sm rounded-pill btn-icon dropdown-toggle hide-arrow show" data-bs-toggle="dropdown" aria-expanded="true"><i class="ti ti-dots-vertical ti-md"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end m-0" data-popper-placement="bottom-end">
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="editData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Edit</a>
-                        </li>
-                        <div class="dropdown-divider"></div>
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="deleteData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Delete</a>
-                        </li>
-                    </ul>
-                </div>
+                $btnMore = '';
+                $btnview = '';
+                $btnview .= '<a class="btn btn-icon" href="javascript:void(0);" data-permision="user-update" onclick="editData(this)" data-params="' . base64_encode(json_encode($detail)) . '">
+                                <i class="ti ti-edit ti-md"></i>
+                            </a>';
+                // $btnMore .= '<a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="editData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Edit</a>';
+                // $btnMore .= '<div class="dropdown-divider"></div>';
+                $btnMore .= '<a class="dropdown-item" href="javascript:void(0);" data-permision="user-update" onclick="deleteData(this)" data-params="' . base64_encode(json_encode($detail)) . '">Delete</a>';
+
+                $btnDropdown = $btnMore === '' ? '' : '
+                        <div class="dropdown">
+                            <a href="javascript:;" class="btn dropdown-toggle hide-arrow btn-icon p-0" data-bs-toggle="dropdown" aria-expanded="false"><i class="ti ti-dots-vertical ti-md"></i></a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                ' . $btnMore . '
+                            </div>
+                        </div>
                 ';
+
+                return '
+                    <div class="d-flex align-items-center">
+                        ' . $btnview . '
+                        ' . $btnDropdown . '
+                    </div>
+                    ';
             })
             ->rawColumns(['status', 'action'])
             ->toJson();

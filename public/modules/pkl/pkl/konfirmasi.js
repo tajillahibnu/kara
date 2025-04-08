@@ -67,16 +67,17 @@ confirmAll = (el) => {
     var data = $(el).data('params')
     var tipe = $(el).data('tipe')
     data = JSON.parse(atob(data));
+    console.log(tipe)
     targetID = data['id'];
     APP.confirm({
         title: 'Are you sure?',
-        text: tipe == 'approved' ? 'Apakah anda ingin menyetujui registrasi PKL? menyetujui akan by pass tidak sesuai prosedur' : 'Apakah anda ingin membatalkan registrasi PKL? membatalkan akan by pass tidak sesuai prosedur',
+        text: tipe == 'completed' ? 'Apakah anda ingin menyetujui registrasi PKL? menyetujui akan by pass tidak sesuai prosedur' : 'Apakah anda ingin membatalkan registrasi PKL? membatalkan akan by pass tidak sesuai prosedur',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: tipe == 'approved' ? 'Approved!' : 'Rejected!',
+        confirmButtonText: tipe == 'completed' ? 'Completed!' : 'Rejected!',
         cancelButtonText: 'Batal',
         customClass: {
-            confirmButton: tipe == 'approved' ? 'btn btn-primary waves-effect waves-light text-white' : 'btn btn-danger waves-effect waves-light text-white',
+            confirmButton: tipe == 'completed' ? 'btn btn-primary waves-effect waves-light text-white' : 'btn btn-danger waves-effect waves-light text-white',
         },
     }).then((result) => {
         if (result.isConfirmed) {

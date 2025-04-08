@@ -28,8 +28,7 @@ return new class extends Migration
             $table->softDeletes();
 
             // Foreign key constraints
-            $table->unsignedBigInteger('walikelas_id')->nullable();
-            // $table->foreignId('walikelas_id')->constrained('pegawais')->onDelete('cascade');
+            $table->foreignId('walikelas_id')->nullable()->constrained('pegawais')->onDelete('cascade');
             $table->foreignId('jurusan_id')->constrained('jurusans')->onDelete('cascade');
         });
     }

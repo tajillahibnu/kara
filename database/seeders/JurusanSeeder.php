@@ -48,8 +48,10 @@ class JurusanSeeder extends Seeder
             ],
         ];
 
+        $iNumb = 1;
         foreach ($jurusanSmkData as $data) {
             DB::table('jurusans')->insert([
+                'kakomli_id' => $iNumb++,
                 'kode' => $data['kode'],
                 'name' => $data['name'],
                 'bidang_keahlian' => $data['bidang_keahlian'],

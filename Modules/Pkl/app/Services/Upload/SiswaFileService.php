@@ -1,0 +1,179 @@
+<?php
+
+namespace Modules\Pkl\Services\Upload;
+
+use App\Models\Jurusan;
+use App\Models\Rombel;
+use App\Models\Siswa;
+use App\Models\TempSiswa;
+use App\Models\Upload_siswa;
+use App\Services\DataTableService;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
+use Modules\Pkl\Jobs\ProcessSiswaUploade;
+use Modules\Pkl\Repositories\SiswaRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+class SiswaFileService
+{
+    public function uploadSiswaJurusan($request)
+    {
+        $file = $request->file('files_siswa');
+        $filename = time();
+        $location = 'uploads/siswa/';
+        Storage::disk('s3')->put($location . $filename, file_get_contents($file));
+
+        $upload = Upload_siswa::create([
+            'filename'          => $filename,
+            'path'              => $location,
+            'original_name'     => $file->getClientOriginalName(),
+            'file_type'         => $file->getClientOriginalExtension(),
+            'file_size'         => $file->getSize(),
+            'url'               => Storage::disk('s3')->url($location . $filename),
+            'status'            => 'pending',
+            'tahun_akademik'    => $request->input('tahun_pelajaran'),
+            'jurusan_id'        => $request->input('jurusan_id'),
+        ]);
+
+        // Kirim ke queue untuk diproses
+        dispatch(new ProcessSiswaUploade($upload));
+
+        return [
+            'message' => 'File berhasil diupload dan sedang diproses',
+            'data' => $upload
+        ];
+    }
+
+    public function update($request, $id)
+    {
+        $response['statusCode'] = 200;
+        DB::beginTransaction(); // Mulai transaction
+        try {
+            $tempSiswa = TempSiswa::find($id);
+            $dataToUpdate['rombel_id'] = $request['kelas_siswa'];
+
+            $save['nis']        = $tempSiswa['nis'];
+            $save['name']       = $tempSiswa['nama'];
+            $save['jurusan_id'] = $tempSiswa['jurusan_id'];
+            $save['tingkat_id'] = $tempSiswa['tingkat_id'];
+            $save['tahun_masuk'] = $tempSiswa['tahun_akademik'];
+            
+            $siswa = Siswa::create($save);
+
+            DB::commit(); // Simpan perubahan ke database
+            return $tempSiswa->update($dataToUpdate);
+        } catch (NotFoundHttpException $e) {
+            throw new NotFoundHttpException("Item with ID $id not found for update");
+        } catch (Exception $e) {
+            $response['message'] = $e->getMessage();
+            throw new Exception($e->getMessage(), 500);
+        }
+    }
+
+    public function delete($id = null)
+    {
+        $response['statusCode'] = 200;
+        try {
+            $post = TempSiswa::find($id);
+            return $post->delete();
+        } catch (NotFoundHttpException $e) {
+            throw new NotFoundHttpException("Item with ID $id not found for deletion");
+        } catch (Exception $e) {
+            $response['message'] = $e->getMessage();
+            throw new Exception("Failed to delete item" . $e->getMessage(), 500);
+        }
+    }
+
+    public function tableSiswa($request)
+    {
+        $file_id = $request->input('id');
+        return DataTableService::draw('temp_siswas')
+            ->where('deleted_at', null)
+            ->where('upload_siswa_id', $file_id)
+            ->addColumn('rombel_name', function ($detail) {
+                $getRombel = Rombel::find($detail->rombel_id);
+                return empty($getRombel) ? '-' : $getRombel->name;
+            })
+            ->addColumn('status', function ($detail) {
+                switch ($detail->status) {
+                    case 'pending':
+                        $badgeClass = 'bg-label-warning';
+                        break;
+                    case 'failed':
+                        $badgeClass = 'bg-label-danger';
+                        break;
+                    case 'completed':
+                        $badgeClass = 'bg-label-success';
+                        break;
+                    default:
+                        $badgeClass = 'bg-label-secondary';
+                }
+
+                $badgeText = ucfirst($detail->status); // Huruf pertama kapital
+
+                return '<span class="badge ' . $badgeClass . '">' . htmlspecialchars($badgeText) . '</span>';
+            })
+            ->addColumn('action', function ($detail) {
+                return '
+                <div class="d-inline-block">
+                    <a href="javascript:void(0);" class="btn btn-sm rounded-pill btn-icon dropdown-toggle hide-arrow show" data-bs-toggle="dropdown" aria-expanded="true"><i class="ti ti-dots-vertical ti-md"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end m-0" data-popper-placement="bottom-end">
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0);" data-permision="upload-siswa-detail" onclick="onEditSiswa(this)" data-params="' . base64_encode(json_encode($detail)) . '">Edit</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0);" data-permision="upload-siswa-detail" onclick="onDeleteSiswa(this)" data-params="' . base64_encode(json_encode($detail)) . '">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+                ';
+            })
+            ->rawColumns(['status', 'action'])
+            ->toJson();
+    }
+
+    public function table()
+    {
+        return DataTableService::draw('upload_siswas')
+            ->select(['upload_siswas.*', 'jurusans.name AS jurusan_name'])
+            ->join('jurusans', [
+                ['jurusans.id', '=', 'upload_siswas.jurusan_id'],
+            ])
+            ->where('upload_siswas.deleted_at', null)
+            ->addColumn('status', function ($detail) {
+                switch ($detail->status) {
+                    case 'pending':
+                        $badgeClass = 'bg-label-warning';
+                        break;
+                    case 'failed':
+                        $badgeClass = 'bg-label-danger';
+                        break;
+                    case 'completed':
+                        $badgeClass = 'bg-label-success';
+                        break;
+                    default:
+                        $badgeClass = 'bg-label-secondary';
+                }
+
+                $badgeText = ucfirst($detail->status); // Huruf pertama kapital
+
+                return '<span class="badge ' . $badgeClass . '">' . htmlspecialchars($badgeText) . '</span>';
+            })
+            ->addColumn('action', function ($detail) {
+                return '
+                <div class="d-inline-block">
+                    <a href="javascript:void(0);" class="btn btn-sm rounded-pill btn-icon dropdown-toggle hide-arrow show" data-bs-toggle="dropdown" aria-expanded="true"><i class="ti ti-dots-vertical ti-md"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end m-0" data-popper-placement="bottom-end">
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0);" data-permision="upload-siswa-detail" onclick="onDetails(this)" data-params="' . base64_encode(json_encode($detail)) . '">Detail</a>
+                        </li>
+                    </ul>
+                </div>
+                ';
+            })
+            ->rawColumns(['status', 'action'])
+            ->toJson();
+    }
+}
