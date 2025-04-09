@@ -37,11 +37,12 @@ class RoleMenuSeeder extends Seeder
     private function admin_sekolah($role)
     {
         $inMenu = $this->global();
-        $inMenu = array_merge($inMenu,$this->menu_data());
-        $inMenu = array_merge($inMenu,$this->menu_pkl());
-        $inMenu = array_merge($inMenu,$this->master());
-        $inMenu = array_merge($inMenu,$this->management());
-        $inMenu = array_merge($inMenu,$this->setting());
+        $inMenu = array_merge($inMenu, $this->menu_data());
+        $inMenu = array_merge($inMenu, $this->jurnal());
+        $inMenu = array_merge($inMenu, $this->menu_pkl());
+        $inMenu = array_merge($inMenu, $this->master());
+        $inMenu = array_merge($inMenu, $this->management());
+        $inMenu = array_merge($inMenu, $this->setting());
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -53,7 +54,7 @@ class RoleMenuSeeder extends Seeder
     private function wali_kelas($role)
     {
         $inMenu = $this->global();
-        $inMenu = array_merge($inMenu,['dasirole']);
+        $inMenu = array_merge($inMenu, ['dasirole', 'jurnal_mengajar_role']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -65,7 +66,7 @@ class RoleMenuSeeder extends Seeder
     private function kepala_jurusan($role)
     {
         $inMenu = $this->global();
-        $inMenu = array_merge($inMenu,['dasirole']);
+        $inMenu = array_merge($inMenu, ['dasirole', 'jurnal_mengajar_role']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -77,7 +78,7 @@ class RoleMenuSeeder extends Seeder
     private function kepala_program($role)
     {
         $inMenu = $this->global();
-        $inMenu = array_merge($inMenu,['dasirole']);
+        $inMenu = array_merge($inMenu, ['dasirole']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -89,6 +90,19 @@ class RoleMenuSeeder extends Seeder
     private function guru($role)
     {
         $inMenu = $this->global();
+        $inMenu = array_merge($inMenu, $this->jurnal());
+        $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
+
+        if (!empty($menuIds)) {
+            $this->command->info($role->name);
+            $role->menus()->syncWithoutDetaching($menuIds);
+        }
+    }
+
+    private function staff_tu($role)
+    {
+        $inMenu = $this->global();
+        $inMenu = array_merge($inMenu, ['data', 'dapeg', 'dasi']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -100,7 +114,7 @@ class RoleMenuSeeder extends Seeder
     private function siswa($role)
     {
         $inMenu = $this->global();
-        $inMenu = array_merge($inMenu,$this->menu_pkl_siswa());
+        $inMenu = array_merge($inMenu, $this->menu_pkl_siswa());
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -112,7 +126,19 @@ class RoleMenuSeeder extends Seeder
     private function iduka($role)
     {
         $inMenu = $this->global();
-        $inMenu = array_merge($inMenu,['dasirole']);
+        $inMenu = array_merge($inMenu, ['dasirole']);
+        $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
+
+        if (!empty($menuIds)) {
+            $this->command->info($role->name);
+            $role->menus()->syncWithoutDetaching($menuIds);
+        }
+    }
+
+    private function karyawan($role)
+    {
+        $inMenu = $this->global();
+        $inMenu = array_merge($inMenu, ['jurnal_kegiatan_karyawan']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {
@@ -134,6 +160,14 @@ class RoleMenuSeeder extends Seeder
         $inMenu[] = 'dapeg';
         $inMenu[] = 'dasi';
         $inMenu[] = 'dakel';
+        return $inMenu;
+    }
+
+    private function jurnal()
+    {
+        $inMenu[] = 'jurnal';
+        $inMenu[] = 'jurnal_mengajar';
+        $inMenu[] = 'jurnal_kegiatan_role';
         return $inMenu;
     }
 

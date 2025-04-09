@@ -16,6 +16,7 @@ class MenuSeeder extends Seeder
         $aArrMenu = [
             'dashboard',
             'data',
+            'jurnal',
             'pkl',
             'pkl_siswa',
             'master',
@@ -47,8 +48,9 @@ class MenuSeeder extends Seeder
         Menu::create($save);
     }
 
-    private function data($id,$menuNumber){
-        $save['id']    = $id.'0';
+    private function data($id, $menuNumber)
+    {
+        $save['id']    = $id . '0';
         $save['title']      = 'Siswa';
         $save['name']       = 'Siswa';
         $save['slug']       = 'dasirole';
@@ -59,7 +61,7 @@ class MenuSeeder extends Seeder
         $save['view_file']      = 'default';
         $save['menu_order'] = $menuNumber;
         Menu::create($save);
-        
+
         $dd = $id;
         $save['id']    = $id;
         $save['name']  = 'Data';
@@ -72,7 +74,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Pegawai';
         $save['name']       = 'Pegawai';
@@ -86,7 +88,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Siswa';
         $save['name']       = 'Siswa';
@@ -100,7 +102,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Kelas';
         $save['name']       = 'Kelas';
@@ -114,7 +116,75 @@ class MenuSeeder extends Seeder
         Menu::create($save);
     }
 
-    private function pkl($id,$menuNumber){
+    private function jurnal($id, $menuNumber)
+    {
+        $dd = $id;
+        $save['id']    = $id;
+        $save['name']  = 'Jurnal';
+        $save['title']  = 'Jurnal';
+        $save['slug']   = 'jurnal';
+        $save['url']   = 'jurnal';
+        $save['level'] = '0';
+        $save['type']  = 'main';
+        $save['menu_order'] = $menuNumber;
+        Menu::create($save);
+
+
+        $save['id']         = $id . '0';
+        $save['title']      = 'Jurnal Mengajar';
+        $save['name']       = 'Jurnal Mengajar';
+        $save['slug']       = 'jurnal_mengajar_role';
+        $save['url']        = 'jurnal/mengajar';
+        $save['level']      = '0';
+        $save['type']       = 'main';
+        $save['menu_order'] = $menuNumber;
+        $save['view_path']  = 'jurnal/mengajar/~|role|~';
+        $save['view_file']  = 'default';
+        Menu::create($save);
+
+        $save['id']         = $id . '1';
+        $save['title']      = 'Jurnal Kegiatan';
+        $save['name']       = 'Jurnal Kegiatan';
+        $save['slug']       = 'jurnal_kegiatan_karyawan';
+        $save['url']        = 'jurnal/kegiatan/karyawan';
+        $save['level']      = '0';
+        $save['type']       = 'main';
+        $save['menu_order'] = $menuNumber;
+        $save['view_path']  = 'jurnal/kegiatan/karyawan';
+        $save['view_file']  = 'default';
+        Menu::create($save);
+
+        $dd = $dd + 1;
+        $save['id']         = $id . $dd;
+        $save['parent_id']  = $id;
+        $save['title']      = 'Jurnal Mengajar';
+        $save['name']       = 'Jurnal Mengajar';
+        $save['slug']       = 'jurnal_mengajar';
+        $save['url']        = 'jurnal/mengajar';
+        $save['level']      = '1';
+        $save['type']       = 'main';
+        $save['menu_order'] = $dd;
+        $save['view_path']  = 'jurnal/mengajar/';
+        $save['view_file']  = 'default';
+        Menu::create($save);
+
+        $dd = $dd + 1;
+        $save['id']         = $id . $dd;
+        $save['parent_id']  = $id;
+        $save['title']      = 'Jurnal Kegiatan';
+        $save['name']       = 'Jurnal Kegiatan';
+        $save['slug']       = 'jurnal_kegiatan_role';
+        $save['url']        = 'jurnal/kegiatan';
+        $save['level']      = '1';
+        $save['type']       = 'main';
+        $save['menu_order'] = $dd;
+        $save['view_path']  = 'jurnal/kegiatan/~|role|~';
+        $save['view_file']  = 'default';
+        Menu::create($save);
+    }
+
+    private function pkl($id, $menuNumber)
+    {
         $dd = $id;
         $save['id']    = $id;
         $save['name']  = 'PKL';
@@ -127,7 +197,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Daftar Siswa';
         $save['name']       = 'Daftar Siswa';
@@ -141,7 +211,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Penempatan Siswa';
         $save['name']       = 'Penempatan Siswa';
@@ -153,9 +223,9 @@ class MenuSeeder extends Seeder
         $save['view_path']      = 'pkl/penempatan/';
         $save['view_file']      = 'default';
         Menu::create($save);
-        
+
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Periode';
         $save['name']       = 'Periode';
@@ -169,7 +239,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Registrasi';
         $save['name']       = 'Registrasi';
@@ -183,7 +253,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Data Pengajuan';
         $save['name']       = 'Data Pengajuan';
@@ -197,8 +267,8 @@ class MenuSeeder extends Seeder
         Menu::create($save);
     }
 
-    
-    private function pkl_siswa($id,$menuNumber){
+    private function pkl_siswa($id, $menuNumber)
+    {
         $dd = $id;
         $save['id']    = $id;
         $save['name']  = 'PKL';
@@ -211,7 +281,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Absensi';
         $save['name']       = 'Absensi';
@@ -225,7 +295,8 @@ class MenuSeeder extends Seeder
         Menu::create($save);
     }
 
-    private function master($id,$menuNumber){
+    private function master($id, $menuNumber)
+    {
         $dd = $id;
         $save['id']    = $id;
         $save['name']  = 'Master';
@@ -238,7 +309,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Dunia Usaha dan Dunia Industri';
         $save['name']       = 'Data Perusahaan';
@@ -252,7 +323,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Jurusan';
         $save['name']       = 'Data Jurusan';
@@ -266,7 +337,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Kelas';
         $save['name']       = 'Data Kelas';
@@ -279,8 +350,9 @@ class MenuSeeder extends Seeder
         $save['view_file']      = 'default';
         Menu::create($save);
     }
-    
-    private function management($id,$menuNumber){
+
+    private function management($id, $menuNumber)
+    {
         $dd = $id;
         $save['id']    = $id;
         $save['name']  = 'Management';
@@ -293,7 +365,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Management Siswa';
         $save['name']       = 'Siswa';
@@ -307,7 +379,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Management Pegawai';
         $save['name']       = 'Pegawai';
@@ -334,7 +406,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Setting Aplikasi';
         $save['name']       = 'Aplikasi';
@@ -348,7 +420,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Upload';
         $save['name']       = 'Upload Siswa';
@@ -362,7 +434,7 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
         $dd = $dd + 1;
-        $save['id']         = $id.$dd;
+        $save['id']         = $id . $dd;
         $save['parent_id']  = $id;
         $save['title']      = 'Setting Sekolah';
         $save['name']       = 'Sekolah';

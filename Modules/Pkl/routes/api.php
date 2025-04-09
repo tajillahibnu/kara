@@ -57,4 +57,7 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
     Route::group(['prefix' => 'prakerin'], function () {
         require_once(__DIR__ . '/api/pkl.php');
     });
+    Route::group(['prefix' => 'jurnal'], function () {
+        require_once(__DIR__ . '/api/Jurnal.php');
+    });
 });

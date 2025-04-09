@@ -25,6 +25,9 @@
 <script src="{{asset('/')}}assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
 <script src="{{asset('/')}}assets/vendor/libs/toastr/toastr.js"></script>
 <script src="{{asset('/')}}assets/vendor/libs/select2/select2.js"></script>
+<!-- Vendors JS -->
+<script src="{{asset('/')}}assets/vendor/libs/quill/katex.js"></script>
+<script src="{{asset('/')}}assets/vendor/libs/quill/quill.js"></script>
 
 
 <!-- Main JS -->

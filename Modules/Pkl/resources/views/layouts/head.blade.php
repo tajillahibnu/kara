@@ -53,7 +53,15 @@
     <link rel="stylesheet" href="../../assets/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css" />
     <!-- Form Validation -->
     <link rel="stylesheet" href="../../assets/vendor/libs/@form-validation/form-validation.css" />
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../../assets/vendor/libs/node-waves/node-waves.css" />
 
+    <!-- Tambahkan Quill JS & CSS -->
+    <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" /> -->
+
+    <link rel="stylesheet" href="{{asset('/')}}assets/vendor/libs/quill/typography.css" />
+    <link rel="stylesheet" href="{{asset('/')}}assets/vendor/libs/quill/katex.css" />
+    <link rel="stylesheet" href="{{asset('/')}}assets/vendor/libs/quill/editor.css" />
     <!-- Page CSS -->
 
     <!-- Helpers -->
