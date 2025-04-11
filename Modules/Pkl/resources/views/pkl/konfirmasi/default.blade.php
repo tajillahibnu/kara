@@ -16,3 +16,4 @@
         </table>
     </div>
 </div>
+@include('pkl::pkl.konfirmasi.form')

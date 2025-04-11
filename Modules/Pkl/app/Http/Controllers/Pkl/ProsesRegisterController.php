@@ -32,10 +32,10 @@ class ProsesRegisterController extends Controller
         try {
             switch ($request->input('tipe')) {
                 case 'completed':
-                    $aArrProses = $this->mainServices->acc_pkl($request->input('id'), $request->input());
+                    $aArrProses = $this->mainServices->acc_pkl($request->input('id'), $request->all());
                     break;
                 case 'rejected':
-                    $aArrProses = $this->mainServices->rejected_pkl($request->input('id'), $request->input());
+                    $aArrProses = $this->mainServices->rejected_pkl($request->input('id'), $request->all());
                     break;
                 default:
                     $aArrProses = [];
@@ -50,6 +50,7 @@ class ProsesRegisterController extends Controller
 
     public function mainTable()
     {
-        return $this->mainServices->table();
+        $slugRole = session('active_role_slug');
+        return $this->mainServices->table($slugRole);
     }
 }

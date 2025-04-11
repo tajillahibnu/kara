@@ -55,7 +55,7 @@ class MenuSeeder extends Seeder
         $save['name']       = 'Siswa';
         $save['slug']       = 'dasirole';
         $save['url']        = 'data/dasirole';
-        $save['level']      = '1';
+        $save['level']      = '0';
         $save['type']       = 'main';
         $save['view_path']      = 'data/siswa/~|role|~';
         $save['view_file']      = 'default';
@@ -130,17 +130,17 @@ class MenuSeeder extends Seeder
         Menu::create($save);
 
 
-        $save['id']         = $id . '0';
-        $save['title']      = 'Jurnal Mengajar';
-        $save['name']       = 'Jurnal Mengajar';
-        $save['slug']       = 'jurnal_mengajar_role';
-        $save['url']        = 'jurnal/mengajar';
-        $save['level']      = '0';
-        $save['type']       = 'main';
-        $save['menu_order'] = $menuNumber;
-        $save['view_path']  = 'jurnal/mengajar/~|role|~';
-        $save['view_file']  = 'default';
-        Menu::create($save);
+        // $save['id']         = $id . '0';
+        // $save['title']      = 'Jurnal Mengajar';
+        // $save['name']       = 'Jurnal Mengajar';
+        // $save['slug']       = 'jurnal_mengajar_role';
+        // $save['url']        = 'jurnal/mengajar';
+        // $save['level']      = '0';
+        // $save['type']       = 'main';
+        // $save['menu_order'] = $menuNumber;
+        // $save['view_path']  = 'jurnal/mengajar/~|role|~';
+        // $save['view_file']  = 'default';
+        // Menu::create($save);
 
         $save['id']         = $id . '1';
         $save['title']      = 'Jurnal Kegiatan';
@@ -154,19 +154,19 @@ class MenuSeeder extends Seeder
         $save['view_file']  = 'default';
         Menu::create($save);
 
-        $dd = $dd + 1;
-        $save['id']         = $id . $dd;
-        $save['parent_id']  = $id;
-        $save['title']      = 'Jurnal Mengajar';
-        $save['name']       = 'Jurnal Mengajar';
-        $save['slug']       = 'jurnal_mengajar';
-        $save['url']        = 'jurnal/mengajar';
-        $save['level']      = '1';
-        $save['type']       = 'main';
-        $save['menu_order'] = $dd;
-        $save['view_path']  = 'jurnal/mengajar/';
-        $save['view_file']  = 'default';
-        Menu::create($save);
+        // $dd = $dd + 1;
+        // $save['id']         = $id . $dd;
+        // $save['parent_id']  = $id;
+        // $save['title']      = 'Jurnal Mengajar';
+        // $save['name']       = 'Jurnal Mengajar';
+        // $save['slug']       = 'jurnal_mengajar';
+        // $save['url']        = 'jurnal/mengajar';
+        // $save['level']      = '1';
+        // $save['type']       = 'main';
+        // $save['menu_order'] = $dd;
+        // $save['view_path']  = 'jurnal/mengajar/';
+        // $save['view_file']  = 'default';
+        // Menu::create($save);
 
         $dd = $dd + 1;
         $save['id']         = $id . $dd;
@@ -193,7 +193,7 @@ class MenuSeeder extends Seeder
         $save['url']   = 'pkl';
         $save['level'] = '0';
         $save['type']  = 'main';
-        $save['menu_order'] = $menuNumber;
+        $save['menu_order'] = 4;
         Menu::create($save);
 
         $dd = $dd + 1;
@@ -220,7 +220,7 @@ class MenuSeeder extends Seeder
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
-        $save['view_path']      = 'pkl/penempatan/';
+        $save['view_path']      = 'pkl/penempatan/~|role|~';
         $save['view_file']      = 'default';
         Menu::create($save);
 
@@ -248,7 +248,7 @@ class MenuSeeder extends Seeder
         $save['level']      = '1';
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
-        $save['view_path']      = 'pkl/pendaftaran/';
+        $save['view_path']      = 'pkl/pendaftaran/~|role|~';
         $save['view_file']      = 'default';
         Menu::create($save);
 
@@ -395,6 +395,7 @@ class MenuSeeder extends Seeder
 
     private function setting($id, $menuNumber)
     {
+        $menuNumber = 99;
         $dd = $id;
         $save['id']    = $id;
         $save['name']  = 'Setting';

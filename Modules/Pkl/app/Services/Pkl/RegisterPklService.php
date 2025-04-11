@@ -4,11 +4,9 @@ namespace Modules\Pkl\Services\Pkl;
 
 use App\Models\PklPeriode;
 use App\Models\PklRegistration;
-use App\Models\Siswa;
 use App\Services\DataTableService;
 use Illuminate\Database\QueryException;
 use Modules\Pkl\Repositories\RegisterPklRepository;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RegisterPklService
 {
@@ -34,8 +32,7 @@ class RegisterPklService
                 foreach ($input['siswa_id'] as $key => $siswaId) {
                     $save = [];
                     $save['periode_id'] = $input['periode_id'];
-                    $save['jurusan_id'] = $input['jurusan_id'];
-                    $save['registration_type'] = 'seleksi';
+                    $save['registration_type']   = 'seleksi';
                     $save['status_register']     = 'pending';
                     $save['status_pelaksana']    = 'pending';
 
@@ -51,25 +48,22 @@ class RegisterPklService
         return $response;
     }
 
-    public function combo_siswa($tingkat_id, $jurusan_id)
+    public function combo_siswa($data)
     {
-        // Hanya ambil data dengan is_active = true
-        // $data = Siswa::select('id', 'name')
-        $data = Siswa::selectRaw("CONCAT('[', nis, '] ', name) as name,id")
-            ->where('is_active', true) // Filter data yang aktif
-            ->where('is_pkl', false) // Filter data yang aktif
-            ->where('tingkat_id', $tingkat_id) // Filter data yang aktif
-            ->where('jurusan_id', $jurusan_id) // Filter data yang aktif
-            ->whereNotNull('rombel_id')
-            ->get();
-
-        return $data->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'nis' => $item->id,
-                'name' => ucwords($item->name),
-            ];
-        });
+        try {
+            $aArrSiswa = $this->repository->combosiswa($data);
+            $response = $aArrSiswa->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'nis' => $item->nis,
+                    'name' => ucwords($item->name),
+                ];
+            });
+        } catch (QueryException $e) {
+            $response['statusCode'] = 400;
+            $response['message'] = $e->getMessage();
+        }
+        return $response;
     }
 
     public function priode_pkl()
@@ -89,7 +83,12 @@ class RegisterPklService
 
     public function table_registrasi(array $data)
     {
-        $filter['pkl_registrations.jurusan_id'] = $data['jurusan'];
+        if (!empty($data['jurusan'])) {
+            $filter['pkl_registrations.jurusan_id'] = $data['jurusan'];
+        } else {
+            $jurusanId = $this->repository->jurusanId();
+            $filter['pkl_registrations.jurusan_id'] = $jurusanId;
+        }
         $filter['periode_id'] = $data['priode'];
 
         if ($data['tipe'] != 'all') {
@@ -128,22 +127,22 @@ class RegisterPklService
             ->where('deleted_at', null)
             ->addColumn('total', function ($detail) {
                 $total = PklRegistration::where('jurusan_id', $detail->id)
-                ->where('tahun_pelajaran',$this->tahunPelajaran)
-                ->count();
+                    ->where('tahun_pelajaran', $this->tahunPelajaran)
+                    ->count();
                 return $total;
             })
             ->addColumn('diterima', function ($detail) {
                 $total = PklRegistration::where('jurusan_id', $detail->id)
-                ->where('tahun_pelajaran',$this->tahunPelajaran)
-                ->where('status_register','completed')
-                ->count();
+                    ->where('tahun_pelajaran', $this->tahunPelajaran)
+                    ->where('status_register', 'completed')
+                    ->count();
                 return $total;
             })
             ->addColumn('ditolak', function ($detail) {
                 $total = PklRegistration::where('jurusan_id', $detail->id)
-                ->where('tahun_pelajaran',$this->tahunPelajaran)
-                ->where('status_register','rejected')
-                ->count();
+                    ->where('tahun_pelajaran', $this->tahunPelajaran)
+                    ->where('status_register', 'rejected')
+                    ->count();
                 return $total;
             })
             ->addColumn('action', function ($detail) {

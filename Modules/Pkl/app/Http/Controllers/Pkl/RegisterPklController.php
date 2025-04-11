@@ -40,7 +40,7 @@ class RegisterPklController extends Controller
 
     public function combosiswa(Request $request)
     {
-        $data = $this->mainServices->combo_siswa($request->input('tingkat_id'), $request->input('jurusan_id'));
+        $data = $this->mainServices->combo_siswa($request->all());
         return $this->apiResponse($data)->send();
     }
     public function combopriode(Request $request)

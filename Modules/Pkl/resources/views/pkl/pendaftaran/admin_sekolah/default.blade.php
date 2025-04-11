@@ -88,4 +88,4 @@
     </div>
 </div>
 
-@include('pkl::pkl.pendaftaran.form')
+@include('pkl::pkl.pendaftaran.admin_sekolah.form')

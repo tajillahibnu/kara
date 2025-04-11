@@ -5,16 +5,27 @@ $(() => {
 })
 
 mainTable = () => {
+    console.log(APP_MODULE === 'staff_tu' ? 't' : 'asd')
+
+    // dom untuk non-staff (pakai tombol)
+    const domWithButtons = `<"card-header d-flex flex-wrap py-0 flex-column flex-sm-row"<f>
+        <"d-flex justify-content-center justify-content-md-end align-items-baseline"
+        <"dt-action-buttons d-flex justify-content-center flex-md-row align-items-baseline"B>>>t
+        <"row mx-1"<"col-sm-12 col-md-6 d-flex align-items-center length-menu-no-margin"li>
+        <"col-sm-12 col-md-6"p>>`;
+
+    // dom untuk staff (tidak ada tombol tapi search & pagination tetap)
+    const domDefault = `
+        <"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>
+        <"table-responsive"t>
+        <"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>`;
+
     APP.initTable({
         el: '#maintable', // ID atau kelas elemen tabel HTML
         url: BASE_API_MENU + '/main-table', // URL endpoint API untuk mengambil data
         index: 1, // Kolom yang diurutkan
-        dom: `
-        <"card-header d-flex flex-wrap py-0 flex-column flex-sm-row"<f>
-            <"d-flex justify-content-center justify-content-md-end align-items-baseline"
-            <"dt-action-buttons d-flex justify-content-center flex-md-row align-items-baseline"B>>>t
-        <"row mx-1"<"col-sm-12 col-md-6 d-flex align-items-center length-menu-no-margin"li><"col-sm-12 col-md-6"p>>`,
-        buttons: [{
+        dom: APP_MODULE === 'staff_tu' ? domDefault : domWithButtons,
+        buttons: APP_MODULE === 'staff_tu' ? [] : [{
             text: '<i class="ti ti-plus ti-xs me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">Tambah Siswa</span>',
             className: "add-new btn btn-primary ms-2 waves-effect waves-light",
             action: function (e, dt, node, config) {

@@ -66,6 +66,10 @@ class RoleMenuSeeder extends Seeder
     private function kepala_jurusan($role)
     {
         $inMenu = $this->global();
+        $inMenu[] = 'pkl';
+        $inMenu[] = 'penempatanpkl';
+        $inMenu[] = 'pendaftaranpkl';
+        $inMenu[] = 'konfirmasipkl';
         $inMenu = array_merge($inMenu, ['dasirole', 'jurnal_mengajar_role']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
@@ -175,8 +179,8 @@ class RoleMenuSeeder extends Seeder
     {
         $inMenu[] = 'pkl';
         $inMenu[] = 'peserta_pkl';
-        $inMenu[] = 'penempatanpkl';
         $inMenu[] = 'pklpriode';
+        $inMenu[] = 'penempatanpkl';
         $inMenu[] = 'pendaftaranpkl';
         $inMenu[] = 'konfirmasipkl';
         return $inMenu;

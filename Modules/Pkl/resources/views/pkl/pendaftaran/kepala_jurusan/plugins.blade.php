@@ -1,0 +1,1 @@
+<script src="{{asset('/')}}modules/pkl/pkl/pendaftaran_jurusan.js"></script>

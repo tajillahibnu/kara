@@ -27,6 +27,7 @@ class MenuRoleMiddleware
 
             $user = Auth::user();
             $user->name_module = session('active_role_name');
+            $user->slug_module = $slugRole;
             View::share('biodata', $user);
 
             $menus = $this->menuNav($slugRole, $roleId);
@@ -35,6 +36,7 @@ class MenuRoleMiddleware
                 if($getSiswa['is_pkl']){
                     $pklMenus = $this->menuNav($slugRole, $roleId,'menu_pkl_siswa');
                     $menus = $menus->merge($pklMenus);
+                    exit;
                 }
             }else{
                 $aArrMenuRole = $this->roleMenuService->showMenuRole($slugRole,$user->biodata_id);
@@ -62,6 +64,7 @@ class MenuRoleMiddleware
             ->whereNull('parent_id')
             ->where('type', $type)
             ->where('role_menus.role_id', $roleId)
+            ->orderBy('menu_order', 'ASC')
             ->get()
             ->map(function ($menu) use ($roleActive, $roleId) {
                 $menu->name = ucwords($menu->name);

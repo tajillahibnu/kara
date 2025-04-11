@@ -26,12 +26,6 @@
                                     </div>
                                     <div class="col-6 col-md-6">
                                         <div class="mt-4">
-                                            <label class="form-label" for="filter_jurusan">Jurusan</label>
-                                            <select id="filter_jurusan" name="filter_jurusan" class="select2 form-select form-control form-control-sm" data-placeholder="Select Tahun">
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-                                        <div class="mt-4">
                                             <label class="form-label" for="filter_status">Status</label>
                                             <select id="filter_status" name="filter_status" class="select2 form-select form-control form-control-sm">
                                                 <option value=""></option>
@@ -67,4 +61,4 @@
         </div>
     </div>
 </div>
-@include('pkl::pkl.penempatan.form')
+@include('pkl::pkl.penempatan.kepala_jurusan.form')

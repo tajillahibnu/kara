@@ -14,6 +14,7 @@ class PklRegistration extends Model
         'siswa_id',
         'jurusan_id',
         'dudi_id',
+        'dudi_name',
         'guru_id',
         'registration_type',
         'status_register',
@@ -63,5 +64,15 @@ class PklRegistration extends Model
     public function approvals()
     {
         return $this->hasMany(PklRegistrationStatuses::class, 'registration_id');
+    }
+
+    protected static function booted()
+    {
+        static::saving(function ($input) {
+            if ($input->isDirty('dudi_id')) {
+                $dudi = Dudi::findOrFail($input->dudi_id);
+                $input->dudi_name = $dudi->name;
+            }
+        });
     }
 }

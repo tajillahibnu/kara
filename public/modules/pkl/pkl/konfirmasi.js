@@ -1,3 +1,4 @@
+var params = '';
 $(() => {
     mainTable()
 })
@@ -63,11 +64,29 @@ mainTable = () => {
     });
 }
 
+onDetails = (el) => {
+    var data = $(el).data('params');
+    $('#btnRjct').data('params', data);
+    $('#btnOk').data('params', data);
+
+    data = JSON.parse(atob(data));
+    $.each(data, (i, v) => {
+        let inputElement = $(`.info-${i}`);
+        inputElement.html(v);
+    })
+
+    $('#box-konfirmasi').hide();
+    if (data.status_role == "pending") {
+        $('#box-konfirmasi').show();
+    }
+
+    $('#mainModal').modal('show');
+}
+
 confirmAll = (el) => {
     var data = $(el).data('params')
     var tipe = $(el).data('tipe')
     data = JSON.parse(atob(data));
-    console.log(tipe)
     targetID = data['id'];
     APP.confirm({
         title: 'Are you sure?',
@@ -94,6 +113,45 @@ confirmAll = (el) => {
                     type: data.status,
                     message: data.message,
                 });
+                $('#mainModal').modal('hide');
+            }).catch(error => {
+                console.error("Fetch error:", error);
+            });
+        }
+    });
+}
+
+confirmAll = (el,role = null) => {
+    var data = $(el).data('params')
+    var tipe = $(el).data('tipe')
+    data = JSON.parse(atob(data));
+    targetID = data['id'];
+    APP.confirm({
+        title: 'Are you sure?',
+        text: tipe == 'completed' ? 'Apakah anda ingin menyetujui registrasi PKL? menyetujui akan by pass tidak sesuai prosedur' : 'Apakah anda ingin membatalkan registrasi PKL? membatalkan akan by pass tidak sesuai prosedur',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: tipe == 'completed' ? 'Completed!' : 'Rejected!',
+        cancelButtonText: 'Batal',
+        customClass: {
+            confirmButton: tipe == 'completed' ? 'btn btn-primary waves-effect waves-light text-white' : 'btn btn-danger waves-effect waves-light text-white',
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            APP.axiosRequest({
+                url: `${BASE_API_MENU}/confirmall`,
+                data: {
+                    id: targetID,
+                    tipe: tipe,
+                    task: role
+                },
+            }).then(data => {
+                APP.reloadTable();
+                APP.showToast({
+                    type: data.status,
+                    message: data.message,
+                });
+                $('#mainModal').modal('hide');
             }).catch(error => {
                 console.error("Fetch error:", error);
             });

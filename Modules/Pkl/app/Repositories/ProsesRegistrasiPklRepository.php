@@ -2,8 +2,10 @@
 
 namespace Modules\Pkl\Repositories;
 
+use App\Models\Jurusan;
 use App\Models\PklRegistration;
 use App\Models\PklRegistrationStatuses;
+use App\Models\Role;
 use App\Models\Siswa;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class ProsesRegistrasiPklRepository extends BaseRepository
 {
+    protected $role_id = null;
     public function __construct(PklRegistration $model)
     {
         parent::__construct($model);
@@ -32,8 +35,11 @@ class ProsesRegistrasiPklRepository extends BaseRepository
                 ->where('status', 'pending');
 
             if ($roleFilter) {
-                $role_id = Auth::user()->id;
-                $query->where('role_id', $role_id);
+                if (is_null($this->role_id)) {
+                    throw new \Exception("Role module ditentukan ");
+                }
+
+                $query->where('role_id', $this->role_id);
             }
 
             // Update status menjadi 'completed' atau 'rejected'
@@ -89,6 +95,7 @@ class ProsesRegistrasiPklRepository extends BaseRepository
      */
     public function saveAcc($registerId)
     {
+        $this->role_id = session('active_role_id');
         return $this->updateRegistrationStatus($registerId, 'completed', true);
     }
 
@@ -100,13 +107,17 @@ class ProsesRegistrasiPklRepository extends BaseRepository
         return $this->updateRegistrationStatus($registerId, 'completed', false);
     }
 
-
     public function saveReject($registerId)
     {
+        $this->role_id = session('active_role_id');
         return $this->updateRegistrationStatus($registerId, 'rejected', true);
     }
     public function saveRejectAll($registerId)
     {
         return $this->updateRegistrationStatus($registerId, 'rejected', false);
+    }
+
+    public function jurusanId(){
+        return Jurusan::where('kakomli_id', Auth::user()->biodata_id)->value('id');
     }
 }

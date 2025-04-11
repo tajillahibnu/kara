@@ -83,7 +83,13 @@ class PenempatanPKLService
             $query->where('dudi_id', $request['dudi']);
         }
 
-        $query->where('pkl_registrations.jurusan_id', $request['jurusan']);
+        if (!empty($request['jurusan'])) {
+            $jurusanId = $request['jurusan'];
+        }else{
+            $jurusanId = $this->repository->jurusanId();
+        }
+        $query->where('pkl_registrations.jurusan_id', $jurusanId);
+
 
         return $query
             ->addColumn('dudi_name', function ($detail) {
@@ -154,8 +160,8 @@ class PenempatanPKLService
             ->whereNull('deleted_at');
 
         $query->where('is_active', true);
-        
-        if(!empty($request->input('jurusan'))){
+
+        if (!empty($request->input('jurusan'))) {
             $query->where('jurusan_id', $request->input('jurusan'));
         }
         $data = $query->get();
