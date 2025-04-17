@@ -65,4 +65,4 @@
         </table>
     </div>
 </div>
-@include('pkl::pkl.absensi.siswa.form')
+@include('pkl::absensi.pkl.harian.siswa.form')

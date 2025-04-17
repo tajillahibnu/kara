@@ -77,5 +77,26 @@
         table.dataTable .form-check-input {
             width: 30px;
         }
+
+        .column-top {
+            vertical-align: top !important;
+            padding-top: 1.5% !important;
+        }
+
+        .column-deskripsi {
+            max-width: 25vw;
+            white-space: normal !important;
+            word-wrap: break-word;
+        }
+
+        .read-more {
+            color: #007bff;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>

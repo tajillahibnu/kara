@@ -60,4 +60,8 @@ Route::group(['prefix' => 'pkl', 'middleware' => ['web', 'auth']], function () {
     Route::group(['prefix' => 'jurnal'], function () {
         require_once(__DIR__ . '/api/Jurnal.php');
     });
+
+    Route::group(['prefix' => 'absensi'], function () {
+        require_once(__DIR__ . '/api/Absensi.php');
+    });
 });

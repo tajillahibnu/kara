@@ -22,6 +22,7 @@ class MenuSeeder extends Seeder
             'master',
             'management',
             'setting',
+            'menu_ijin_pkl',
             'headNav',
         ];
         for ($i = 1; $i <= count($aArrMenu); $i++) {
@@ -33,7 +34,6 @@ class MenuSeeder extends Seeder
 
     private function dashboard($id, $menuNumber)
     {
-
         $save['id']    = $id;
         $save['title'] = 'Dashboard';
         $save['name']  = 'Dashboard';
@@ -51,8 +51,8 @@ class MenuSeeder extends Seeder
     private function data($id, $menuNumber)
     {
         $save['id']    = $id . '0';
-        $save['title']      = 'Siswa';
-        $save['name']       = 'Siswa';
+        $save['title']      = 'Daftar Siswa';
+        $save['name']       = 'Daftar Siswa';
         $save['slug']       = 'dasirole';
         $save['url']        = 'data/dasirole';
         $save['level']      = '0';
@@ -290,7 +290,21 @@ class MenuSeeder extends Seeder
         $save['level']      = '1';
         $save['type']       = 'menu_pkl_siswa';
         $save['menu_order'] = $dd;
-        $save['view_path']      = 'pkl/absensi/siswa/';
+        $save['view_path']      = 'absensi/pkl/harian/siswa';
+        $save['view_file']      = 'default';
+        Menu::create($save);
+
+        $dd = $dd + 1;
+        $save['id']         = $id . $dd;
+        $save['parent_id']  = $id;
+        $save['title']      = 'Ijin Siswa PKL';
+        $save['name']       = 'Ijin Siswa PKL';
+        $save['slug']       = 'ijin_siswa_pkl';
+        $save['url']        = 'absensi/ijin/pkl';
+        $save['level']      = '1';
+        $save['type']       = 'menu_pkl_siswa';
+        $save['menu_order'] = $dd;
+        $save['view_path']      = 'absensi/pkl/ijin/siswa';
         $save['view_file']      = 'default';
         Menu::create($save);
     }
@@ -389,6 +403,34 @@ class MenuSeeder extends Seeder
         $save['type']       = 'main';
         $save['menu_order'] = $dd;
         $save['view_path']      = 'management/pegawai/';
+        $save['view_file']      = 'default';
+        Menu::create($save);
+    }
+
+    private function menu_ijin_pkl($id, $menuNumber)
+    {
+        $menuNumber = 88;
+        $dd = $id;
+        $save['id']    = $id;
+        $save['name']  = 'Absensi & Ijin Siswa';
+        $save['slug']   = 'absesi_ijin';
+        $save['url']   = 'absensi/';
+        $save['level'] = '0';
+        $save['type']  = 'main';
+        $save['menu_order'] = $menuNumber;
+        Menu::create($save);
+
+        $dd = $dd + 1;
+        $save['id']         = $id . $dd;
+        $save['parent_id']  = $id;
+        $save['title']      = 'Ijin Siswa PKL';
+        $save['name']       = 'Ijin Siswa PKL';
+        $save['slug']       = 'ijin_siswa_pkl_role';
+        $save['url']        = 'absensi/ijin/pkl';
+        $save['level']      = '1';
+        $save['type']       = 'main';
+        $save['menu_order'] = $dd;
+        $save['view_path']      = 'absensi/pkl/ijin/~|role|~';
         $save['view_file']      = 'default';
         Menu::create($save);
     }

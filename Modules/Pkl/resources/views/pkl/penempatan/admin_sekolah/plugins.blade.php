@@ -46,28 +46,6 @@
             choose: true,
             callback: (item) => {
                 $('#filter_industri').val(null).trigger('change');
-                $('#dudi_id').empty().append('<option value="">Choose...</option>');
-                item['data'].forEach(element => {
-                    $('#dudi_id').append(`<option value="${element['id']}" data-name="${element['pic_name']}" data-phone="${element['pic_phone']}" data-jabatan="${element['pic_jabatan']}">${element['name']}</option>`);
-                });
-                $("#dudi_id").select2({
-                    allowClear: true,
-                    placeholder: "Pilih Industri",
-                    dropdownParent: '#mainModal'
-                });
-                $('#dudi_id').on('change', function() {
-                    var selectedOption = $(this).find('option:selected');
-
-                    var picName = selectedOption.data('name');
-                    var picPhone = selectedOption.data('phone');
-                    var picJabatan = selectedOption.data('jabatan');
-
-                    // Update the input fields with the selected option's data
-                    $('#pembina_name').val(picName);
-                    $('#pembina_hp').val(picPhone);
-                    $('#pembina_jabatan').val(picJabatan);
-                });
-
             }
         })
         APP.combov1({
@@ -208,9 +186,34 @@
             select2: true,
             allowClear: true,
             dropdownParent: '#mainModal',
-            data:{
+            data: {
                 jurusan: data['jurusan_id']
             },
+            callback: (item) => {
+                $('#dudi_id').empty().append('<option value="">Choose...</option>');
+                item['data'].forEach(element => {
+                    $('#dudi_id').append(`<option value="${element['id']}" data-name="${element['pic_name'] || ''}" data-phone="${element['pic_phone']}" data-jabatan="${element['pic_jabatan']}">${element['name']}</option>`);
+                });
+
+                $("#dudi_id").select2({
+                    allowClear: true,
+                    placeholder: "Pilih Industri",
+                    dropdownParent: '#mainModal'
+                });
+                $('#dudi_id').on('change', function() {
+                    var selectedOption = $(this).find('option:selected');
+                    console.log(selectedOption.get(0).outerHTML); // Untuk debug, cek isi lengkap
+
+                    var picName = selectedOption.attr('data-name');
+                    var picPhone = selectedOption.attr('data-phone');
+                    var picJabatan = selectedOption.attr('data-jabatan');
+
+                    $('#pembina_name').val(picName);
+                    $('#pembina_hp').val(picPhone);
+                    $('#pembina_jabatan').val(picJabatan);
+
+                });
+            }
         })
         $('#mainModal').modal('show');
     }

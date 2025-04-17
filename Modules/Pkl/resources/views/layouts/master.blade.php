@@ -133,6 +133,7 @@
         var BASE_URL = `{{url('/')}}`;
         var BASE_API_MENU = `${BASE_URL}/api/pkl/`;
         var APP_MODULE = `{{$biodata->slug_module}}`;
+        var app_title = `{{ config('app.name', 'Aplikasi') }}`;
     </script>
     <!-- / Layout wrapper -->
     @include('pkl::layouts.plugins')

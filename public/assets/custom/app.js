@@ -452,33 +452,72 @@ var APP = ((config) => {
             // setTimeout(() => {
             // }, 400);
         },
-        // notify: (config) => {
-        //     // Opsi default
-        //     var defaults = {
-        //         type: 'theme', // success, danger, warning, info
-        //         message: '<i class="fa-regular fa-bell"></i><strong>Notification</strong> Default message.',
-        //         delay: 2000,
-        //         allow_dismiss: true,
-        //         timer: 300,
-        //         animate: {
-        //             enter: "animated fadeInDown",
-        //             exit: "animated fadeOutUp",
-        //         },
-        //         showProgressbar: true,
-        //     };
+        toggleReadMore: function (userConfig) {
+            var config = $.extend(true, {
+                el: '.column-deskripsi',
+                text: {
+                    more: 'Read more',
+                    less: 'Read less'
+                },
+                onToggle: function (isExpanded, el) { }
+            }, userConfig);
 
-        //     // Menggabungkan konfigurasi dengan default
-        //     config = $.extend(true, defaults, config);
+            $(config.el).each(function () {
+                var el = $(this);
+                var shortText = el.find('.short-text');
+                var fullText = el.find('.full-text');
+                var readMore = el.find('.read-more');
 
-        //     // Menampilkan notifikasi
-        //     $.notify(config.message, {
-        //         type: config.type,
-        //         allow_dismiss: config.allow_dismiss,
-        //         delay: config.delay,
-        //         animate: config.animate,
-        //         showProgressbar: config.showProgressbar,
-        //     });
-        // }
+                // Bersihkan event sebelumnya
+                readMore.off('click');
+
+                readMore.on('click', function () {
+                    var isExpanded = fullText.hasClass('d-none') === false;
+
+                    if (isExpanded) {
+                        fullText.addClass('d-none');
+                        shortText.removeClass('d-none');
+                        $(this).text(config.text.more);
+                    } else {
+                        fullText.removeClass('d-none');
+                        shortText.addClass('d-none');
+                        $(this).text(config.text.less);
+                    }
+
+                    config.onToggle(!isExpanded, el);
+                });
+            });
+        },
+        characterCounter: function (userConfig) {
+            var config = $.extend(true, {
+                textareaId: 'alasan',       // ID dari textarea
+                counterId: 'alasan-counter', // ID dari elemen untuk menampilkan jumlah karakter
+                maxLength: 1000,            // Batas maksimal karakter
+            }, userConfig);
+
+            const textarea = document.getElementById(config.textareaId);
+            const counter = document.getElementById(config.counterId);
+
+            // Fungsi untuk memperbarui counter karakter
+            function updateCounter() {
+                const length = textarea.value.length;
+                counter.textContent = `${length} / ${config.maxLength} karakter`;
+                if (length >= config.maxLength) {
+                    counter.classList.remove('text-muted');
+                    counter.classList.add('text-danger');
+                } else {
+                    counter.classList.remove('text-danger');
+                    counter.classList.add('text-muted');
+                }
+            }
+
+            // Event listener untuk inputan pengguna
+            textarea.addEventListener('input', updateCounter);
+
+            // Inisialisasi saat halaman dimuat atau edit
+            updateCounter();
+        }
+
     };
 })({ defaultOption: true }); // Mengirimkan objek config saat IIFE dipanggil
 
@@ -496,8 +535,6 @@ getInitials = (name) => {
 
     return initials;
 }
-
-
 class Queue {
     constructor() {
         this.queue = [];

@@ -118,6 +118,8 @@ class RoleMenuSeeder extends Seeder
     private function siswa($role)
     {
         $inMenu = $this->global();
+        $inMenu = array_merge($inMenu, ['ijin_siswa_pkl']);
+        // $inMenu = array_merge($inMenu, ['absesi_ijin', 'ijin_siswa_pkl']);
         $inMenu = array_merge($inMenu, $this->menu_pkl_siswa());
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
@@ -131,6 +133,20 @@ class RoleMenuSeeder extends Seeder
     {
         $inMenu = $this->global();
         $inMenu = array_merge($inMenu, ['dasirole']);
+        $inMenu = array_merge($inMenu, ['absesi_ijin','ijin_siswa_pkl_role']);
+        $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
+
+        if (!empty($menuIds)) {
+            $this->command->info($role->name);
+            $role->menus()->syncWithoutDetaching($menuIds);
+        }
+    }
+    
+    private function pendamping_pkl($role)
+    {
+        $inMenu = $this->global();
+        $inMenu = array_merge($inMenu, ['dasirole']);
+        $inMenu = array_merge($inMenu, ['absesi_ijin','ijin_siswa_pkl_role']);
         $menuIds = Menu::whereIn('slug', $inMenu)->pluck('id')->toArray();
 
         if (!empty($menuIds)) {

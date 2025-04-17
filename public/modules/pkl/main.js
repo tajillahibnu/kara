@@ -45,6 +45,7 @@ menuLinks.forEach(function (link) {
         }).then(response => {
             var data = response.data;
             var nameMenu = data['name'];
+            document.title = app_title+' | '+data['name'];
 
             $('#page-menu-name').html(nameMenu)
             BASE_API_MENU = `${BASE_URL}/api/pkl/${data.url}`;

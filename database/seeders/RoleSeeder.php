@@ -29,6 +29,7 @@ class RoleSeeder extends Seeder
             ['name' => 'Kepala Program', 'slug' => 'kepala_program', 'description' => 'Approve PKL for Mandiri & Seleksi'],
             ['name' => 'Kesiswaan', 'slug' => 'kesiswaan', 'description' => 'Final approval for PKL registration'],
             ['name' => 'Dunia Industri dan Dunia Kerja', 'slug' => 'iduka', 'description' => 'Role user untuk lokasi perusahaan pkl'],
+            ['name' => 'Guru Pendamping', 'slug' => 'pendamping_pkl', 'description' => 'Role user untuk memantau siswa pkl'],
         ];
 
         foreach ($roles as $role) {
