@@ -33,7 +33,7 @@ class RegisterPklService
                     $save = [];
                     $save['periode_id'] = $input['periode_id'];
                     $save['registration_type']   = 'seleksi';
-                    $save['status_register']     = 'pending';
+                    $save['status_register']     = 'completed';
                     $save['status_pelaksana']    = 'pending';
 
                     $save['siswa_id']   = $siswaId;

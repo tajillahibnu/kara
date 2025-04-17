@@ -33,7 +33,7 @@ class MenuRoleMiddleware
             $menus = $this->menuNav($slugRole, $roleId);
             if($user->is_siswa){
                 $getSiswa = Siswa::find($user->biodata_id)->toArray();
-                $getSiswa['is_pkl'] = true;
+                // $getSiswa['is_pkl'] = true;
                 if($getSiswa['is_pkl']){
                     $pklMenus = $this->menuNav($slugRole, $roleId,'menu_pkl_siswa');
                     $menus = $menus->merge($pklMenus);

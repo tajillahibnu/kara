@@ -72,15 +72,16 @@ class ProsesPklService
         $tahunPelajaran = $getSetting['kbm']['tahun_pelajaran'];
         if ($role == 'super_admin' || $role == 'admin_sekolah') {
             $query = DataTableService::draw('pkl_registrations')
-                ->select(['pkl_registrations.*', 'siswas.name', 'siswas.nis', 'siswas.rombel_name', 'siswas.jurusan_id','pkl_registrations.status_register AS status_role'])
+                ->select(['pkl_registrations.*', 'siswas.name', 'siswas.nis', 'siswas.rombel_name', 'siswas.jurusan_id', 'pkl_registrations.status_register AS status_role'])
                 ->join('siswas', [
                     ['siswas.id', '=', 'pkl_registrations.siswa_id'],
                 ]);
+            $query->where('pkl_registrations.status_register','mandiri');
         } else {
             $role_id = session('active_role_id');
             $jurusanId = $this->repository->jurusanId();
             $query = DataTableService::draw('pkl_registration_statuses')
-                ->select(['pkl_registrations.*', 'siswas.name', 'siswas.nis', 'siswas.rombel_name', 'siswas.jurusan_id','pkl_registration_statuses.status AS status_role'])
+                ->select(['pkl_registrations.*', 'siswas.name', 'siswas.nis', 'siswas.rombel_name', 'siswas.jurusan_id', 'pkl_registration_statuses.status AS status_role'])
                 ->join('siswas', [
                     ['siswas.id', '=', 'pkl_registration_statuses.siswa_id'],
                 ])

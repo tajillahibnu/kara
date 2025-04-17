@@ -52,35 +52,42 @@ class RegisterPklRepository extends BaseRepository
 
             // 4. Buat data pendaftaran PKL
             $pklRegistration = PklRegistration::create($save);
+
             if (!$pklRegistration) {
                 throw new \Exception("Gagal menyimpan data pendaftaran PKL.");
             }
 
-            // 5. Ambil approvals sesuai tipe pendaftaran
-            $approvals = PklApproval::where('approval_type', $pklRegistration->registration_type)
-                ->orderBy('approval_order', 'asc')
-                ->get();
-
-            if ($approvals->isEmpty()) {
-                throw new \Exception("Approval belum dikonfigurasi.");
-            }
-
-            // 6. Simpan ke tabel pkl_registration_statuses
-            foreach ($approvals as $approval) {
-                $status = new PklRegistrationStatuses([
-                    'siswa_id' => $id,
-                    'jurusan_id' => $pklRegistration->jurusan_id,
-                    'registration_id' => $pklRegistration->id,
-                    'role_id' => $approval->role_id,
-                    'status' => 'pending',
-                    'approval_order' => $approval->approval_order,
-                    'is_view' => $approval->approval_order == 1,
-                ]);
-
-                if (!$status->save()) {
-                    throw new \Exception("Gagal menyimpan status approval.");
+            if($pklRegistration->status_register === 'completed'){
+                // Kirim Notif siswa atau email telah tergis pkl
+            }else{
+                // 5. Ambil approvals sesuai tipe pendaftaran
+                $approvals = PklApproval::where('approval_type', $pklRegistration->registration_type)
+                    ->orderBy('approval_order', 'asc')
+                    ->get();
+    
+                if ($approvals->isEmpty()) {
+                    throw new \Exception("Approval belum dikonfigurasi.");
+                }
+    
+                // 6. Simpan ke tabel pkl_registration_statuses
+                foreach ($approvals as $approval) {
+                    $status = new PklRegistrationStatuses([
+                        'siswa_id' => $id,
+                        'jurusan_id' => $pklRegistration->jurusan_id,
+                        'registration_id' => $pklRegistration->id,
+                        'role_id' => $approval->role_id,
+                        'status' => 'pending',
+                        'approval_order' => $approval->approval_order,
+                        'is_view' => $approval->approval_order == 1,
+                    ]);
+    
+                    if (!$status->save()) {
+                        throw new \Exception("Gagal menyimpan status approval.");
+                    }
                 }
             }
+
+
 
             return $pklRegistration;
         });
