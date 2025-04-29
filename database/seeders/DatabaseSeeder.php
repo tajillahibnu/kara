@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             DudiSeeder::class,
             SiswaSeeder::class,
             PklApprovalSeeder::class,
+            JurusanPriodePklSeeder::class,
         ]);
         // User::factory()->create([
         //     'name' => 'Test User',

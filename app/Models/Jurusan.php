@@ -33,8 +33,6 @@ class Jurusan extends Model
         return $this->belongsTo(Pegawai::class, 'kakomli_id');
     }
 
-
-
     protected static function boot()
     {
         parent::boot();

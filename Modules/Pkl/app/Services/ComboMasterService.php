@@ -57,7 +57,8 @@ class ComboMasterService
             return [
                 'id' => $item->id,
                 'name' => ucwords($item->name),
-                'romawi' => ucwords($item->romawi)
+                'romawi' => ucwords($item->romawi),
+                'romawi_name' => ucwords($item->name).' ['.ucwords($item->romawi).']'
             ];
         });
     }

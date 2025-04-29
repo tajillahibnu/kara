@@ -26,7 +26,7 @@ class RoleSeeder extends Seeder
             // Tambahan role khusus approval PKL
             ['name' => 'Wali Kelas', 'slug' => 'wali_kelas', 'description' => 'Approve PKL for Mandiri track'],
             ['name' => 'Kepala Jurusan', 'slug' => 'kepala_jurusan', 'description' => 'Approve PKL for Mandiri & Seleksi'],
-            ['name' => 'Kepala Program', 'slug' => 'kepala_program', 'description' => 'Approve PKL for Mandiri & Seleksi'],
+            // ['name' => 'Kepala Program', 'slug' => 'kepala_program', 'description' => 'Approve PKL for Mandiri & Seleksi'],
             ['name' => 'Kesiswaan', 'slug' => 'kesiswaan', 'description' => 'Final approval for PKL registration'],
             ['name' => 'Dunia Industri dan Dunia Kerja', 'slug' => 'iduka', 'description' => 'Role user untuk lokasi perusahaan pkl'],
             ['name' => 'Guru Pendamping', 'slug' => 'pendamping_pkl', 'description' => 'Role user untuk memantau siswa pkl'],

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('tanggal_mulai'); // Tanggal mulai PKL
             $table->date('tanggal_selesai'); // Tanggal selesai PKL
             $table->boolean('is_active')->default(false); // Apakah pendaftaran sedang aktif?
+            $table->json('tingkatan')->nullable(); // <<== Tambahan field untuk filter kelas/tingkat
             $table->timestamps();
             $table->softDeletes();
         });

@@ -28,13 +28,18 @@ class PklApprovalSeeder extends Seeder
         // Ambil role yang sesuai
         $wali_kelas = Role::where('slug', 'wali_kelas')->first();
         $kepala_jurusan = Role::where('slug', 'kepala_jurusan')->first();
-        $kepala_program = Role::where('slug', 'kepala_program')->first();
+        // $kepala_program = Role::where('slug', 'kepala_program')->first();
         $kesiswaan = Role::where('slug', 'kesiswaan')->first();
 
-        if (!$wali_kelas || !$kepala_jurusan || !$kepala_program || !$kesiswaan) {
+        if (!$wali_kelas || !$kepala_jurusan || !$kesiswaan) {
             $this->command->warn('Beberapa role tidak ditemukan. Pastikan RoleSeeder sudah dijalankan.');
             return;
         }
+
+        // if (!$kepala_program) {
+        //     $this->command->warn('Beberapa role tidak ditemukan. Pastikan RoleSeeder sudah dijalankan.');
+        //     return;
+        // }
 
         // Approval untuk jalur Mandiri
         $mandiri_approvals = [
@@ -54,14 +59,14 @@ class PklApprovalSeeder extends Seeder
                 'can_override' => false,
                 'approval_type' => 'mandiri',
             ],
-            [
-                'periode_id' => $periode->id,
-                'role_id' => $kepala_program->id,
-                'is_required' => true,
-                'approval_order' => 3,
-                'can_override' => false,
-                'approval_type' => 'mandiri',
-            ],
+            // [
+            //     'periode_id' => $periode->id,
+            //     'role_id' => $kepala_program->id,
+            //     'is_required' => true,
+            //     'approval_order' => 3,
+            //     'can_override' => false,
+            //     'approval_type' => 'mandiri',
+            // ],
             [
                 'periode_id' => $periode->id,
                 'role_id' => $kesiswaan->id,
@@ -82,14 +87,14 @@ class PklApprovalSeeder extends Seeder
                 'can_override' => false,
                 'approval_type' => 'seleksi',
             ],
-            [
-                'periode_id' => $periode->id,
-                'role_id' => $kepala_program->id,
-                'is_required' => true,
-                'approval_order' => 2,
-                'can_override' => false,
-                'approval_type' => 'seleksi',
-            ],
+            // [
+            //     'periode_id' => $periode->id,
+            //     'role_id' => $kepala_program->id,
+            //     'is_required' => true,
+            //     'approval_order' => 2,
+            //     'can_override' => false,
+            //     'approval_type' => 'seleksi',
+            // ],
             [
                 'periode_id' => $periode->id,
                 'role_id' => $kesiswaan->id,

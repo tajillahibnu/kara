@@ -96,6 +96,46 @@ class PriodePKLController extends Controller
         }
     }
 
+    public function combobox(Request $request, $tipe)
+    {
+        try {
+            switch ($tipe) {
+                case 'induka':
+                    $aArrCombo = $this->mainServices->comboInduka($request->all());
+                    break;
+                default:
+                    $aArrCombo = $this->mainServices->combokompt($request->all());
+                    break;
+            }
+            return $this->apiResponse($aArrCombo)
+                ->send();
+        } catch (\Throwable $th) {
+            throw new Exception('Internal server malfunction.' . $th->getMessage());
+        }
+    }
+
+    public function store_kompt(Request $request)
+    {
+        try {
+            $aArrStore = $this->mainServices->add_kompt($request->all());
+            return $this->apiResponse($aArrStore)
+                ->send();
+        } catch (\Throwable $th) {
+            throw new Exception('Internal server malfunction.');
+        }
+    }
+
+    public function store_induka(Request $request)
+    {
+        try {
+            $aArrStore = $this->mainServices->add_induka($request->all());
+            return $this->apiResponse($aArrStore)
+                ->send();
+        } catch (\Throwable $th) {
+            throw new Exception('Internal server malfunction.');
+        }
+    }
+
     /**
      * Mendapatkan data tabel utama.
      *
@@ -104,5 +144,39 @@ class PriodePKLController extends Controller
     public function mainTable()
     {
         return $this->mainServices->table();
+    }
+
+    public function tableKomptPriod(Request $request)
+    {
+        return $this->mainServices->tableJurusanPriode($request->all());
+    }
+
+    public function tablePriodeInduka(Request $request)
+    {
+        return $this->mainServices->tablePriodeInduka($request->all());
+    }
+
+    public function delete_kompt(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $aArrDelete = $this->mainServices->deleteKompt($id);
+            return $this->apiResponse($aArrDelete)
+                ->send();
+        } catch (\Throwable $th) {
+            throw new Exception('Internal server malfunction.');
+        }
+    }
+
+    public function delete_induka(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $aArrDelete = $this->mainServices->deleteInduka($id);
+            return $this->apiResponse($aArrDelete)
+                ->send();
+        } catch (\Throwable $th) {
+            throw new Exception('Internal server malfunction.');
+        }
     }
 }

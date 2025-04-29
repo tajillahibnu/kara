@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PklPeriode extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -19,7 +19,23 @@ class PklPeriode extends Model
         'tanggal_mulai',
         'tanggal_selesai',
         'is_active',
+        'tingkatan',
     ];
+
+    protected $casts = [
+        'tingkatan' => 'array',
+    ];
+
+
+
+    // Mutator opsional untuk format tanggal
+    public function getTanggalRangeAttribute()
+    {
+        if ($this->tanggal_mulai->equalTo($this->tanggal_selesai)) {
+            return $this->tanggal_mulai->format('d M Y');
+        }
+        return $this->tanggal_mulai->format('d M Y') . ' - ' . $this->tanggal_selesai->format('d M Y');
+    }
 
     /**
      * Cek apakah pendaftaran masih terbuka.
@@ -28,5 +44,4 @@ class PklPeriode extends Model
     {
         return $this->is_active && now()->lte($this->batas_registrasi);
     }
-
 }

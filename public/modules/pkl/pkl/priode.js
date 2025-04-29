@@ -9,6 +9,16 @@ $(() => {
         dropdownParent: '#mainModal',
     })
 
+    APP.combov1({
+        el: ['#tingkatan'],
+        url: `${BASE_API_MENU}/combo/tingkat`,
+        fild_id: 'romawi',
+        fild_name: 'romawi_name',
+        select2: true,
+        allowClear: false,
+        dropdownParent: '#mainModal',
+    })
+
     $('#batas_registrasi').flatpickr({
         monthSelectorType: 'static',
         dateFormat: 'd-m-Y'
@@ -53,7 +63,6 @@ mainTable = () => {
                         <small>Registrasi : ${moment(full['batas_registrasi']).format("DD-MM-Y")}</small>
                     </div>
                     `
-                    return full['name'];
                 },
             },
             {
@@ -72,7 +81,13 @@ mainTable = () => {
                 targets: 3,
                 width: "100px", // Mengatur lebar kolom nomor urut
                 render: function (data, type, full, meta) {
-                    return full['kuota_siswa'] + ' Siswa';
+                    return `
+                    <div class="d-flex flex-column">
+                        <span>${full['kuota_siswa']} Siswa</span>
+                        <small>${full['syarat_tingkat']}</small>
+                    </div>
+                    `
+                    return;
                 },
             },
             {
@@ -101,24 +116,66 @@ newData = () => {
 }
 
 editData = (el) => {
-    var data = $(el).data('params')
+    var data = $(el).data('params');
     data = JSON.parse(atob(data));
     targetID = data['id'];
+
     $.each(data, (i, v) => {
+        // Penanganan khusus untuk tingkatan[]
+        if (i === 'tingkatan') {
+            let inputElement = $(`[name="tingkatan[]"]`);
+
+            try {
+                // Jika v adalah string, coba decode (parse) dua kali
+                if (typeof v === 'string') {
+                    v = JSON.parse(v);  // Pertama kali decode
+                }
+
+                // Jika masih berupa string setelah parse pertama, coba decode lagi
+                if (typeof v === 'string') {
+                    v = JSON.parse(v);  // Decode kedua kali jika diperlukan
+                }
+
+                // Pastikan v adalah array, jika tidak buat kosong
+                if (!Array.isArray(v)) {
+                    console.warn("Value bukan array:", v);
+                    v = [];
+                }
+            } catch (e) {
+                console.warn("JSON parse gagal:", v);
+                v = [];
+            }
+
+            // Inject option secara manual jika select2 AJAX belum ada datanya
+            v.forEach(val => {
+                if (inputElement.find(`option[value="${val}"]`).length === 0) {
+                    inputElement.append(new Option(val, val, true, true));
+                }
+            });
+
+            // Set nilai select2 dan trigger change setelah delay
+            setTimeout(() => {
+                inputElement.val(v).trigger('change');
+            }, 300);
+
+            return;  // Skip untuk field 'tingkatan' ini
+
+        }
+
+
+        // Penanganan umum input
         let inputElement = $(`[name="${i}"]`);
         inputElement.val(v).trigger('change');
 
-        // Jika elemen memiliki Flatpickr, atur tanggalnya dengan setDate
         if (inputElement.hasClass('flatpickr-input')) {
-            // Konversi format YYYY-MM-DD ke DD-MM-YYYY jika perlu
             let formattedDate = v.split('-').reverse().join('-');
-
-            console.log("Setting date:", formattedDate); // Debugging
             inputElement[0]._flatpickr.setDate(formattedDate, true);
         }
-    })
+    });
+
     $('#mainModal').modal('show');
 }
+
 
 onSaveIt = (name) => {
     APP.block();

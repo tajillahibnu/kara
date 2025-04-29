@@ -17,6 +17,10 @@
                             <select id="tahun_ajaran" name="tahun_ajaran" class="select2 form-select" data-placeholder="Select Tahun"></select>
                         </div>
                         <div class="col-12 mb-4">
+                            <label class="form-label" for="tingkatan">Tingkat</label>
+                            <select id="tingkatan" multiple name="tingkatan[]" class="select2 form-select" data-placeholder="Tingkat"></select>
+                        </div>
+                        <div class="col-12 mb-4">
                             <label class="form-label" for="name">Batas Registrasi</label>
                             <input class="form-control" id="batas_registrasi" name="batas_registrasi" type="text" required="">
                         </div>

@@ -535,39 +535,51 @@ getInitials = (name) => {
 
     return initials;
 }
-class Queue {
-    constructor() {
-        this.queue = [];
-        this.isRunning = false;
-    }
+function Queue() {
+    this.queue = [];
+    this.isProcessing = false;
+}
 
-    enqueue(callback, delay = 0) {
-        this.queue.push({ callback, delay });
+Queue.prototype = {
+    constructor: Queue,
+
+    enqueue: function (fn, queueName) {
+        this.queue.push({
+            name: queueName || 'global',
+            fn: fn || function (next) { next(); }
+        });
+        return this;
+    },
+
+    dequeueAll: function (queueName) {
+        if (this.isProcessing) return this;
+        this.isProcessing = true;
+
+        const instance = this;
+        const queue = this.queue;
+        const allFns = (!queueName) ? this.queue.slice() : this.queue.filter(function (current) {
+            return (current.name === queueName);
+        });
+
+        (function recursive(index) {
+            const currentItem = allFns[index];
+            if (!currentItem) {
+                instance.isProcessing = false;
+                return;
+            }
+
+            currentItem.fn.call(instance, function (delay) {
+                queue.splice(queue.indexOf(currentItem), 1);
+                if (delay && typeof delay === 'number') {
+                    setTimeout(() => {
+                        recursive(index + 1);
+                    }, delay);
+                } else {
+                    recursive(index + 1);
+                }
+            });
+        }(0));
+
         return this;
     }
-
-    dequeue() {
-        if (this.queue.length === 0) {
-            this.isRunning = false;
-            return;
-        }
-
-        this.isRunning = true;
-        const { callback, delay } = this.queue.shift();
-
-        setTimeout(() => {
-            callback(() => this.dequeue());
-        }, delay);
-    }
-
-    dequeueAll() {
-        if (!this.isRunning) {
-            this.dequeue();
-        }
-    }
-
-    clearQueue() {
-        this.queue = [];
-        this.isRunning = false;
-    }
-}
+};

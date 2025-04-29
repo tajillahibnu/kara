@@ -23,6 +23,7 @@ class PklPeriodeSeeder extends Seeder
             'tanggal_mulai' => Carbon::parse('2024-07-15'),
             'tanggal_selesai' => Carbon::parse('2024-10-15'),
             'is_active' => false, // Pendaftaran dibuka
+            'tingkatan'         => json_encode(['XI', 'XII']), // array disimpan dalam bentuk JSON
         ]);
 
         PklPeriode::create([
@@ -34,6 +35,7 @@ class PklPeriodeSeeder extends Seeder
             'tanggal_mulai' => Carbon::parse('2025-03-10'),
             'tanggal_selesai' => Carbon::parse('2025-06-10'),
             'is_active' => true, // Pendaftaran belum dibuka
+            'tingkatan'         => json_encode(['XI', 'XII']), // array disimpan dalam bentuk JSON
         ]);
 
         PklPeriode::create([
@@ -45,6 +47,7 @@ class PklPeriodeSeeder extends Seeder
             'tanggal_mulai' => Carbon::parse('2025-07-10'),
             'tanggal_selesai' => Carbon::parse('2025-12-10'),
             'is_active' => false, // Pendaftaran belum dibuka
+            'tingkatan'         => json_encode(['XI', 'XII']), // array disimpan dalam bentuk JSON
         ]);
     }
 }

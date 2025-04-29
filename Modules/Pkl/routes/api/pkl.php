@@ -36,10 +36,17 @@ use Modules\Pkl\Http\Controllers\Pkl\RegisterPklController;
 
 Route::group(['prefix' => 'priode', 'middleware' => []], function () {
     Route::post('main-table', [PriodePKLController::class, 'mainTable'])->name('main-table');
+    Route::post('table-priodekompt', [PriodePKLController::class, 'tableKomptPriod'])->name('table-priodekompt');
+    Route::post('table-induka', [PriodePKLController::class, 'tablePriodeInduka'])->name('table-induka');
     Route::post('store', [PriodePKLController::class, 'store'])->name('store');
     Route::post('update/{id}', [PriodePKLController::class, 'update'])->name('update');
     Route::post('delete', [PriodePKLController::class, 'delete'])->name('delete');
     Route::post('status', [PriodePKLController::class, 'status'])->name('status');
+    Route::post('store_kompt', [PriodePKLController::class, 'store_kompt'])->name('store_kompt');
+    Route::post('delete_kompt', [PriodePKLController::class, 'delete_kompt'])->name('delete_kompt');
+    Route::post('store_induka', [PriodePKLController::class, 'store_induka'])->name('store_induka');
+    Route::post('delete_induka', [PriodePKLController::class, 'delete_induka'])->name('delete_induka');
+    Route::post('combobox/{tipe}', [PriodePKLController::class, 'combobox'])->name('combobox');
     Route::post('combo/{tipe}', [ComboMasterController::class, 'combo'])->name('combo');
 });
 
